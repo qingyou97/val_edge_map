@@ -1,8 +1,1 @@
-Test the average of all indicators on the BSDS, NYUD, and mutilcue datasets. Used for comparison after retraining.
-
-Link of Multicue: https://serre-lab.clps.brown.edu/resource/multicue/
-You can take a reference to Depth Image and Data augmentation in NYUD yun-liu/RCF#124 for the data augmentation.
-
-Regarding connectivity indicators, research principles, and analyze why the left graph is higher than the right graph.
-
-Configure the cuda environment and continue training on the BSDS dataset (200 sheets) using the BCDN network.
+3. 在BSDS、NYUD和mutilcue数据集上进行测试，记录所有指标结果。用于重新训练后做指标结果的比较。
