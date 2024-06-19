@@ -1,3 +1,5 @@
+Test the average of all indicators on the BSDS, NYUD, and mutilcue datasets. Used for comparison after retraining.
+
 Link of Multicue: https://serre-lab.clps.brown.edu/resource/multicue/
 You can take a reference to Depth Image and Data augmentation in NYUD yun-liu/RCF#124 for the data augmentation.
 
