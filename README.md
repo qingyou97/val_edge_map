@@ -1,1 +1,1 @@
-colors = np.random.randint(0, 255, size=(num_labels, 3))
+These indicators need to be converted from. mat format to. png in order to be tested.
