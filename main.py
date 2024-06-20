@@ -2,28 +2,25 @@ import os
 import random
 import shutil
 
-# 设置图像文件夹路径
-image_folder = "<图像文件夹的完整路径>"  # 替换成实际路径
-output_folder = "<输出文件夹的完整路径>"  # 替换成实际路径
+# 源目录和目标目录
+src_dir = 'source_directory_path'  # 更改为你的图像文件夹路径
+dst_dir = 'destination_directory_path'  # 更改为你的目标文件夹路径
 
-# 创建输出文件夹，如果文件夹不存在
-if not os.path.exists(output_folder):
-    os.makedirs(output_folder)
-
-# 提取组别信息
-image_dict = {}
-for filename in os.listdir(image_folder):
+# 获取所有文件名并按前缀分组
+groups = {}
+for filename in os.listdir(src_dir):
     if filename.endswith('.png'):
-        group_key = '_'.join(filename.split('_')[:3])
-        if group_key not in image_dict:
-            image_dict[group_key] = []
-        image_dict[group_key].append(filename)
+        prefix = '_'.join(filename.split('_')[:3])
+        if prefix not in groups:
+            groups[prefix] = []
+        groups[prefix].append(filename)
 
-# 从每一组中随机选择一个文件
-for group_key, files in image_dict.items():
-    random_file = random.choice(files)
-    source_path = os.path.join(image_folder, random_file)
-    destination_path = os.path.join(output_folder, random_file)
-    shutil.copy2(source_path, destination_path)
+# 从每组中随机选择一张图像，并复制到目标文件夹
+if not os.path.exists(dst_dir):
+    os.makedirs(dst_dir)
 
-print("任务完成，共选择了100张图片")
+for group in groups.values():
+    chosen_file = random.choice(group)
+    shutil.copy(os.path.join(src_dir, chosen_file), os.path.join(dst_dir, chosen_file))
+
+print(f"选出的图像已复制到 {dst_dir} 文件夹中。")
