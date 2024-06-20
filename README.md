@@ -1,3 +1,9 @@
-Search for the ground truth of tests in the NYUD and Mutilcue datasets (many people's tests do not include ground truth in the official website and most dataset download links, so searching for it can be a bit time-consuming);
-Change. mat to. png format for testing metrics ();
-
+数据准备阶段：选择各个指标对应的数据集（训练/验证/测试数据集）；
+模型设计阶段
+Unet基础网络的选择
+提升性能的方法调研
+模型重训练阶段
+size：数据 / 网络架构
+background：数据 / 网络架构
+...
+实验对比阶段
