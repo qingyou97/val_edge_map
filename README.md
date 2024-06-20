@@ -1,3 +1,3 @@
-[These indicators need to be converted from. mat format to. png in order to be tested.
-https://cs.nyu.edu/~fergus/datasets/nyu_depth_v2.html
-](https://github.com/yun-liu/rcf/issues/91)
+Search for the ground truth of tests in the NYUD and Mutilcue datasets (many people's tests do not include ground truth in the official website and most dataset download links, so searching for it can be a bit time-consuming);
+Change. mat to. png format for testing metrics ();
+
