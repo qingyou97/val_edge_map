@@ -1,25 +1,51 @@
+import cv2
+import numpy as np
 import os
-import shutil
+from skimage import io, filters
+from sklearn.cluster import KMeans
 
-A_folder = '路径到A文件夹'
-B_folder = '路径到B文件夹'
-C_folder = '路径到C文件夹'
+def calculate_brightness(image):
+    return np.mean(image)
 
-# 确保C文件夹存在
-if not os.path.exists(C_folder):
-    os.makedirs(C_folder)
+def calculate_contrast(image):
+    return image.std()
 
-# 获取A文件夹中的图像名称
-image_names = os.listdir(A_folder)
+def calculate_complexity(image):
+    edges = filters.sobel(image)
+    return np.mean(edges)
 
-# 从B文件夹复制对应的图像到C文件夹
-for image_name in image_names:
-    src_path = os.path.join(B_folder, image_name)
-    dest_path = os.path.join(C_folder, image_name)
-    # 确保图像在B文件夹中存在
-    if os.path.exists(src_path):
-        shutil.copy(src_path, dest_path)
-    else:
-        print(f"图像 {image_name} 在B文件夹中不存在")
+def load_images_from_folder(folder):
+    images = []
+    for filename in os.listdir(folder):
+        img = cv2.imread(os.path.join(folder, filename), cv2.IMREAD_GRAYSCALE)
+        if img is not None:
+            images.append((filename, img))
+    return images
 
-print("复制完成")
+def select_diverse_images(images, n_clusters=10):
+    features = []
+    for filename, img in images:
+        brightness = calculate_brightness(img)
+        contrast = calculate_contrast(img)
+        complexity = calculate_complexity(img)
+        features.append([brightness, contrast, complexity])
+    
+    kmeans = KMeans(n_clusters=n_clusters)
+    kmeans.fit(features)
+    selected_images = []
+    for i in range(n_clusters):
+        cluster_indices = np.where(kmeans.labels_ == i)[0]
+        selected_images.append(images[cluster_indices[0]])
+    
+    return selected_images
+
+# Load images from the test folder
+folder_path = 'path_to_your_test_images_folder'
+images = load_images_from_folder(folder_path)
+
+# Select 10 diverse images
+selected_images = select_diverse_images(images, n_clusters=10)
+
+# Print selected image filenames
+for filename, _ in selected_images:
+    print(filename)
