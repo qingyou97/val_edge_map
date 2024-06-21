@@ -1,2 +1,2 @@
-从文件夹中加载图像，计算每张图像的亮度、对比度和复杂度，然后使用KMeans聚类算法选择具有多样性特征的10张图像。
-Load images from the folder, calculate the brightness, contrast, and complexity of each image, and then use the KMeans clustering algorithm to select 10 images with diverse features.
+The dataset is composed of 100 video screenshots. Generally, in a paper, only each image within each group is used, which means a total of 100 images, with 80 for training and 20 for testing.
+The 20 images were also selected using the kmeans method mentioned above.
