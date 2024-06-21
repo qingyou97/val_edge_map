@@ -2,9 +2,9 @@
 
 
 1. BSDS (200) 
-- 清晰度 (clarity): 边缘强度出色，信噪比较高。 Excellent edge strength and high signal-to-noise ratio.
-- 连通性 (continuity): 边缘断点少，连通区域适中。 Few edge breakpoints and moderate connected areas.
-- 定位精度 (location accuracy): 精度和召回率相差较大，总体 F1-score 不高。  The difference in accuracy and recall is significant, and the overall F1 score is not high.
+clarity: Excellent edge strength and high signal-to-noise ratio.
+连通性 (continuity): 边缘断点少，连通区域适中。 Few edge breakpoints and moderate connected areas.
+定位精度 (location accuracy): 精度和召回率相差较大，总体 F1-score 不高。  The difference in accuracy and recall is significant, and the overall F1 score is not high.
 总体而言，BSDS 在边缘强度和信噪比上表现非常好，但连通区域较多，定位的准确性有待提高。
 Overall, BSDS performs very well in edge strength and signal-to-noise ratio, but there are many connected areas, and the accuracy of localization needs to be improved.
   
