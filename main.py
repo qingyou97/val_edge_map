@@ -1,51 +1,28 @@
-import cv2
-import numpy as np
 import os
-from skimage import io, filters
-from sklearn.cluster import KMeans
+from PIL import Image
 
-def calculate_brightness(image):
-    return np.mean(image)
+# 定义A文件夹和B文件夹的路径
+a_folder = 'path/to/A_folder'
+b_folder = 'path/to/B_folder'
 
-def calculate_contrast(image):
-    return image.std()
+# 确保B文件夹存在，如果不存在则创建
+if not os.path.exists(b_folder):
+    os.makedirs(b_folder)
 
-def calculate_complexity(image):
-    edges = filters.sobel(image)
-    return np.mean(edges)
+# 遍历A文件夹内的所有文件
+for filename in os.listdir(a_folder):
+    if filename.endswith('.png'):
+        # 打开图像
+        img = Image.open(os.path.join(a_folder, filename))
 
-def load_images_from_folder(folder):
-    images = []
-    for filename in os.listdir(folder):
-        img = cv2.imread(os.path.join(folder, filename), cv2.IMREAD_GRAYSCALE)
-        if img is not None:
-            images.append((filename, img))
-    return images
+        # 将图像转为灰度图（防止出现带颜色的结果）
+        img = img.convert('L')
 
-def select_diverse_images(images, n_clusters=10):
-    features = []
-    for filename, img in images:
-        brightness = calculate_brightness(img)
-        contrast = calculate_contrast(img)
-        complexity = calculate_complexity(img)
-        features.append([brightness, contrast, complexity])
-    
-    kmeans = KMeans(n_clusters=n_clusters)
-    kmeans.fit(features)
-    selected_images = []
-    for i in range(n_clusters):
-        cluster_indices = np.where(kmeans.labels_ == i)[0]
-        selected_images.append(images[cluster_indices[0]])
-    
-    return selected_images
+        # 反转图像的像素值（黑色变白色，白色变黑色）
+        img_inverted = Image.eval(img, lambda x: 255 - x)
+        
+        # 将修改后的图像保存到B文件夹
+        save_path = os.path.join(b_folder, filename)
+        img_inverted.save(save_path)
 
-# Load images from the test folder
-folder_path = 'path_to_your_test_images_folder'
-images = load_images_from_folder(folder_path)
-
-# Select 10 diverse images
-selected_images = select_diverse_images(images, n_clusters=10)
-
-# Print selected image filenames
-for filename, _ in selected_images:
-    print(filename)
+print("图像已经转换并保存到B文件夹")
