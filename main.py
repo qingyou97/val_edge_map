@@ -1,28 +1,17 @@
 import os
-from PIL import Image
 
-# Define the paths for folder A and folder B
-a_folder = 'path/to/A_folder'
-b_folder = 'path/to/B_folder'
+def get_file_stems(directory, extension):
+    return {os.path.splitext(file)[0] for file in os.listdir(directory) if file.endswith(extension)}
 
-# Ensure folder B exists, create it if it does not
-if not os.path.exists(b_folder):
-    os.makedirs(b_folder)
+def check_corresponding_files(folder_a, ext_a, folder_b, ext_b):
+    stems_a = get_file_stems(folder_a, ext_a)
+    stems_b = get_file_stems(folder_b, ext_b)
+    return stems_a == stems_b
 
-# Iterate over all files in folder A
-for filename in os.listdir(a_folder):
-    if filename.endswith('.png'):
-        # Open the image
-        img = Image.open(os.path.join(a_folder, filename))
+folder_a = "A文件夹路径"
+folder_b = "B文件夹路径"
 
-        # Convert the image to grayscale (to prevent colored results)
-        img = img.convert('L')
-
-        # Invert the pixel values of the image (black to white, white to black)
-        img_inverted = Image.eval(img, lambda x: 255 - x)
-        
-        # Save the modified image to folder B
-        save_path = os.path.join(b_folder, filename)
-        img_inverted.save(save_path)
-
-print("Images have been converted and saved to folder B")
+if check_corresponding_files(folder_a, ".jpg", folder_b, ".png"):
+    print("文件名一一对应")
+else:
+    print("文件名不对应")
