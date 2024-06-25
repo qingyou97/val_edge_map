@@ -1,26 +1,43 @@
 import os
+from PIL import Image
+import collections
 
-def get_file_stems(directory, extension):
-    return {os.path.splitext(file)[0] for file in os.listdir(directory) if file.endswith(extension)}
-
-def are_filenames_corresponding(folder_a, ext_a, folder_b, ext_b):
-    stems_a = get_file_stems(folder_a, ext_a)
-    stems_b = get_file_stems(folder_b, ext_b)
+def calculate_image_resolutions(folder_path):
+    # 保存每个分辨率的图像数量
+    resolution_counts = collections.Counter()
     
-    only_in_a = stems_a - stems_b
-    only_in_b = stems_b - stems_a
+    # 初始化总宽度和总高度
+    total_width, total_height = 0, 0
+    image_count = 0
     
-    return only_in_a, only_in_b
+    # 遍历文件夹中的所有文件
+    for filename in os.listdir(folder_path):
+        if filename.lower().endswith(('png', 'jpg', 'jpeg', 'bmp', 'gif')):
+            try:
+                # 获取图像的分辨率
+                with Image.open(os.path.join(folder_path, filename)) as img:
+                    width, height = img.size
+                    resolution_counts[(width, height)] += 1
+                    total_width += width
+                    total_height += height
+                    image_count += 1
+            except Exception as e:
+                print(f"Error processing image {filename}: {e}")
 
-folder_a = "A文件夹路径"
-folder_b = "B文件夹路径"
+    if image_count == 0:
+        print("无法计算平均分辨率，因为文件夹中没有有效图像。")
+        return
 
-only_in_a, only_in_b = are_filenames_corresponding(folder_a, ".jpg", folder_b, ".png")
+    # 计算平均分辨率
+    average_width = total_width / image_count
+    average_height = total_height / image_count
+    
+    # 输出结果
+    print(f"平均分辨率: {average_width} x {average_height}")
+    print("每种分辨率下的图像数量:")
+    for resolution, count in resolution_counts.items():
+        print(f"{resolution[0]} x {resolution[1]}: {count} 张")
 
-if not only_in_a and not only_in_b:
-    print("文件名一一对应")
-else:
-    if only_in_a:
-        print("以下文件只在A文件夹中存在:", only_in_a)
-    if only_in_b:
-        print("以下文件只在B文件夹中存在:", only_in_b)
+# 示例用法
+folder_path = 'path/to/your/image/folder'
+calculate_image_resolutions(folder_path)
