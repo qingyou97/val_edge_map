@@ -1,1 +1,1 @@
-May I ask, are you referring to your daily goal or this week's goal? If it is the goal for the current week, we have updated it in xxx. If it is the goal for today, we have updated it in column xxx.
+Do you mean we need to update tomorrow's goals into this table now? This will also be necessary in the future. If it's tomorrow's goal, both Wang Chao and I have been updated to column xxx.
