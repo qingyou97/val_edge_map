@@ -1,3 +1,2 @@
-# 1.首先，`batch_size` 设置为 `iter_size` 乘以 `batch_size`，即在10个小批次完成后总共有10 x 1 = 10个样本被处理。Firstly, set `batch_size` to be `iter_size` multiplied by `batch_size`, which means that after 10 small batches, a total of 10 x 1 = 10 samples are processed.
-# 2.在内层循环中，每次输入一个小批次图片，并累积梯度 (`loss.backward()`)。In the inner loop, input a small batch of images each time and accumulate the gradients (`loss.backward()`).
-# 3.完成 `iter_size` 次小批次后，调用 `optimizer.step()` 更新网络参数，然后本次完整的mini-batch处理结束。After completing `iter_size` small batches, call `optimizer.step()` to update the network parameters, and thus the whole mini-batch processing is completed.
+如果在后续训练中将初始学习率从之前的10e-6突然升高到10e-2，模型参数可能会跳出已经到达的极低损失点。建议继续使用较小的学习率（例如10e-6）进行后续训练，这样可以确保模型在已有的优化基础上更稳定、渐进地微调。
+If the initial learning rate in subsequent training is suddenly increased from the previous 10e-6 to 10e-2, the model parameters might jump out of the already reached low loss point. It is recommended to continue using a small learning rate (such as 10e-6) for subsequent training, as this ensures that the model can be fine-tuned more stably and progressively on the existing optimized basis.
