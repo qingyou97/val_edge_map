@@ -1,1 +1,1 @@
-从这段代码可以看出，只有骨干网络 (backbone) VGG16 加载了预训练模型，其他的模块并没有加载预训练模型。而在初始化其他层时，默认使用的是 PyTorch 的初始化方法，没有使用同样的预训练权重。From this code, it can be seen that only the backbone network (VGG16) loads the pretrained model, whereas other modules do not load the pretrained model. When initializing other layers, the default PyTorch initialization method is used, without applying the same pretrained weights.
+从指定路径加载预训练的模型权重，并将该权重应用到模型中。Load the pre-trained model weights from the specified path and apply those weights to the model.
