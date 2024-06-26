@@ -1,3 +1,3 @@
-首先，`batch_size` 设置为 `iter_size` 乘以 `batch_size`，即在10个小批次完成后总共有10 x 1 = 10个样本被处理。Firstly, set `batch_size` to be `iter_size` multiplied by `batch_size`, which means that after 10 small batches, a total of 10 x 1 = 10 samples are processed.
-在内层循环中，每次输入一个小批次图片，并累积梯度 (`loss.backward()`)。In the inner loop, input a small batch of images each time and accumulate the gradients (`loss.backward()`).
-完成 `iter_size` 次小批次后，调用 `optimizer.step()` 更新网络参数，然后本次完整的mini-batch处理结束。After completing `iter_size` small batches, call `optimizer.step()` to update the network parameters, and thus the whole mini-batch processing is completed.
+# 1.首先，`batch_size` 设置为 `iter_size` 乘以 `batch_size`，即在10个小批次完成后总共有10 x 1 = 10个样本被处理。Firstly, set `batch_size` to be `iter_size` multiplied by `batch_size`, which means that after 10 small batches, a total of 10 x 1 = 10 samples are processed.
+# 2.在内层循环中，每次输入一个小批次图片，并累积梯度 (`loss.backward()`)。In the inner loop, input a small batch of images each time and accumulate the gradients (`loss.backward()`).
+# 3.完成 `iter_size` 次小批次后，调用 `optimizer.step()` 更新网络参数，然后本次完整的mini-batch处理结束。After completing `iter_size` small batches, call `optimizer.step()` to update the network parameters, and thus the whole mini-batch processing is completed.
