@@ -1,1 +1,1 @@
-Two issues have been identified (initial learning rate and interface for loading pre trained models) and are currently being retrained.
+My code is correct, and based on the principle, it is determined that this phenomenon is normal.
