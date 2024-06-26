@@ -1,5 +1,25 @@
-    if os.path.exists(args.res_dir):
-        print(f"Directory '{args.res_dir}' already exists. Skipping creation.")
-    else:
-        os.makedirs(args.res_dir)
-        print(f"Directory '{args.res_dir}' did not exist, so it was created.")
+      
+import matplotlib.pyplot as plt
+epoch = ['10000','11000', '12000','13000', '14000', '15000' ,'16000', '17000', '18000','20000','25000','40000']
+f1 = [0.10033116857701836,
+0.11678458763848124,
+0.11706396079385323,
+0.13439718640046502,
+0.14354745245139422,
+0.15621751026574385,
+0.1454420537171253,
+0.16412845119625902,
+0.1581566578794463,
+0.18018523471935105,
+0.19838503636726426,
+0.20429354355425658]
+
+plt.plot(epoch, f1, marker='o')
+plt.title('Model Performance')
+plt.xlabel('The epochs of model training')
+plt.ylabel('F1-score')
+plt.show()
+
+
+
+    
