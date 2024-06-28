@@ -1,8 +1,5 @@
-1.1 Test the metrics and visualize the results for the training, test, and validation sets in the BSDS dataset.
-1.2 Configure the CUDA environment.
-1.3 Conduct retraining experiment 1 with BDCN (using the BSDS pretrained model + using BSDS test set as training set + training for 40,000 epochs), twice in total.
-1.4 Use F1-score to select the model, compare the performance of the two experiments with the out-of-the-box performance.
-1.5 Identify the reasons for poor training results.
-1.6 Investigate the principle of the F1 score.
-2.1 Daily management of personnel and task pool.
-2.2 Phase division of few-shot and generalization tasks.
+Weaknesses: Sometimes I'm not very meticulous and often make mistakes because I rush. For instance, I forget to set the learning rate when retraining or use parameters without thoroughly checking them. I assume that the pre-trained model parameters are fully set, which is not always the case.
+
+Strengths:
+1. Starting this week, I began managing tasks. Currently, I'm handling various technical and scrum management tasks simultaneously. I'm also communicating well with task owners, and the task progress is being tracked smoothly.
+2. When handling Task Three, I was able to investigate and verify issues and abnormal results from multiple angles. I can explain these issues, find the root cause, and provide solutions.
