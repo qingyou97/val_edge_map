@@ -1,1 +1,1 @@
-Carefully observe the parameters and the training strategy used in the paper.
+If the training is over, I will start testing the indicator results.
