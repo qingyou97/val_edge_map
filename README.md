@@ -1,5 +1,1 @@
-All indicators of train and val in BDCN on the bsds dataset are higher than those of pidinet.
-On the bsds dataset and the test dataset, all other indicators of BDCN except recall are higher than those of pidinet.
-On the NYUD HHA dataset, BDCN outperforms pidinet in all other metrics except for signal-to-noise ratio.
-On the NYUD RGB dataset, except for the number of breakpoints and recall, all other indicators of BDCN are lower than those of pidinet.
-BDCN outperforms pidinet in all other metrics except for edge strength and recall on the mutilicue dataset.
+The meeting discussed the reasons for the model architecture (lack of supervision information from deep to shallow layers) and the visual angle (high noise). Later, it was checked whether I set a threshold that caused many edge points to be filtered out. The conclusion is that I have set the same threshold for both, and most people use this threshold when transitioning from grayscale to binary images.
