@@ -1,1 +1,1 @@
-After comparing the F1 scores of 14 rounds of models, one extreme point was selected, and 48 rounds were ultimately chosen.
+Tested the results of 48 rounds of the model on 7 indicators across three datasets.
