@@ -1,1 +1,1 @@
-I have re read the training parameter settings mentioned in the paper, identified the issues in the code, made modifications, set the correct learning rate, and completed the training.
+After comparing the F1 scores of 14 rounds of models, one extreme point was selected, and 48 rounds were ultimately chosen.
