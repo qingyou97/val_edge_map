@@ -1,1 +1,5 @@
-If the training is over, I will start testing the indicator results.
+print('befor sum: total total_duration', total_duration)
+    total_duration = np.sum(np.array(total_duration))
+    print('total total_duration', total_duration)
+    print('total dataloader', len(test_loader))
+    print("FPS: %f" % (len(test_loader) / total_duration))
