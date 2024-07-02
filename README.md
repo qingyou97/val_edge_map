@@ -1,1 +1,1 @@
-After 20 rounds of confirmation, the code can run smoothly.
+Carefully observe the parameters and the training strategy used in the paper.
