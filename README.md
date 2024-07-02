@@ -1,5 +1,1 @@
-print('befor sum: total total_duration', total_duration)
-    total_duration = np.sum(np.array(total_duration))
-    print('total total_duration', total_duration)
-    print('total dataloader', len(test_loader))
-    print("FPS: %f" % (len(test_loader) / total_duration))
+The code shows that the optimizer related information has not been saved in the model, so the Adam optimizer can only be reinitialized for training.
