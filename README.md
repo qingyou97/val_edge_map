@@ -1,1 +1,1 @@
-The meeting discussed the reasons for the model architecture (lack of supervision information from deep to shallow layers) and the visual angle (high noise). Later, it was checked whether I set a threshold that caused many edge points to be filtered out. The conclusion is that I have set the same threshold for both, and most people use this threshold when transitioning from grayscale to binary images.
+After 20 rounds of confirmation, the code can run smoothly.
