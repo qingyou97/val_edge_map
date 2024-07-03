@@ -1,1 +1,15 @@
-Modified the performance representation of generalization tasks and few-shot tasks to intuitively show whether there is a delay and newly added information.
+  cycler==0.11.0
+  fonttools==4.38.0
+  kiwisolver==1.4.5
+  kornia==0.6.12
+  matplotlib==3.5.3
+  numpy==1.21.6
+  opencv-python==4.10.0.82
+  packaging==24.0
+  Pillow==9.5.0
+  pyparsing==3.1.2
+  python-dateutil==2.9.0.post0
+  six==1.16.0
+  torch==1.13.1
+  typing_extensions==4.7.1
+  wincertstore==0.2
