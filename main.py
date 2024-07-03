@@ -1,41 +1,29 @@
-from openpyxl import Workbook
-from openpyxl.drawing.image import Image as XLImage
+from openpyxl import load_workbook
+from openpyxl.drawing.image import Image
 from PIL import Image as PILImage
 
-# 打开Excel文件或创建新工作簿
-wb = Workbook()
-ws = wb.active
-ws.title = "B页"
+# 定义文件和工作表位置等参数
+img_path = 'A.png'  # 图片路径
+excel_path = 'C.xlsx'  # Excel文件路径
+sheet_name = 'B'  # 工作表名称
+cell = 'D1'  # 图片粘贴位置
 
-# 打开要粘贴的图片
-img_path = 'A图片路径.jpg'
-img = PILImage.open(img_path)
+# 打开图片并调整大小（保持比例）
+original_img = PILImage.open(img_path)
+width, height = original_img.size
+new_height = 20.32  # Excel中行高度，单位为“磅”，20 磅大约是2 cm
+# 计算调整后的图片宽度
+new_width = int(width * (new_height / height))
 
-# 获取并保持图片横纵比，缩小到高为2
-# 假设高为2是以某固定单位，比如厘米
-required_height_cm = 2
-width, height = img.size
+resized_img_path = 'resized_A.png'
+original_img.thumbnail((new_width, new_height), PILImage.ANTIALIAS)  # 保持比例缩小图片
+original_img.save(resized_img_path)
 
-# 高度转换为像素（假设设置100DPI，对于60DPI价值最大）：
-dpi = 100
-required_height_pixels = required_height_cm * dpi / 2.54
+# 在Excel中插入调整大小后的图片
+wb = load_workbook(excel_path)
+sheet = wb[sheet_name]
 
-if height > required_height_pixels:
-    resize_ratio = required_height_pixels / height
-    new_size = (int(width * resize_ratio), int(height * resize_ratio))
-    img = img.resize(new_size, PILImage.ANTIALIAS)
+img = Image(resized_img_path)  
+sheet.add_image(img, cell)  # 指定插入位置
 
-# 保存调整后的图片到临时文件
-temp_img_path = 'temp.jpg'
-img.save(temp_img_path)
-
-# 插入图片到Excel指定位置C位置
-excel_img = XLImage(temp_img_path)
-ws.add_image(excel_img, 'C1')  # 说明："C1" 是Excel的位置
-
-# 保存Excel文件
-wb.save('path_to_your_excel_file.xlsx')
-
-# 删除临时文件（如果需要）
-import os
-os.remove(temp_img_path)
+wb.save(excel_path)
