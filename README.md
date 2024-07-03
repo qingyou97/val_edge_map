@@ -1,1 +1,1 @@
-According to the previous requirements, the accuracy, recall, and F1 score of each image before and after training have been tested and recorded in a table.
+The noise in the image has decreased, and it feels like the detection rate of many edges has also increased.
