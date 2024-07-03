@@ -1,15 +1,5 @@
-  cycler==0.11.0
-  fonttools==4.38.0
-  kiwisolver==1.4.5
-  kornia==0.6.12
-  matplotlib==3.5.3
-  numpy==1.21.6
-  opencv-python==4.10.0.82
-  packaging==24.0
-  Pillow==9.5.0
-  pyparsing==3.1.2
-  python-dateutil==2.9.0.post0
-  six==1.16.0
-  torch==1.13.1
-  typing_extensions==4.7.1
-  wincertstore==0.2
+Regarding the information you just added in the meeting, I want to respond. I think my prepared materials for the meeting are fine, but I believe there might be issues with the continuity and consistency of certain information. I am afraid that the information I have might not be comprehensive enough, so I would like to include Dong-san. Is that okay?
+
+Secondly, regarding tomorrow's meeting, there are two things I want to discuss with you in advance. First, about Han-san's communication issue, I think it might be because his thoughts and ideas are more research-oriented, which might cause some differences in thinking compared to the engineering roles. This is the first thing I want to talk about.
+
+Secondly, the issue of our workload. You know that, especially for me, I have to handle scrum-related management and coordination along with my own technical tasks. This means that my effective working time each day gets spread out. I need to communicate schedules with each member, coordinate phase goals, and attend their afternoon meetings as they involve task changes and coordination. Therefore, my technical workload is reduced. This is the second thing I want to discuss.
