@@ -1,1 +1,1 @@
-On the BSDS dataset, except for signal-to-noise ratio, the other six indicators show a greater increase in PIDINET.
+Modified the performance representation of generalization tasks and few-shot tasks to intuitively show whether there is a delay and newly added information.
