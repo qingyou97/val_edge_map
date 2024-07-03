@@ -1,7 +1,6 @@
-For the BSDS test dataset, after training, the accuracy improved by 6.79%, the recall rate increased by 0.37%, and the f1 score improved by 6.09%.
-For the training dataset of BSDS, after training, the accuracy improved by 7.04%, the recall decreased by 0.48%, and the f1 score improved by 6.21%.
-For the validation dataset of BSDS, after training, the accuracy improved by 5.98%, the recall rate improved by 0.16%, and the f1 score improved by 5.33%.
-For the NYUD HHA test dataset, after training, the accuracy improved by 2.36%, the recall decreased by 2.19%, and the f1 score improved by 1.56%.
-For the RGB test dataset of NYUD, after training, the accuracy improved by 3.33%, the recall decreased by 5.07%, and the f1 score improved by 2.44%.
-For the test dataset of mutilcue, after training, the accuracy improved by 3.15%, the recall decreased by 3.56%, and the f1 score improved by 2.24%.
-
+For the BSDS test dataset, after training, the accuracy improved by 4.81%, the recall decreased by 1.38%, and the F1 score improved by 4.08%.
+For the training dataset of BSDS, after training, the accuracy improved by 5.13%, the recall decreased by 1.57%, and the F1 score improved by 4.39%.
+For the validation dataset of BSDS, after training, the accuracy improved by 5.3%, the recall decreased by 2.04%, and the F1 score improved by 4.46%.
+For the NYUD HHA test dataset, after training, the accuracy decreased by 17.24%, the recall decreased by 56.12%, and the F1 score decreased by 27.09%.
+For the RGB test dataset of NYUD, after training, the accuracy improved by 10.09%, the recall decreased by 16.26%, and the F1 score improved by 8.08%.
+For the multiclue test dataset, after training, the accuracy improved by 3.7%, the recall decreased by 1.85%, and the F1 score improved by 2.66%.
