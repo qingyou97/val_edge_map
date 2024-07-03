@@ -1,1 +1,1 @@
-The noise in the image has decreased, and it feels like the detection rate of many edges has also increased.
+On the BSDS dataset, except for signal-to-noise ratio, the other six indicators show a greater increase in PIDINET.
