@@ -1,1 +1,1 @@
-Participated in Li Zhe's meeting and recorded the goals.
+Compare all indicators and improvement percentages of BDCN, PIDINET, and DEXINED algorithms.
