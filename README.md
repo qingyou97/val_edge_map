@@ -1,1 +1,1 @@
-Record team improvement points and come up with solutions and countermeasures.
+Participated in Li Zhe's meeting and recorded the goals.
