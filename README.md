@@ -1,1 +1,1 @@
-By becoming more composed while performing tasks and learning from last week's experiences, I now conduct a relatively thorough analysis before actually executing tasks. This helps avoid deviations and overlooking key points. Consequently, the process runs more smoothly and efficiency has improved.
+Regarding the experimental design for the generalization task, once Li Zhe is finished writing it, we will coordinate and then send it to you.
