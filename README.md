@@ -1,1 +1,1 @@
-But this only proves that dexined's results differ from the ground truth, it doesn't necessarily mean the detection results are bad.
+Although the metrics indicate lower values, I have noticed that the details in the detection results are more pronounced, and the noise is minimal. Moreover, the model has never been trained on these datasets, yet it demonstrates excellent generalization.
