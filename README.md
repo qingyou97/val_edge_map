@@ -1,1 +1,1 @@
-I changed the resize parameter of DexiNed to 896x896 (the size must be a multiple of 16). This was done to maintain consistency with the previous test FPS data of BDCN and PiDiNet. The conclusion is that the FPS is 0.33.
+I tested the results of 7 indicators on three datasets.
