@@ -1,1 +1,1 @@
-Although the metrics indicate lower values, I have noticed that the details in the detection results are more pronounced, and the noise is minimal. Moreover, the model has never been trained on these datasets, yet it demonstrates excellent generalization.
+I have placed all the meeting minutes from June 25 to July 5 here. I will update them regularly.
