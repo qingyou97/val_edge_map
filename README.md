@@ -1,1 +1,1 @@
-Regarding the experimental design for the generalization task, once Li Zhe is finished writing it, we will coordinate and then send it to you.
+I changed the resize parameter of DexiNed to 896x896 (the size must be a multiple of 16). This was done to maintain consistency with the previous test FPS data of BDCN and PiDiNet. The conclusion is that the FPS is 0.33.
