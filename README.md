@@ -1,1 +1,1 @@
-I often experience mood swings. Sometimes when the experimental results differ greatly from expectations, I subconsciously attribute it to the black-box nature of deep learning, which makes me oscillate between self-comfort and finding the real issue.
+By becoming more composed while performing tasks and learning from last week's experiences, I now conduct a relatively thorough analysis before actually executing tasks. This helps avoid deviations and overlooking key points. Consequently, the process runs more smoothly and efficiency has improved.
