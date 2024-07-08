@@ -1,1 +1,1 @@
-Apart from the results shared yesterday on BSDS and NYUD, the detection results of the Multicue dataset show more details and less noise. Furthermore, the model has never been trained on these datasets, yet it still demonstrates excellent generalization ability.
+Using TensorBoard to trace the training process, I found that the improvement was significant for this specific dataset. However, performance declined on other original datasets.
