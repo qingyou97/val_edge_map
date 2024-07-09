@@ -1,1 +1,1 @@
-Okay, two things, I will tell Li Zhe to clarify the content of MTG again. Secondly, I will have Li Zhe write the experimental design and paste the Excel link into the deliverables.
+Create a table in the specified format to record the number of images with and without targets, as well as the number for training and testing. During testing, also divide it into image-level and pixel-level.
