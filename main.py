@@ -1,86 +1,24 @@
-#!/bin/python
+import cv2
 import numpy as np
-from scipy.ndimage.filters import convolve, gaussian_filter
-from scipy.misc import imread, imshow
 
-def CannyEdgeDetector(im, blur = 1, highThreshold = 91, lowThreshold = 31):
-        im = np.array(im, dtype=float) #Convert to float to prevent clipping values
+# 读取图像
+image = cv2.imread('your_image_path.jpg', cv2.IMREAD_GRAYSCALE) # 使用灰度模式读取图像
 
-        #Gaussian blur to reduce noise
-        im2 = gaussian_filter(im, blur)
+# 检查图像是否成功加载
+if image is None:
+    print("图像加载失败！请检查文件路径。")
+    exit()
 
-        #Use sobel filters to get horizontal and vertical gradients
-        im3h = convolve(im2,[[-1,0,1],[-2,0,2],[-1,0,1]]) 
-        im3v = convolve(im2,[[1,2,1],[0,0,0],[-1,-2,-1]])
+# 使用cv2.Laplacian检测图像边缘
+laplacian = cv2.Laplacian(image, cv2.CV_64F)
 
-        #Get gradient and direction
-        grad = np.power(np.power(im3h, 2.0) + np.power(im3v, 2.0), 0.5)
-        theta = np.arctan2(im3v, im3h)
-        thetaQ = (np.round(theta * (5.0 / np.pi)) + 5) % 5 #Quantize direction
+# 将图像的深度转换回来以便显示在 0-255 范围内
+laplacian = np.uint8(np.absolute(laplacian))
 
-        #Non-maximum suppression
-        gradSup = grad.copy()
-        for r in range(im.shape[0]):
-                for c in range(im.shape[1]):
-                        #Suppress pixels at the image edge
-                        if r == 0 or r == im.shape[0]-1 or c == 0 or c == im.shape[1] - 1:
-                                gradSup[r, c] = 0
-                                continue
-                        tq = thetaQ[r, c] % 4
+# 显示原始图像和Laplacian边缘检测结果
+cv2.imshow('Original Image', image)
+cv2.imshow('Laplacian Edge Detection', laplacian)
 
-                        if tq == 0: #0 is E-W (horizontal)
-                                if grad[r, c] <= grad[r, c-1] or grad[r, c] <= grad[r, c+1]:
-                                        gradSup[r, c] = 0
-                        if tq == 1: #1 is NE-SW
-                                if grad[r, c] <= grad[r-1, c+1] or grad[r, c] <= grad[r+1, c-1]:
-                                        gradSup[r, c] = 0
-                        if tq == 2: #2 is N-S (vertical)
-                                if grad[r, c] <= grad[r-1, c] or grad[r, c] <= grad[r+1, c]:
-                                        gradSup[r, c] = 0
-                        if tq == 3: #3 is NW-SE
-                                if grad[r, c] <= grad[r-1, c-1] or grad[r, c] <= grad[r+1, c+1]:
-                                        gradSup[r, c] = 0
-
-        #Double threshold
-        strongEdges = (gradSup > highThreshold)
-
-        #Strong has value 2, weak has value 1
-        thresholdedEdges = np.array(strongEdges, dtype=np.uint8) + (gradSup > lowThreshold)
-
-        #Tracing edges with hysteresis        
-        #Find weak edge pixels near strong edge pixels
-        finalEdges = strongEdges.copy()
-        currentPixels = []
-        for r in range(1, im.shape[0]-1):
-                for c in range(1, im.shape[1]-1):        
-                        if thresholdedEdges[r, c] != 1:
-                                continue #Not a weak pixel
-
-                        #Get 3x3 patch        
-                        localPatch = thresholdedEdges[r-1:r+2,c-1:c+2]
-                        patchMax = localPatch.max()
-                        if patchMax == 2:
-                                currentPixels.append((r, c))
-                                finalEdges[r, c] = 1
-
-        #Extend strong edges based on current pixels
-        while len(currentPixels) > 0:
-                newPix = []
-                for r, c in currentPixels:
-                        for dr in range(-1, 2):
-                                for dc in range(-1, 2):
-                                        if dr == 0 and dc == 0: continue
-                                        r2 = r+dr
-                                        c2 = c+dc
-                                        if thresholdedEdges[r2, c2] == 1 and finalEdges[r2, c2] == 0:
-                                                #Copy this weak pixel to final result
-                                                newPix.append((r2, c2))
-                                                finalEdges[r2, c2] = 1
-                currentPixels = newPix
-
-        return finalEdges
-
-if __name__=="__main__":
-        im = imread("test.jpg", mode="L") #Open image, convert to greyscale
-        finalEdges = CannyEdgeDetector(im)
-        imshow(finalEdges)
+# 等待用户关闭窗口
+cv2.waitKey(0)
+cv2.destroyAllWindows()
