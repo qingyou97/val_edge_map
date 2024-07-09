@@ -1,1 +1,1 @@
-Ensure that pruning and testing can be completed this week, and that Wang Chao's previous plan can be completed on time.
+I will record the specific methods and strategies for pruning, and if not, I will use OpenVino for pruning.
