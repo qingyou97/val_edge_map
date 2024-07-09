@@ -1,13 +1,15 @@
-import numpy as np
-from torch.utils.tensorboard import SummaryWriter
+import cv2
 
-writer = SummaryWriter(comment='test_tensorboard')
+# 读取图像
+image = cv2.imread('image.jpg', cv2.IMREAD_GRAYSCALE)
 
-for x in range(100):
-    writer.add_scalar('y=2x', x * 2, x)
-    writer.add_scalar('y=pow(2, x)', 2 ** x, x)
+# 可选：降噪处理
+blurred_image = cv2.GaussianBlur(image, (5, 5), 1.4)
 
-    writer.add_scalars('data/scalar_group', {"xsinx": x * np.sin(x),
-                                             "xcosx": x * np.cos(x),
-                                             "arctanx": np.arctan(x)}, x)
-writer.close()
+# Canny边缘检测
+edges = cv2.Canny(blurred_image, threshold1=50, threshold2=150)
+
+# 显示结果
+cv2.imshow('Edges', edges)
+cv2.waitKey(0)
+cv2.destroyAllWindows()
