@@ -1,1 +1,1 @@
-Create a table in the specified format to record the number of images with and without targets, as well as the number for training and testing. During testing, also divide it into image-level and pixel-level.
+Ensure that pruning and testing can be completed this week, and that Wang Chao's previous plan can be completed on time.
