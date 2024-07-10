@@ -1,1 +1,1 @@
-I recorded the average metrics of this model on three datasets (BSDS, NYUD, MUTILCUE). After comparing with out of box, it was found that the fscore and accuracy of each dataset increased.
+I pasted the visualization results of 40 images into the images. I feel like generalization is not being checked, and the detected edges are becoming finer. Just missing some details.
