@@ -1,1 +1,1 @@
-Underfitting: Training data includes only one image, leading to insufficient training. Insufficient training causes underfitting and results in poor model performance.
+I need to take a day off on Friday, July 12th.
