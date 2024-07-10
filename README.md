@@ -1,1 +1,3 @@
-I think I trained a single image three times, and only this time did the recall decrease. For this training result, recall was increasing before the 13th epoch, but afterwards, it may have decreased due to weight drifting caused by the long training time.
+Weight drift from 20 to 39 epochs: The detection results at 39 epochs show undetected edges in the image (e.g., the back of the white goose). However, the model at 20 epochs shows better detection with more comprehensive edge detection. This indicates that there is weight drift from 20 to 39 epochs. When training for too long, the model weights may drift within the parameter space, causing the model to move from a better local optimum to a worse solution, possibly degrading performance on the training set.
+
+Underfitting from 10 to 20 epochs: Compared to 20 epochs, the detection results at 12 and 13 epochs show more noise due to insufficient training and lower precision.
