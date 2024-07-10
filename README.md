@@ -1,1 +1,1 @@
-After changing the threshold, the accuracy, recall, and fscore of the 10BSDS dataset were recorded, as well as the growth values of three indicators before and after the threshold change.
+The average precision decreased by 25.1728%, the average recall increased by 68.9658%, and the average F1 score decreased by 7.9933%.
