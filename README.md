@@ -1,1 +1,1 @@
-IndustrialNet\PMNet\SegGPT。
+I think I trained a single image three times, and only this time did the recall decrease. For this training result, recall was increasing before the 13th epoch, but afterwards, it may have decreased due to weight drifting caused by the long training time.
