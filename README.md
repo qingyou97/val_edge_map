@@ -1,1 +1,1 @@
-The following experiments were conducted separately, and it can be seen that as the number of epochs increases, Precision gradually increases while recall gradually decreases. The 12 epochs and 13 epochs are better than the out of box model in all three indicators, and there is a possibility of overfitting in epochs after 13.
+Underfitting: Training data includes only one image, leading to insufficient training. Insufficient training causes underfitting and results in poor model performance.
