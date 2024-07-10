@@ -1,1 +1,1 @@
-I recorded 10 images of BSDS, and the indicators of each image increased.
+I recorded 10 images of BSDS, and the indicator growth and average growth value of each image.
