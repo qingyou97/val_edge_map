@@ -1,3 +1,5 @@
-Weight drift from 20 to 39 epochs: The detection results at 39 epochs show undetected edges in the image (e.g., the back of the white goose). However, the model at 20 epochs shows better detection with more comprehensive edge detection. This indicates that there is weight drift from 20 to 39 epochs. When training for too long, the model weights may drift within the parameter space, causing the model to move from a better local optimum to a worse solution, possibly degrading performance on the training set.
+在`cv2.Canny()`中，阈值用于边缘检测的步骤：
 
-Underfitting from 10 to 20 epochs: Compared to 20 epochs, the detection results at 12 and 13 epochs show more noise due to insufficient training and lower precision.
+1. **低阈值**：第一阈值。低于这个值的像素会被认为不是边缘，直接滤除。
+2. **高阈值**：第二阈值。高于这个值的像素会被认为是确定的边缘。
+3. **双阈值**：介于两个阈值之间的像素根据与已确定边缘的连通性来判断是否为边缘。
