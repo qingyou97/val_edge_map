@@ -1,1 +1,1 @@
-I recorded 10 images of BSDS, and the indicator growth and average growth value of each image.
+I recorded the accuracy, recall, and F1 scores of 10 BSDS images. The accuracy decreased by an average of 25.1728%, recall increased by an average of 68.9658%, and the F1 score decreased by an average of 7.9933%.
