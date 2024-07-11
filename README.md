@@ -1,1 +1,2 @@
-I recorded the accuracy, recall, and F1 scores of 10 BSDS images. The accuracy decreased by an average of 25.1728%, recall increased by an average of 68.9658%, and the F1 score decreased by an average of 7.9933%.
+1. Start implementing the L1 method in DepGraph. Priority 1.
+2. Briefly organize the pruning in the four links. What method does each interface function correspond to? Priority 2.
