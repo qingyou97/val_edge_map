@@ -1,8 +1,5 @@
-论文中提到的PiDiNet（Pixel Difference Network）算法是一种高效且轻量级的边缘检测架构，其适用场景主要包括：
-
-1. **实时边缘检测**：由于PiDiNet的高推理速度（高达200 FPS），它适用于需要实时响应的应用，例如视频分析、增强现实（AR）和自动驾驶车辆的环境感知。
-2. **资源受限的环境**：PiDiNet模型小巧（少于1M参数），适合部署在计算资源受限的设备上，例如移动设备和嵌入式系统。
-3. **从零开始的训练**：PiDiNet能够使用有限的数据集从头开始训练，而不需要大规模数据集上预训练的大型网络，适用于数据获取受限的情况。
-4. **传统边缘检测算子的集成**：PiDiNet通过像素差分卷积（PDC）整合了传统边缘检测算子，适用于需要结合传统图像处理技术和深度学习的场景。
-5. **计算机视觉任务**：PiDiNet生成的边缘信息对于多种中高级计算机视觉任务至关重要，如物体识别和检测、图像分割、物体提议生成和图像编辑。
-9. **无需大规模数据集训练**：PiDiNet能够在不依赖大规模数据集如ImageNet预训练的情况下，实现高精度边缘检测，适用于对隐私和数据使用有限制的应用。
+1. Strong integrity: The unique structure ensures edge detection has integrity and continuity.
+2. High accuracy: Advanced feature extraction enables the detection of finer edges, improving accuracy.
+3. High robustness: Multi-scale fusion and data augmentation technologies make it stable across various conditions (different lighting, complex backgrounds).
+4. Strong scalability: AI models can be easily extended to new tasks and datasets through transfer learning.
+5. Reduced human intervention: After training, the detection process is largely automated, reducing labor costs.
