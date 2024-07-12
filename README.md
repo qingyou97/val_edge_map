@@ -1,3 +1,3 @@
-1. Complex image: Able to extract details and textures from complex images and backgrounds. 
-2. Strong adaptability: Can adapt to different types of images without manual parameter adjustment. 
-3. Trained on large data: Performs better with a large number of sample data.
+1. Easy to understand and implement: rule-based methods usually rely on simple mathematical operators, with concepts and algorithms being relatively straightforward, making them easy to implement.
+2. High computational efficiency: due to their relatively simple computational process, the calculation speed is usually fast, making it suitable for real-time processing.
+3. Strong controllability: parameters and rules are clearly defined, providing good controllability, and making them easy to debug and adjust.
