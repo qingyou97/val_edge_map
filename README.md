@@ -1,3 +1,3 @@
-1. Easy to understand and implement: rule-based methods usually rely on simple mathematical operators, with concepts and algorithms being relatively straightforward, making them easy to implement.
-2. High computational efficiency: due to their relatively simple computational process, the calculation speed is usually fast, making it suitable for real-time processing.
-3. Strong controllability: parameters and rules are clearly defined, providing good controllability, and making them easy to debug and adjust.
+1. Sensitivity to noise and parameters: Traditional methods have poor noise robustness and can easily be affected by noise and brightness variations, leading to poor detection performance. Additionally, different images require different parameter adjustments, lacking the ability for automatic tuning.
+2. Poor overall performance: Edges lack continuity, resulting in poor detection performance and difficulty in generalizing to complex scenes or images with large variations in lighting.
+3. Lack of high-level information utilization: Only low-level gradient information is used, making it difficult to understand global structural information and recognize complex edges.
