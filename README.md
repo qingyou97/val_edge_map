@@ -1,1 +1,11 @@
-Okay, today I will complete the edge detection task as you requested. If there are any remaining issues, I will come back next Tuesday to continue solving them. If there are no remaining issues, next Tuesday I will work on generalization tasks and select a pruning method to prune the model. What do you think?
+1. **需要大量数据**：训练高度准确的模型通常需要大量标注好的训练数据。
+
+2. **计算和训练成本高**：推理和训练过程中对计算资源和存储资源需求大，可能需要高成本的大型计算基础设施。
+
+3. **模型复杂性高**：模型的训练和实现比基于规则的方法更加复杂，要求较高的计算资源和专业知识。
+
+4. **缺乏解释性与透明度**：模型的决策过程不透明，属于黑箱化，难以理解和解释。
+
+5. **泛化性能不确定**：模型可能在特定条件下表现优异，但在不同或更复杂的条件下，泛化性能无法保证。模型也对数据依赖性强，当场景较训练集变化大时，可能需要重新训练模型。
+
+6. **噪声敏感**：模型性能与具体的算法有关，对数据噪声敏感。
