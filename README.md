@@ -1,3 +1,3 @@
-1. Sensitivity to noise and parameters: Traditional methods have poor noise robustness and can easily be affected by noise and brightness variations, leading to poor detection performance. Additionally, different images require different parameter adjustments, lacking the ability for automatic tuning.
-2. Poor overall performance: Edges lack continuity, resulting in poor detection performance and difficulty in generalizing to complex scenes or images with large variations in lighting.
-3. Lack of high-level information utilization: Only low-level gradient information is used, making it difficult to understand global structural information and recognize complex edges.
+Compare three algorithms from Point().
+From a visual perspective, I compared three algorithms and posted all the detection result graphs of these three algorithms and rule-based algorithms on six datasets.
+From the perspective of indicators, I compared three algorithms and calculated the differences between each algorithm and the rule-based algorithm.
