@@ -1,6 +1,1 @@
-The advantages, disadvantages, and applicable scenarios of AI based edge detection methods.
-The advantages, disadvantages, and applicable scenarios of rule-based edge detection methods.
-A detailed comparison was made between AI based edge detection methods and Rule based edge detection methods in terms of integrity, accuracy, robustness, and noise sensitivity.
-Advantages, disadvantages, and applicable scenarios of BDCN.
-The advantages, disadvantages, and applicable scenarios of PiDiNet.
-DexiNad's advantages, disadvantages, and applicable scenarios.
+Hello, as Li Zhe is currently using Wang Chao's machine for homework, could you please grant Wang Chao the machine permission of Sun Jiawen? Do you think this is appropriate? I checked and Sun Jiawen's computer has a GPU.
