@@ -1,1 +1,4 @@
-What I just meant was that after entering AVD, Wang Chao did not connect to her own internal PC, but connected to Sun's internal PC. This way, there will be no conflict with Li Zhe's remote connection to Wang Chao.
+Research the official pruning methods and strategies of PyTorch and record them.
+Research the pruning methods and strategies of torch pruning and record them.
+Implement the openvino method and record the comparison of recall rate and accuracy before and after implementation.
+Train and prune UNet using other categories of MVTEC for testing.
