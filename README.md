@@ -1,1 +1,1 @@
-Okay, I'll have Wang Chao check it. Can Wang Chao connect to Sun's machine while Li Zhe is remotely using Wang Chao's machine?
+Firstly, Wang Chao successfully connected to Sun Jiawen's machine on the company's PC. But as soon as Li Zhe connects to Wang Chao's PC, Wang Chao disconnects.
