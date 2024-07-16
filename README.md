@@ -1,4 +1,2 @@
-Research the official pruning methods and strategies of PyTorch and record them.
-Research the pruning methods and strategies of torch pruning and record them.
-Implement the openvino method and record the comparison of recall rate and accuracy before and after implementation.
-Train and prune UNet using other categories of MVTEC for testing.
+Advantages: Last week, I found that my learning and organizational skills improved. When working on summary tasks, I aimed to make the content comprehensive and logically clear.
+Disadvantages: While organizing documents, concerning some tasks calculating percentage growth indicators, I tried to find an efficient method using formulas in Excel but ended up wasting some time.
