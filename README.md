@@ -1,1 +1,1 @@
-Firstly, Wang Chao successfully connected to Sun Jiawen's machine on the company's PC. But as soon as Li Zhe connects to Wang Chao's PC, Wang Chao disconnects.
+What I just meant was that after entering AVD, Wang Chao did not connect to her own internal PC, but connected to Sun's internal PC. This way, there will be no conflict with Li Zhe's remote connection to Wang Chao.
