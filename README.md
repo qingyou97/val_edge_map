@@ -1,1 +1,1 @@
-Hi, I encountered a problem while organizing tasks. Do I need to organize Li Zhe's previous experiment results, including the effects and trends resulting from parameter adjustments? Are they the experiment results from last Thursday and Friday, without the modification to sigmoid yet?
+Hello, I can log in to Sun's machine using the same method, but Wang Chao cannot log in. Perhaps Wang Chao's permissions were not successfully activated?
