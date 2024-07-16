@@ -1,2 +1,1 @@
-Advantages: Last week, I found that my learning and organizational skills improved. When working on summary tasks, I aimed to make the content comprehensive and logically clear.
-Disadvantages: While organizing documents, concerning some tasks calculating percentage growth indicators, I tried to find an efficient method using formulas in Excel but ended up wasting some time.
+Hi, I encountered a problem while organizing tasks. Do I need to organize Li Zhe's previous experiment results, including the effects and trends resulting from parameter adjustments? Are they the experiment results from last Thursday and Friday, without the modification to sigmoid yet?
