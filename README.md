@@ -1,1 +1,1 @@
-At 4 pm, you finally decided that I would use Sun's computer for deployment. Later, I encountered network issues and communicated with you on Teams, but did not receive a response.
+The provided code includes a total of 6 pruning methods and 1 method to remove pruning. Among them, there are 3 unstructured pruning methods, 2 structured pruning methods, and 1 custom pruning method. The custom pruning method can be either structured or unstructured. There's also a remove function to delete the relevant pruning information from the module.
