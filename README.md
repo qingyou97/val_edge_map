@@ -1,1 +1,1 @@
-The provided code includes a total of 6 pruning methods and 1 method to remove pruning. Among them, there are 3 unstructured pruning methods, 2 structured pruning methods, and 1 custom pruning method. The custom pruning method can be either structured or unstructured. There's also a remove function to delete the relevant pruning information from the module.
+The time has been changed to 3-4 am Japan time. A notification has been sent in the calendar.
