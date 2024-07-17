@@ -1,45 +1,20 @@
-import sys
-import cv2 as cv
-import os
+import torch
 
+# 加载模型权重
+model_path = 'your_model_path.pth'
+model = torch.load(model_path, map_location=torch.device('cpu'))
 
-def main(img_folder, save_path):
-     ddepth = cv.CV_16S
-     kernel_size = 3
+# 打印模型的层和参数名字
+for name, param in model.items():
+    print(f"Layer: {name} | Size: {param.size()}")
+```
 
-     if not os.path.exists(save_path):
-          os.makedirs(save_path,exist_ok=True)
+注意：上述代码假设模型保存的字典状态。如果模型是通过 `torch.save(model.state_dict(), path)` 保存的，可以使用 `model.load_state_dict()` 的 `state_dict` 替代 `model`。
 
-     img_list = os.listdir(img_folder)
+```python
+# 加载 model.state_dict()
+state_dict = torch.load(model_path, map_location=torch.device('cpu'))
 
-     for img in img_list:
-          img_path = os.path.join(img_folder, img)
-
-          src = cv.imread(img_path, cv.IMREAD_COLOR) # Load an image
-
-          if src is None:
-               print('Error opening image')
-               print('Program Arguments: [image_name -- default lena.jpg]')
-               return -1
-
-
-          # Remove noise by blurring with a Gaussian filter
-          src = cv.GaussianBlur(src, (3, 3), 0)
-
-          # Convert the image to grayscale
-          src_gray = cv.cvtColor(src, cv.COLOR_BGR2GRAY)
-
-          # Apply Laplace function
-          dst = cv.Laplacian(src_gray, ddepth, ksize=kernel_size)
-
-          # converting back to uint8
-          abs_dst = cv.convertScaleAbs(dst)
-          abs_dst = 255 - abs_dst
-          name = img.split('.')[0]
-          cv.imwrite(os.path.join(save_path, f'{name}.png'), abs_dst)
-     print('计算完成')
-     return 0
-if __name__ == "__main__":
-     img_folder = r'E:\DexiNed-master\data'
-     save_path = r'result/laplacian'
-     main(img_folder, save_path )
+# 输出每个参数的名字和大小
+for name, param in state_dict.items():
+    print(f"Parameter: {name} | Size: {param.size()}")
