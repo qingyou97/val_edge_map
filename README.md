@@ -1,1 +1,1 @@
-Understood. I have another question. Since the carpet dataset has five types of defects, Li Zhe initially took one image from each type, totaling five images. During testing, all five types of defects were tested. If only one image is used for training in the end, which type should I choose? Do I need to test the effects on the other four types of defects?
+Okay, do we need to add OK images for training, or do we only need one NG image for training?
