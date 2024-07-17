@@ -1,4 +1,6 @@
-The out of box comparison of the three algorithms shows that BDCN has thicker edges and more noise than pidinetd; The pidinet algorithm is more effective in detecting some details, but occasionally in some images, the noise can become significant; Dexined has the most details and good generalization.
-In traditional methods, the overall quality is obviously poor, the detection details are few, and there is also a lot of noise.
-三个算法的out-of-box对比，BDCN的边缘更粗，噪声比pidinetd多些；pidinet算法对于一些细节检测的更多了，但偶尔一些图像，噪声会变得很多；dexined的细节是最多的，泛化性也比较好。
-传统方法中，明显整体性比较差，检测的细节也少，噪声也多。
+For the BSDS test dataset, after training, the accuracy improved by 25.98%, the recall decreased by 1.54%,the f1 score improved by 23.33%.
+For the training dataset of BSDS, after training, the accuracy improved by 23.85%, the recall decreased by 1.77%. the f1 score improved by 20.83%.
+ For the validation dataset of BSDS, after training, the accuracy improved by 30.42%, the recall improved by 1.56%, the f1 score improved by 20.84%.
+ For the NYUD HHA test dataset, after training, the accuracy improved by 43.77%, the recal decreased by 54.12%, the f1 score improved by 2.16%.
+ For the RGB test dataset of NYUD, after training, the accuracy improved by 16.96%, the recal decreased by 16.27%, the f1 score improved by 12.35%
+ For the multiclue test dataset, after training, the accuracy improved by 17.60%, the recall decreased by 21.97% , and the F1 score improved by 9.24%.
