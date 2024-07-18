@@ -1,1 +1,1 @@
-Also, I just checked three results and couldn't find the basic model that didn't detect it. The pruned model detected this type of image. But most of them will detect that the area has become larger and the contour has become larger.
+At present, we have selected the results of 400 epochs. How about we have a meeting where Li Zhe can explain?
