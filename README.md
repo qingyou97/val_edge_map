@@ -1,1 +1,1 @@
-![image](https://github.com/user-attachments/assets/5b325bc0-a16a-4fd2-841f-47700699f4cf)Used the LnStructured method to perform pruning with n being 1, 2, infinity, and negative infinity, and prune ratios of 0.1 and 0.2. The metrics were tested at image and pixel levels.
+After modifying the activation function, it was found that training 10 images in the previous way alleviated the problem of background over detection.
