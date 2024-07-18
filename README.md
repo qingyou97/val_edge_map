@@ -1,1 +1,1 @@
-At present, we have selected the results of 400 epochs. How about we have a meeting where Li Zhe can explain?
+probabilities = torch.sigmoid(output) if net.n_classes == 1 else F.softmax(output, dim=1)
