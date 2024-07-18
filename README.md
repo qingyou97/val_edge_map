@@ -1,2 +1,1 @@
-I understand this point, but I want to know if I am still adjusting the softmax activation function model to take out the probability of foreground classes, lower the threshold, and see if this foreground can be detected.
-Also, I just checked three results and couldn't find such an image.
+Also, I just checked three results and couldn't find the basic model that didn't detect it. The pruned model detected this type of image. But most of them will detect that the area has become larger and the contour has become larger.
