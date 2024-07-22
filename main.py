@@ -1,3 +1,5 @@
+Overall, on Monday we will finalize the selection of the baseline model and determine the pruning scope. On Tuesday and Wednesday, we will fix the baseline model and pruning scope and use different pruning methods to tune and prune the model. On Thursday, we will organize and analyze the results in a standardized format. On Friday, we will report the final conclusions and future targets to you.
+  
 Duan:
 1. Monday: Select multiple baseline models and check other datasets and defect types to see if there is overfitting.
 2. Tuesday and Wednesday: Use the torch-pruning method to prune the parameters of all selected baseline models according to the scope chosen by Li Zhe. Record all visualization results.
