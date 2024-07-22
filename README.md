@@ -1,2 +1,4 @@
-The progress on generalization tasks is currently steady. I think our collaboration with Li Zhe went very smoothly last week, and I learned a lot about segmentation and generalization. Our team is becoming more organized. 
-The experiments on generalization last week were still in an exploratory stage. I also forgot to analyze from a visualization perspective. I hope to find a clear direction for the experiments this week and explore the relationship between pruning and generalization.
+(a)Basic dependency：模块直接依赖其输入和输出的特征。
+(b)Residual dependency：模块依赖于残差连接的输入和输出特征。
+(c)Concatenation dependency：模块依赖于特征拼接操作的输入和输出。
+(d)Reduction dependency：模块依赖于降维操作（求和）连接的输入特征和输出特征。
