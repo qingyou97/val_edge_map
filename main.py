@@ -1,4 +1,6 @@
 重要性计算方法	Metapruner能否使用
+mp = tp.importance.BNScaleImportance()
+
 GroupNormImportance
 	YES
 BNScaleImportance
