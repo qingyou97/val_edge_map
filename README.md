@@ -1,13 +1,2 @@
-Duan:
-1. Discuss baseline model selection with Li Zhe: Look at images;
-2. Discuss the pruning scope: initial inc layer, encoder, decoder, encoder and decoder, final outc layer;
-3. Learn the principles of torch-pruning;
-4. Test torch-pruning implementation;
-5. Learn and test OpenVINO; Output the differences;
-6. Analyze and organize other types of datasets tested by Li Zhe;
-
-Li Zhe:
-7. Discuss baseline model selection with Duan: Testing and metrics;
-8. Test and analyze all parameters of the official PyTorch methods;
-9. Learn and test TensorRT (trt);
-10. Train and test all other datasets, and organize some of the results.
+The progress on generalization tasks is currently steady. I think our collaboration with Li Zhe went very smoothly last week, and I learned a lot about segmentation and generalization. Our team is becoming more organized. 
+The experiments on generalization last week were still in an exploratory stage. I also forgot to analyze from a visualization perspective. I hope to find a clear direction for the experiments this week and explore the relationship between pruning and generalization.
