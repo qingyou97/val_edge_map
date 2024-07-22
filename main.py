@@ -1,13 +1,24 @@
 import os
+import shutil
 
-def rename_files(folder_path):
-    for filename in os.listdir(folder_path):
-        new_filename = filename.replace('_mask', '')
-        if new_filename != filename:
-            os.rename(os.path.join(folder_path, filename), os.path.join(folder_path, new_filename))
-            print(f'Renamed: {filename} -> {new_filename}')
-        else:
-            print(f'Skipped: {filename}')
+# 设置文件夹路径
+folder_A = "path_to_A"
+folder_B = "path_to_B"
+folder_C = "path_to_C"
+
+# 获取A文件夹里的文件列表
+files_A = os.listdir(folder_A)
+
+# 确保C文件夹存在
+os.makedirs(folder_C, exist_ok=True)
+
+# 遍历A文件夹里的文件
+for file_A in files_A:
+    file_B_path = os.path.join(folder_B, file_A)
     
-folder_path = 'A文件夹的路径'  # 替换为实际文件夹路径
-rename_files(folder_path)
+    # 检查B文件夹中是否存在同名文件
+    if os.path.isfile(file_B_path):
+        # 如果存在，移动到C文件夹
+        shutil.copy(file_B_path, folder_C)
+
+print("文件移动完成")
