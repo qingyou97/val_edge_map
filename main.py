@@ -1,16 +1,11 @@
-# 按照 recall 大小排序
-sorted_results = sorted(results_list, key=lambda x: x['recall'], reverse=True)
-
-# 保存排序结果到 log.txt
-with open('log.txt', 'w') as f:
-    for params in sorted_results:
-        f.write(str(params) + '\
-')
-
-# 打印 top3 的组
-print("Top 3 parameters with highest recall:")
-for i, params in enumerate(sorted_results[:3]):
-    print(f"Rank {i+1}:")
-    for key, value in params.items():
-        print(f"{key}: {value}")
-    print()  # 空行分隔每组参数
+1. Collected experimental information into a results table.
+a. Organized all information about the currently selected baseline model, including the reason for selecting this baseline and relevant diagrams.
+b. Diagrams regarding the pruning range.
+c. Details about all implemented pruning methods.
+d. Information on parameter tuning for the implemented pruning methods.
+   
+2. Completed the for-loop code, which tested 3 baseline models and 4 structured pruning methods from torch-pruning in a loop.
+a. Added code to set the pruning ranges. There are currently four situations: `[['inc'],['down1', 'down2', 'down3', 'down4'], ['up1', 'up3', 'up4'], ['out']]`.
+b. Added code to calculate recall for each pruning parameter setting, and selected the top1 by comparing results under the condition of recall not exceeding 0.9.
+   
+Conclusion: Testing is complete, and the top1 indicators for the three baselines have been recorded. The results show an improvement in recall for all three baseline models. However, the visualization results have not been reviewed yet. Pruning in the encoder phase yielded better results, and the FPGM method for calculating importance is preferable.
