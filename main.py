@@ -1,1 +1,1 @@
-Analyze certain defects in other datasets to determine if there is overfitting. Analyze the results of pruning.
+Bent, missing-wire, and poke_insulation were overfitting and trained well, but some images were not detected during testing.
