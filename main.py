@@ -1,13 +1,28 @@
-# 初始化最大 recall 和对应的参数组
-max_recall = -1
-top1_params = {}
+import sys
 
-# 遍历列表找到 recall 最大的那组参数
-for params in results_list:
-    if params['recall'] > max_recall:
-        max_recall = params['recall']
-        top1_params = params
+def main():
+    # 你的代码开始
+    print("这是你的代码中的print语句1")
+    print("这是你的代码中的print语句2")
+    # 你的代码结束
 
-# 打印 recall 最大的那组参数
-print("Top 1 parameters with highest recall:")
-print(top1_params)
+# 打开log.txt文件
+log_file = open('log.txt', 'a')
+
+# 保存原始的sys.stdout
+original_stdout = sys.stdout
+
+# 重定向sys.stdout到log_file
+sys.stdout = log_file
+
+# 执行你的代码
+main()
+
+# 恢复原始的sys.stdout
+sys.stdout = original_stdout
+
+# 关闭log文件
+log_file.close()
+
+# 现在print会输出到控制台
+print("这是普通的print输出")
