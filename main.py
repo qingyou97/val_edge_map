@@ -1,9 +1,9 @@
-import os
+items = ["hazelnut_hole", "hazelnut_print", "leather_color", "leather_cut", "leather_fold", "leather_glue", "leather_poke", "metal_nut_bent", "metal_nut_color", "metal_nut_flip"]
 
-# 文件夹路径
-folder_path = 'A'  # 请将'A'替换为你的实际路径
+for item in items:
+    exec(f"{item}_recall_list = []")
 
-# 获取所有文件夹名称
-subfolders = [f.name for f in os.scandir(folder_path) if f.is_dir()]
-
-print(subfolders)
+# 验证一下是否创建了这些列表
+print(hazelnut_hole_recall_list)
+print(leather_color_recall_list)
+print(metal_nut_color_recall_list)
