@@ -1,3 +1,1 @@
-I have a question. Currently, we have three baseline models, each under which every defect results in 90 official pruning outcomes and 200 torch-pruning outcomes. 
-
-After retraining with 14 additional datasets, each of which has 3-7 types of defects, let's assume an average of 5 defects. This implies that we need to prune and calculate recall for a total of 75 situations. So, we'll need to analyze 75 * (90 + 200) = 21,750 folders. Can we analyze everything afterward? Or should we narrow down the range on these 75 minor defects? After the training ends, we could automatically filter out the defect types from the training dataset that show poor detection results, and then proceed with pruning for these specific defects.
+If there are some defects without overfitting, we won't do the rest.
