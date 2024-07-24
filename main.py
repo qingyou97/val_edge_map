@@ -26,12 +26,17 @@ def find_and_copy_images(A_folder, B_folder):
                     src_file = os.path.join(src_folder, file_name)
                     dest_file = os.path.join(dest_folder, file_name)
                     if os.path.isfile(src_file):
-                        shutil.copy(src_file, dest_file)
+                        try:
+                            shutil.copy(src_file, dest_file)
+                        except PermissionError as e:
+                            print(f"PermissionError: {e}")
+                        except Exception as e:
+                            print(f"Error copying {src_file} to {dest_file}: {e}")
                 print(f"Copied images from {src_folder} to {dest_folder}")
             else:
                 print(f"Source folder {src_folder} does not exist")
 
 # 使用示例
-A_folder = '/path/to/A_folder'
-B_folder = '/path/to/B_folder'
+A_folder = 'D:\\\\Generalization_task\\\\Pytorch-UNet-master\\\\Pytorch-UNet-master\\\\data\\\\baseline_model_data_15'
+B_folder = 'D:\\\\path\\\\to\\\\B_folder'
 find_and_copy_images(A_folder, B_folder)
