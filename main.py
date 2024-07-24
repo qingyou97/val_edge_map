@@ -1,39 +1,15 @@
 import os
-import shutil
-import stat
 
-# A 和 B 文件夹路径
-folder_A = '/path/to/A'
-folder_B = '/path/to/B'
+def check_folders(parent_folder):
+    for folder_name in os.listdir(parent_folder):
+        folder_path = os.path.join(parent_folder, folder_name)
+        if os.path.isdir(folder_path):
+            test_gt_path = os.path.join(folder_path, 'test_gt')
+            if os.path.exists(test_gt_path) and os.path.isdir(test_gt_path):
+                image_files = [f for f in os.listdir(test_gt_path) if os.path.isfile(os.path.join(test_gt_path, f))]
+                if len(image_files) <= 1:
+                    print(folder_name)
 
-def set_rw_permissions(path):
-    os.chmod(path, stat.S_IRUSR | stat.S_IWUSR | stat.S_IXUSR | 
-                  stat.S_IRGRP | stat.S_IWGRP | stat.S_IXGRP |
-                  stat.S_IROTH | stat.S_IWOTH | stat.S_IXOTH)
-
-for root, dirs, files in os.walk(folder_A):
-    for directory in dirs:
-        # Parse the directory name under A folder
-        parts = directory.split('_', 1)
-
-        if len(parts) != 2:
-            continue # Skip if the name doesn't follow the expected pattern
-
-        first_part, second_part = parts
-        source_dir = os.path.join(folder_B, first_part, 'test', second_part)
-
-        if os.path.exists(source_dir):
-            dest_dir = os.path.join(root, directory, 'test_images')
-            if not os.path.exists(dest_dir):
-                os.makedirs(dest_dir)
-
-            # Copy all files from source_dir to dest_dir
-            for item in os.listdir(source_dir):
-                s = os.path.join(source_dir, item)
-                d = os.path.join(dest_dir, item)
-                
-                if os.path.isfile(s):
-                    shutil.copy2(s, d)
-                    set_rw_permissions(d)
-
-print("文件复制完成。")
+# 使用示例
+parent_folder = 'A'  # 替换为你的父文件夹路径
+check_folders(parent_folder)
