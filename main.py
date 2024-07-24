@@ -1,28 +1,14 @@
 import os
-import shutil
-import stat
 
-# 替换为你要清空的文件夹路径
-folder_path = "A"
+# A文件夹路径
+base_dir = 'A'
 
-def remove_readonly(func, path, _):
-    os.chmod(path, stat.S_IWRITE)
-    func(path)
+# 将在每个子文件夹下创建的四个新文件夹名称
+new_folders = ['test_gt', 'test_images', 'train_gt', 'train_images']
 
-for root, dirs, files in os.walk(folder_path):
-    for file in files:
-        file_path = os.path.join(root, file)
-        try:
-            os.remove(file_path)
-        except PermissionError:
-            os.chmod(file_path, stat.S_IWRITE)
-            os.remove(file_path)
-    for dir in dirs:
-        dir_path = os.path.join(root, dir)
-        try:
-            shutil.rmtree(dir_path, onerror=remove_readonly)
-            os.makedirs(dir_path)
-        except PermissionError:
-            os.chmod(dir_path, stat.S_IWRITE)
-            shutil.rmtree(dir_path, onerror=remove_readonly)
-            os.makedirs(dir_path)
+# 遍历A文件夹下的所有子文件夹
+for subdir in next(os.walk(base_dir))[1]:
+    subdir_path = os.path.join(base_dir, subdir)
+    for folder in new_folders:
+        new_folder_path = os.path.join(subdir_path, folder)
+        os.makedirs(new_folder_path, exist_ok=True)
