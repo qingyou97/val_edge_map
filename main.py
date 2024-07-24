@@ -27,6 +27,8 @@ def find_and_copy_images(A_folder, B_folder):
                     dest_file = os.path.join(dest_folder, file_name)
                     if os.path.isfile(src_file):
                         try:
+                            # 修改文件权限
+                            os.chmod(src_file, 0o777)
                             shutil.copy(src_file, dest_file)
                         except PermissionError as e:
                             print(f"PermissionError: {e}")
