@@ -1,1 +1,1 @@
-Hello, regarding the question you just replied to, I think you should still reply to Wang Chao because there was a time before when I remember you didn't reply to her question. I think doing so will make the members feel very uncomfortable. I just learned about this issue too.
+Hello, regarding your failure to reply to Wang Chao just now, I think you should still reply to Wang Chao. Because I remember a few times before, you didn't reply to her questions. I think doing so will make the members feel very uncomfortable. I just learned about this issue too.
