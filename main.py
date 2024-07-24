@@ -1,15 +1,17 @@
 import os
 
-def check_folders(parent_folder):
-    for folder_name in os.listdir(parent_folder):
-        folder_path = os.path.join(parent_folder, folder_name)
-        if os.path.isdir(folder_path):
-            test_gt_path = os.path.join(folder_path, 'test_gt')
-            if os.path.exists(test_gt_path) and os.path.isdir(test_gt_path):
-                image_files = [f for f in os.listdir(test_gt_path) if os.path.isfile(os.path.join(test_gt_path, f))]
-                if len(image_files) <= 1:
-                    print(folder_name)
+def rename_images(base_folder):
+    # 遍历A文件夹下的所有子文件夹
+    for root, subdirs, files in os.walk(base_folder):
+        # 检查是否是"test_gt"文件夹
+        if os.path.basename(root) == "test_gt":
+            for file in files:
+                if "_mask" in file:  # 检查文件名是否包含"_mask"
+                    src = os.path.join(root, file)
+                    dst = os.path.join(root, file.replace('_mask', ''))
+                    os.rename(src, dst)
+                    print(f'Renamed: {src} -> {dst}')
 
-# 使用示例
-parent_folder = 'A'  # 替换为你的父文件夹路径
-check_folders(parent_folder)
+# 替换为你的文件夹路径
+base_folder = 'A文件夹路径'
+rename_images(base_folder)
