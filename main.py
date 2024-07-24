@@ -14,4 +14,4 @@ def rename_images(base_folder):
 
 # 替换为你的文件夹路径
 base_folder = 'A文件夹路径'
-rename_images(base_folder)
+rename_images(base_folder)["bottle", "cable", "capsule", "carpet", "grid", "hazelnut", "leather", "metal_nut", "pill", "screw", "tile", "toothbrush", "transistor", "wood", "zipper"]
