@@ -1,9 +1,1 @@
-items = ["hazelnut_hole", "hazelnut_print", "leather_color", "leather_cut", "leather_fold", "leather_glue", "leather_poke", "metal_nut_bent", "metal_nut_color", "metal_nut_flip"]
-
-for item in items:
-    exec(f"{item}_recall_list = []")
-
-# 验证一下是否创建了这些列表
-print(hazelnut_hole_recall_list)
-print(leather_color_recall_list)
-print(metal_nut_color_recall_list)
+Li Zhe is using Sun's computer. Sun's computer has a 500GB hard drive, so there are 75 defects and 6750 models need to be saved, which is approximately 600GB. The computer's hard drive is not enough. May I ask what to do?
