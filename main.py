@@ -1,6 +1,1 @@
-Reducing capacity
-Early stopping
-Regularization and weight decay
-Ensembles
-Data augmentation
-Stochastic regularization
+Continue researching methods to improve generalization, with a focus on trained methods
