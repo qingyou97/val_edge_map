@@ -1,1 +1,8 @@
-First, I trained, pruned, and tested the remaining six datasets. Li Zhe helped me to select these six datasets. Second, I organized four importance methods. Because this method is quite special and different from ordinary pruning, I would like to meet with you this afternoon to explain it in detail. Third, I screened the detection results of three baseline models. The current conclusion is that the pruning effect of the three baseline models shows that there are cases where the baseline model cannot detect, but the pruned model can detect, indicating enhanced generalization ability, but it significantly reduces the detection ability of other images. I have recorded the selected images in the table. Today, I will analyze the visualization results of the remaining datasets to understand the relationship between generalization and pruning. I will also analyze the relationship between pruning range and generalization.
+1. I have completed the training of the remaining dataset, and Li Zhe has organized 6 types of training datasets.
+2. Organized four methods of importance measurement. Today I need to make a separate appointment to communicate with you.
+3. Filter the visualization results.
+The conclusion is that the pruning effects of the three baseline models indicate that there are cases where some anomalies cannot be detected by the baseline models but can be detected after pruning, showing an enhanced generalization ability. However, this results in a significant decrease in the detection ability for other images.
+
+Plan for today:
+1. Analyze the visualization results of the remaining part of the dataset to understand the relationship between generalization and pruning.
+2. Concurrently analyze the relationship between the pruning range and generalization.
