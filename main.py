@@ -1,1 +1,2 @@
-Continue researching methods to improve generalization, with a focus on trained methods
+Looking for datasets for edge detection in industrial quality inspection.
+Seeking methods to accelerate training on CPU.
