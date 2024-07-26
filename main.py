@@ -1,1 +1,1 @@
-For the SegGPT method, refine defect categories and generate fixed test data. Then performed one-shot testing, and also used mixed or all defective images for 5-shot testing. Completed testing and organized the visualization results.
+For the DCAMA open-source project, I completed the test data loading function based on its testing logic.
