@@ -1,1 +1,1 @@
-Test the SegGPT method on five classes in fold0 based on fixed test data, visualize the results, and present the outcomes. The test results have been organized into findings.
+For the SegGPT method, refine defect categories and generate fixed test data. Then performed one-shot testing, and also used mixed or all defective images for 5-shot testing. Completed testing and organized the visualization results.
