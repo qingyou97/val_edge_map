@@ -1,1 +1,1 @@
-For the DCAMA method, train the model using mixed data. Then test the algorithm with fixed and mixed data, and organize the visual results for display.
+Based on 2.4, train DCAMA using bad query and mixed support. The data comes from fine-grained defect data from Industrial-5i.
