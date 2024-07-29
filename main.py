@@ -1,1 +1,1 @@
-Refined the parameters and completed the pruning and testing code in the for loop. The refined parameters include modifying the pruning quantity to 0.05 increments and testing from 0.05 to 0.45. It also includes six pruning ranges.
+All previous image results have been stored on the NAS, but the new results with modified parameters are being added due to their large number.
