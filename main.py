@@ -1,1 +1,1 @@
-Attended a meeting with Han Xu and Wang Chao and recorded the objectives.
+Find 1-2 edge detection datasets for industrial quality inspection, then run inference tests on pidinet if available.
