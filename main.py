@@ -1,1 +1,1 @@
-Got the initial conclusions on pruning and generalization, and discussed the next steps.
+We have researched a method called temperature scaling, which is a post process.
