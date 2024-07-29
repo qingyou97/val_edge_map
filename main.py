@@ -1,1 +1,1 @@
-We have researched a method called temperature scaling, which is a post process.
+Temperature scaling is a technique for calibrating the confidence of machine learning model outputs. It adjusts the output probabilities to better reflect actual confidence levels. This method needs to be optimized on a validation set, minimizing the Expected Calibration Error (ECE) to fine-tune the temperature parameter t. Therefore, Temperature scaling is a post-processing step, not learned on the training set.
