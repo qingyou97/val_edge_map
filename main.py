@@ -1,1 +1,2 @@
-Research datasets for edge detection in industrial quality inspection.
+I found 7 edge detection datasets for pavement crack detection. According to the RINDNet paper, downstream tasks include pavement crack detection. The cited papers mentioned 7 downloadable datasets for pavement crack detection, which meet the requirements in JIRA, including low contrast, halo effects making detection difficult, and over-detection of edges due to textures.
+However, I have not yet found a semantic edge dataset related to industrial quality inspection. I only found segmentation datasets for autonomous driving and remote sensing images. Some papers mention that segmentation datasets can be converted to edge detection datasets.
