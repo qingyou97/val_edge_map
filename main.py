@@ -4,6 +4,16 @@ import openpyxl
 from PIL import Image
 import shutil
 
+
+def resize_image(input_path, output_path, new_width=None, new_height=None):
+    with Image.open(input_path) as img:
+
+        height_percent = new_height / float(img.size[1])
+        new_weight = int((float(img.size[0]) * float(height_percent)))
+
+        resized_img = img.resize((new_weight, new_height), Image.LANCZOS)
+        resized_img.save(output_path)
+
 def get_column_letter(n):
     """生成 Excel 列名"""
     result = ''
@@ -50,12 +60,13 @@ def image2excel(excel_file_path, sheet_number, start_row_num,start_col_num, img_
         # 写入图像名
         sheet.cell(row=current_row, column=curent_col, value=image_file)
 
-        # 读取并粘贴图像
-        img = Image.open(img_path)
-        img.thumbnail((100, 100), Image.LANCZOS)
 
+        # 读取并粘贴图像
         path = os.path.join(s_img_folder, image_file)
-        img.save(path)
+
+        img = Image.open(img_path)
+        resize_image(img_path, path, new_width=width, new_height=height)
+
         spreadsheet_img = openpyxl.drawing.image.Image(path) # f"{image_file}"
         sheet.add_image(spreadsheet_img, f"{get_column_letter(curent_col)}{current_row + 1}")
 
@@ -80,6 +91,6 @@ if __name__ == '__main__':
     sheet_number = "Sheet1" # Sheet表名
     start_row_num = 3 # 起始行
     start_col_num = 1 # 起始列
-    width = 20 # 单元格宽度
-    height = 40 # 单元格高度
+    width = 40 # 单元格宽度
+    height = 100 # 单元格高度
     image2excel(excel_path, sheet_number, start_row_num, start_col_num, folder_path,width, height)
