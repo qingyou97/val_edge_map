@@ -1,1 +1,8 @@
-综合各个优化方法，对具体算法在应用场景中的性能和速度进行平衡与对比。确定在哪些条件下各自方法表现最佳。
+import os
+
+def ensure_path_exists(path):
+    if not os.path.exists(path):
+        os.makedirs(path)
+
+path = 'your/directory/path'
+ensure_path_exists(path)
