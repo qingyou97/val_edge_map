@@ -1,29 +1,31 @@
 import os
-import shutil
+import cv2
 
-# 定义A和B文件夹路径
-A_folder = 'path_to_A_folder'
-B_folder = 'path_to_B_folder'
 
-# 获取A文件夹下所有子文件夹
-subfolders = [f.name for f in os.scandir(A_folder) if f.is_dir()]
+def make_edge_mask(seg_mask_path, edge_mask_path):
+    if not os.path.exists(edge_mask_path, ):
+        os.makedirs(edge_mask_path,exist_ok=True)
 
-# 遍历每个子文件夹
-for subfolder in subfolders:
-    A_subfolder_path = os.path.join(A_folder, subfolder)
-    B_subfolder_path = os.path.join(B_folder, subfolder)
+    seg_mask_list = os.listdir(seg_mask_path)
 
-    # 如果B文件夹下对应的子文件夹不存在，则创建
-    if not os.path.exists(B_subfolder_path):
-        os.makedirs(B_subfolder_path)
+    for mask in seg_mask_list:
+        mask_path = os.path.join(seg_mask_path, mask)
 
-    # 复制A子文件夹中的指定子文件夹（test_gt 和 test_images）到B对应的子文件夹
-    for subdir in ['test_gt', 'test_images']:
-        source_path = os.path.join(A_subfolder_path, subdir)
-        dest_path = os.path.join(B_subfolder_path, subdir)
-        if os.path.exists(source_path):
-            if os.path.exists(dest_path):
-                shutil.rmtree(dest_path)  # 如果目标路径已存在，先删除
-            shutil.copytree(source_path, dest_path)
+        # 读取mask图像
+        mask = cv2.imread(r'E:\seg2edge\20160222_080933_721_1921.png', 0)  # 灰度模式读取
 
-print("复制完成")
+        # 使用Canny算法提取边缘
+        edges = cv2.Canny(mask, 100, 200)
+
+        # 保存或显示边缘图像
+        cv2.imwrite(os.path.join(edge_mask_path, mask), edges)
+        # cv2.imshow('Edges', edges)
+        # cv2.waitKey(0)
+        # cv2.destroyAllWindows()
+
+
+
+if __name__ == '__main__':
+    seg_mask_path = '' # 分割mask路径
+    edge_mask_path = '' # 边缘mask路径
+    make_edge_mask(seg_mask_path, edge_mask_path)
