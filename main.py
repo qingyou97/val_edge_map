@@ -1,3 +1,1 @@
-1. Discuss whether the newly added semantic defect segmentation dataset of steel surfaces can be used as an edge detection dataset.
-2. Explore whether it is possible to convert segmentation datasets into edge detection datasets.
-3. Test the performance (accuracy, recall, and F-score) of the cracktree200 dataset on BDCN, PIDINET, and DEXINED.
+BDCN performs better on the AIGLE_RN, crack200, ESAR, and datasets. Dexined performs better on the CFD dataset. Detection is not very good on the crack500, GAPS, and LCMS datasets.
