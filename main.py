@@ -1,1 +1,1 @@
-Comparison between five-shot and one-shot: test the middle one from five-shot with one-shot.
+wrote the conclusion of Pytorch Pruning into the document and pasted the link onto Jira.
