@@ -1,2 +1,6 @@
-1. Strengths: After understanding your requirements for the dataset, I quickly found many relevant datasets, which are helpful for future experiments.
-2. Weaknesses: Initially, my limited knowledge prevented me from understanding the type of dataset you needed, which took some extra time. Next time, I will stay closely connected with you when searching to avoid wasting time.
+1.1 Test six datasets on BDCN, PIDINET, and DEXINED out-of-box results.
+1.2 Compare and summarize three algorithms' out-of-box results.
+2.1 Look for edge detection annotation tools.
+3.1 Annotate 20 images for each of 10 objects in six datasets.
+4.1 Design a training experiment plan.
+4.2 Use 10 datasets to train three algorithms.
