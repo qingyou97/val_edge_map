@@ -1,5 +1,13 @@
-首先我使用了一个人标注的gt和7个人标注的gt同时做了实验，发现相比于dexined，pidinet过度拟合的状态。而且gt不影响pidinet的结果，最后都是过度拟合花朵轮廓，没有噪声。
-其次我使用预训练模型和经过了bsds200张图像的模型作为预训练模型，发现都是pidinet过度拟合的状态。
-我使用一个人标注的gt，把epoch加大到200轮（pidinet原作者12轮，dexined原作者20轮），发现dexined到最最后也没有过度拟合图像，反而pidinet边缘越来越细，噪声越来越少。
-阅读部分代码和论坛帖子，总结了dexined和pidinet的训练过程和模型特殊点。发现有些人说pidinet的CSAM和CDCM模块会让模型消除噪声的影响。
-使用pidinet-l模型，也就是不带CSAM和CDCM模块的模型做了训练与推理，发现虽然比正常的pidinet要拟合的慢，但最后还是拟合了花朵的轮廓。
+from PIL import Image
+import numpy as np
+
+# 打开图像
+img = Image.open('你的图像文件路径.png').convert('L')
+
+# 将图像转换为Numpy数组
+pixel_values = np.array(img)
+
+# 获取唯一的像素值
+unique_values = np.unique(pixel_values)
+
+print("图像中唯一像素值有:", unique_values)
