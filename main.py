@@ -1,28 +1,5 @@
-import cv2
-import numpy as np
-
-# 读入图片
-image1 = cv2.imread('image1.png')
-image2 = cv2.imread('image2.png')
-
-# 确保两张图片尺寸相同
-if image1.shape == image2.shape:
-    # 做减法
-    difference = cv2.absdiff(image1, image2)
-    
-    # 将差异部分高亮显示
-    gray_difference = cv2.cvtColor(difference, cv2.COLOR_BGR2GRAY)
-    _, mask = cv2.threshold(gray_difference, 30, 255, cv2.THRESH_BINARY)
-
-    # 使用红色高亮不通部分
-    highlighted = image1.copy()
-    highlighted[mask != 0] = [0, 0, 255]
-
-    # 显示结果
-    cv2.imshow('Difference', mask)
-    cv2.imshow('Highlighted Differences', highlighted)
-
-    cv2.waitKey(0)
-    cv2.destroyAllWindows()
-else:
-    print("两个图片的尺寸不相同")
+1. First, I used a single-annotated ground truth (gt) and a seven-annotated ground truth for experiments. Compared to DexiNed, PiDiNet overfits significantly. The gt doesn't affect PiDiNet's results; both overfit the flower contour without noise.
+2. Second, I utilized a pre-trained model and a model pre-trained on 200 BSDS images. Both showed PiDiNet overfitting.
+3. I used a single-annotated gt and increased the epochs to 200 (PiDiNet author originally used 12 epochs; DexiNed author used 20 epochs). DexiNed did not overfit, while PiDiNet's edges became finer with less noise.
+4. I read some codes and forum posts. Summarized the training processes and unique features of DexiNed and PiDiNet. Some people mentioned that PiDiNet's CSAM and CDCM modules reduce noise impact.
+5. I trained and inferred using the PiDiNet-l model (without CSAM and CDCM modules). It overfits slower than the standard PiDiNet but eventually still overfits the flower contour.
