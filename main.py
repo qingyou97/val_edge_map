@@ -1,5 +1,5 @@
-1. First, I used a single-annotated ground truth (gt) and a seven-annotated ground truth for experiments. Compared to DexiNed, PiDiNet overfits significantly. The gt doesn't affect PiDiNet's results; both overfit the flower contour without noise.
-2. Second, I utilized a pre-trained model and a model pre-trained on 200 BSDS images. Both showed PiDiNet overfitting.
-3. I used a single-annotated gt and increased the epochs to 200 (PiDiNet author originally used 12 epochs; DexiNed author used 20 epochs). DexiNed did not overfit, while PiDiNet's edges became finer with less noise.
-4. I read some codes and forum posts. Summarized the training processes and unique features of DexiNed and PiDiNet. Some people mentioned that PiDiNet's CSAM and CDCM modules reduce noise impact.
-5. I trained and inferred using the PiDiNet-l model (without CSAM and CDCM modules). It overfits slower than the standard PiDiNet but eventually still overfits the flower contour.
+首先我使用了一个人标注的gt和7个人标注的gt同时做了实验，发现相比于dexined，pidinet过度拟合的状态。而且gt不影响pidinet的结果，最后都是过度拟合花朵轮廓，没有噪声。
+其次我使用预训练模型和经过了bsds200张图像的模型作为预训练模型，发现都是pidinet过度拟合的状态。
+我使用一个人标注的gt，把epoch加大到200轮（pidinet原作者12轮，dexined原作者20轮），发现dexined到最最后也没有过度拟合图像，反而pidinet边缘越来越细，噪声越来越少。
+阅读部分代码和论坛帖子，总结了dexined和pidinet的训练过程和模型特殊点。发现有些人说pidinet的CSAM和CDCM模块会让模型消除噪声的影响。
+使用pidinet-l模型，也就是不带CSAM和CDCM模块的模型做了训练与推理，发现虽然比正常的pidinet要拟合的慢，但最后还是拟合了花朵的轮廓。
