@@ -8,6 +8,7 @@
 3. When training flowers with dexined, continue related experiments such as:
    First, 70 epochs are too few; try increasing to see if it can fit. 
    Second, don't decrease the learning rate, keep training at 0.001.
+   A learning rate of 0.001 can prevent stability in local minima. If the learning rate doesn’t decrease, it can lead to insufficient optimization and difficulty in fitting the training data. Overall, strategies with multiple decay points (Experiments One and Four) perform slightly better.
    - Experiment 1: Learning rate at 0.001, step size [15, 20, 25, 30, 38,]; 70 epochs are too few; tried up to 300 epochs, still couldn't fit as well as pidinet.
    - Experiment 2: Learning rate 0.001, no step size setting, trained straight at 0.001: Effect started getting worse after 15 epochs, edges not detectable later. Perhaps because the learning rate remained high, causing weight drift and missing the minima.
    - Experiment 3: Learning rate 0.001, step size set at [15], learning rate reduced once in 15 epochs only: Effect worsened after 20 epochs. Same reasoning, high learning rate causes weight drift.
