@@ -1,40 +1,28 @@
-import os.path
-
 import cv2
 import numpy as np
 
+def count_pixel_values(image_path):
+    # 读取灰度图
+    gray_image = cv2.imread(image_path, cv2.IMREAD_GRAYSCALE)
 
-path = r'E:\Datasets\Industrial quality inspection\Menta Training\2-casting-product-image-data-for-quality-inspection\casting\gt'
+    # 检查是否成功读取图像
+    if gray_image is None:
+        print("Failed to load image")
+        return
 
-img_list = os.listdir(path)
-for img in img_list:
-    img_path = os.path.join(path, img)
-    # 读取图像
-    image = cv2.imread(img_path)
+    # 初始化一个大小为256的数组以存放各灰度值的数量
+    pixel_counts = np.zeros(256, dtype=int)
 
-    # 转换为灰度图像
-    gray = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
+    # 计算每个灰度值的数量
+    for value in range(256):
+        pixel_counts[value] = np.count_nonzero(gray_image == value)
 
-    # 应用高斯模糊
-    blurred = cv2.GaussianBlur(gray, (5, 5), 0)
+    # 打印每种灰度值及其数量
+    for value, count in enumerate(pixel_counts):
+        print(f"Gray Level {value}: {count}")
 
-    # 使用 Canny 算法检测边缘
-    edges = cv2.Canny(blurred, 120, 250)
+    return pixel_counts
 
-    name = img.split('.')[0]
-
-
-    # 转化成二值图
-    # 读取图片
-    image = cv2.imread(img_path, cv2.IMREAD_GRAYSCALE)
-
-    # 将灰度图转换为二值图像
-    _, binary_image = cv2.threshold(image, 10, 255, cv2.THRESH_BINARY)
-
-    # 保存二值图像
-
-    cv2.imwrite(os.path.join(r'E:\1\new', rf'{name}_canny_edge.png'), binary_image)
-
-
-    print(binary_image.shape)
-    print(set(list(binary_image.flatten())))
+# 使用上述函数
+image_path = '你的图像路径.png'
+counts = count_pixel_values(image_path)
