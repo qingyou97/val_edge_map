@@ -1,7 +1,1 @@
-A = "字符串A"
-B = "字符串B"
-file_path = "输出文件.txt"
-
-with open(file_path, "w", encoding="utf-8") as file:
-    file.write(f"{A} {B}\
-")
+When I use pidinet to loop through training for 20 images, I find that the third image has dimensions of 3000*4000, causing pidinet to fail training. My current idea is to resize both the image and gt, similar to the preprocessing in dexined. Do you think this is reasonable?
