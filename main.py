@@ -1,21 +1,14 @@
-import os
-import shutil
-
-# 定义读取图像的文件夹路径
-source_folder = 'A'
-# 获取文件夹里的文件列表
-image_files = os.listdir(source_folder)
-
-# 过滤掉非图像文件（可选的，根据实际需要）
-image_files = [f for f in image_files if f.lower().endswith(('png', 'jpg', 'jpeg', 'bmp', 'gif'))]
-
-for image_file in image_files:
-    # 获取文件名（不包括后缀）
-    folder_name = os.path.splitext(image_file)[0]
-    # 定义新文件夹的路径
-    new_folder_path = os.path.join(source_folder, folder_name)
-    # 创建文件夹
-    if not os.path.exists(new_folder_path):
-        os.makedirs(new_folder_path)
-
-print(f"创建了{len(image_files)}个文件夹")
+def copy_tree(src, dst):
+    # 如果B文件夹不存在，则创建
+    if not os.path.exists(dst):
+        os.makedirs(dst)
+    
+    # 使用shutil.copytree将A文件夹及其所有内容复制到B文件夹
+    for item in os.listdir(src):
+        src_path = os.path.join(src, item)
+        dst_path = os.path.join(dst, item)
+        
+        if os.path.isdir(src_path):
+            shutil.copytree(src_path, dst_path, dirs_exist_ok=True)
+        else:
+            shutil.copy2(src_path, dst_path)
