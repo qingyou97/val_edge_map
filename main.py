@@ -1,14 +1,7 @@
-def copy_tree(src, dst):
-    # 如果B文件夹不存在，则创建
-    if not os.path.exists(dst):
-        os.makedirs(dst)
+def copy_folder_with_self(src, dst):
+    # 获取A文件夹的名称
+    folder_name = os.path.basename(src.rstrip('/\\\\'))
+    dst_path = os.path.join(dst, folder_name)
     
     # 使用shutil.copytree将A文件夹及其所有内容复制到B文件夹
-    for item in os.listdir(src):
-        src_path = os.path.join(src, item)
-        dst_path = os.path.join(dst, item)
-        
-        if os.path.isdir(src_path):
-            shutil.copytree(src_path, dst_path, dirs_exist_ok=True)
-        else:
-            shutil.copy2(src_path, dst_path)
+    shutil.copytree(src, dst_path, dirs_exist_ok=True)
