@@ -1,47 +1,37 @@
-import os
-
-import json
-import numpy as np
 import cv2
+import numpy as np
 
+# 读取灰度图像
+image = cv2.imread('edge_image.png', cv2.IMREAD_GRAYSCALE)
 
-def json2mask(folder_path, mask_folder_path):
-    if not os.path.exists(mask_folder_path):
-        os.makedirs(mask_folder_path, exist_ok=True)
+# 阈值处理，使灰度图成为二值图
+_, binary_image = cv2.threshold(image, 127, 255, cv2.THRESH_BINARY)
 
-    json_list = os.listdir(folder_path)
-    for name in json_list:
-        json_path = os.path.join(folder_path, name)
-        suffix = name.split('.')[-1]
-        if suffix in ['json']:
-            # 读取JSON文件
-            with open(json_path, 'r', encoding='utf-8') as file:
-                data = json.load(file)
+# 查找轮廓
+contours, _ = cv2.findContours(binary_image, cv2.RETR_LIST, cv2.CHAIN_APPROX_SIMPLE)
 
-            # 获取图像路径和尺寸
-            image_path = data['imagePath']
-            image_height = data['imageHeight']
-            image_width = data['imageWidth']
+# 列表存储厚度
+thickness_list = []
 
-            # 创建一个空白的黑白二值图（全为零，表示黑色）
-            binary_image = np.zeros((image_height, image_width), dtype=np.uint8)
-
-            # 获取点的列表
-            for shape in data['shapes']:
-                points = shape['points']
-                points = np.array(points, np.int32)
-                points = points.reshape((-1, 1, 2))
-
-                # 画线
-                cv2.polylines(binary_image, [points], isClosed=False, color=255, thickness=1)
-            mask_path = os.path.join(mask_folder_path, rf"{name.split('.')[0]}.png")
-            print(f'mask pixel value: {set(list(binary_image.flatten()))}')
-            # 保存生成的图像
-            cv2.imwrite(mask_path, binary_image)
-
-if __name__ == '__main__':
-    json_path = r'E:\1\json'
-    mask_folder_path = r'mask'
-    json2mask(json_path, mask_folder_path)
-
+for contour in contours:
+    # 使用多边形拟合找到凸包
+    hull = cv2.convexHull(contour)
     
+    # 计算轮廓边界矩形
+    x, y, w, h = cv2.boundingRect(hull)
+    
+    # 将宽高的平均值视为该轮廓的"厚度"
+    average_thickness = (w + h) / 2.0
+    thickness_list.append(average_thickness)
+
+# 输出平均厚度
+if thickness_list:
+    avg_thickness = sum(thickness_list) / len(thickness_list)
+    print(f"边缘的平均厚度大约是 {avg_thickness} 个像素点")
+else:
+    print("未检测到边缘")
+
+# Optionally, display image
+cv2.imshow('Binary Image', binary_image)
+cv2.waitKey(0)
+cv2.destroyAllWindows()
