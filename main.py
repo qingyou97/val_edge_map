@@ -1,25 +1,21 @@
-import cv2
-import numpy as np
+import os
+import shutil
 
-# 读取图像
-image = cv2.imread('path_to_your_image.png', cv2.IMREAD_GRAYSCALE)
+# 定义读取图像的文件夹路径
+source_folder = 'A'
+# 获取文件夹里的文件列表
+image_files = os.listdir(source_folder)
 
-# 检查图像是否成功加载
-if image is None:
-    print("Error: Could not load image.")
-    exit()
+# 过滤掉非图像文件（可选的，根据实际需要）
+image_files = [f for f in image_files if f.lower().endswith(('png', 'jpg', 'jpeg', 'bmp', 'gif'))]
 
-# 将图像二值化
-_, binary_image = cv2.threshold(image, 127, 255, cv2.THRESH_BINARY)
+for image_file in image_files:
+    # 获取文件名（不包括后缀）
+    folder_name = os.path.splitext(image_file)[0]
+    # 定义新文件夹的路径
+    new_folder_path = os.path.join(source_folder, folder_name)
+    # 创建文件夹
+    if not os.path.exists(new_folder_path):
+        os.makedirs(new_folder_path)
 
-# 使用张苏恩算法进行骨架化处理
-thinned_image = cv2.ximgproc.thinning(binary_image, thinningType=cv2.ximgproc.THINNING_ZHANGSUEN)
-
-# 显示原始图像和骨架化后的图像
-cv2.imshow('Original Image', image)
-cv2.imshow('Binary Image', binary_image)
-cv2.imshow('Thinned Image', thinned_image)
-
-# 等待按键按下后关闭所有窗口
-cv2.waitKey(0)
-cv2.destroyAllWindows()
+print(f"创建了{len(image_files)}个文件夹")
