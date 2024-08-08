@@ -1,1 +1,1 @@
-I have a question. I looked at the detection results of dexined, and the edge thickness is not 1 pixel. In the center of this flower, the thickness is about 5 pixels. But when we annotate, it's always 1-pixel thick. So, using dexined results to fine-tune gt is not very convenient. What do you think?
+You mean repeatedly performing erosion and dilation operations to gradually remove pixels from the image until only the skeleton remains?
