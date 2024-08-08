@@ -1,34 +1,24 @@
 import cv2
 import numpy as np
 
-def calculate_mean_edge_thickness(image_path):
-    # 读取图像
-    img = cv2.imread(image_path, cv2.IMREAD_GRAYSCALE)
-  
-    # 检测轮廓
-    contours, _ = cv2.findContours(img, cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_NONE)
+# 读取图像
+image = cv2.imread('path_to_image')
+gray = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
 
-    # 用来存储所有边缘上的厚度值
-    thicknesses = []
+# 二值化图像
+_, binary = cv2.threshold(gray, 127, 255, cv2.THRESH_BINARY_INV)
 
-    # 循环遍历所有检测到的边缘轮廓
-    for contour in contours:
-        for i in range(len(contour)):
-            # 当前点
-            x1, y1 = contour[i][0]
+# 查找轮廓
+contours, _ = cv2.findContours(binary, cv2.RETR_TREE, cv2.CHAIN_APPROX_SIMPLE)
 
-            # 下一个点
-            x2, y2 = contour[(i + 1) % len(contour)][0]
+# 计算每个轮廓的厚度
+for contour in contours:
+    # 获取轮廓的旋转边界矩形
+    rect = cv2.minAreaRect(contour)
+    width = min(rect[1])  # 找到最小的边（假设是线条宽度）
+    print(f"Line thickness: {width}")
 
-            # 计算欧几里得距离 (即 thickness)
-            thickness = np.sqrt((x2 - x1) ** 2 + (y2 - y1) ** 2)
-            thicknesses.append(thickness)
-    
-    # 计算平均厚度
-    mean_thickness = np.mean(thicknesses)
-    return mean_thickness
-
-# 更新图片文件路径
-image_path = 'path_to_your_image.png'
-mean_thickness = calculate_mean_edge_thickness(image_path)
-print(f'The mean edge thickness is approximately {mean_thickness} pixels.')
+# 显示结果（可选）
+cv2.imshow('Image', image)
+cv2.waitKey(0)
+cv2.destroyAllWindows()
