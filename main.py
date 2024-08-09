@@ -1,14 +1,1 @@
-import cv2
-import numpy as np
-
-# 读取灰度图像
-image = cv2.imread('image.jpg', cv2.IMREAD_GRAYSCALE)
-
-# 创建一个布尔掩码，找到所有像素值大于10的点
-mask = image > 10
-
-# 将这些点的像素值设为255
-image[mask] = 255
-
-# 保存修改后的图像
-cv2.imwrite('modified_image.jpg', image)
+I have an idea. Currently, out-of-the-box, DexiNed is the best. The author claims this is because they used their finely annotated BIPEDv2 dataset (Believing that the BDCN and PiDiNet used BSDS, which was initially a segmentation dataset and of lower quality for edge detection tasks). But when we used DexiNed to train an image, we found that the results were consistently poor. I am now considering training PiDiNet on the BIPEDv2 dataset to see if we can enhance the out-of-the-box performance of PiDiNet. That way, combined with PiDiNet's good performance in training on a single image, it could very likely become our final model. What do you think?
