@@ -1,25 +1,14 @@
-1. Dexined training from scratch. Documented.
-   a. Learning rate 0.01, poor results.
-   b. Learning rate 0.01, 0.001, poor results.
-   c. Learning rate 0.01, 0.0001, poor results.
-2. Testing BDCN with 7person from yesterday, then train with 1person.
-   a. The test for 7-person is done. The fitting contour is okay, but the edges are not continuous. Strangely, there is not much noise. I am afraid it might be the pixel reading issue mentioned before during training. I will check it today.
-   b. Training 1person started.
-3. Labelme annotation tool.
-   a. Useful, non-closed lines.
-   b. Convert JSON to PNG, values are 0 and 255.
-4. GIMP annotation tool.
-   a. Dexined edge thickness ~5 pixels.
-   b. Mr. Zhao recommended skeletonize method, useful, use it for industrial parts as they have many edges.
-5. Continue annotating other datasets. Total 42 images.
-   a. Airplane turbine blades: 6 remaining. Done.
-   b. Circular cast objects: 16 remaining. Done.
-   c. Third folder not a priority, annotated first object in the fourth folder, ball screws, 20 images. Done.
-6. Training Pidinet with annotated three folders.
-   a. Trained one image at a time, for-loop. Completed, pending test.
+import cv2
+import numpy as np
 
-Today's plan:
-1. Filter test images, delete non-compliant ones.
-2. Test Pidinet model trained on one image for out-of-box performance on other test images.
-3. Test BDCN for 1person performance.
-4. Annotate second object in the fifth folder, Cylinder in 5-apple-company.
+# 读取灰度图像
+image = cv2.imread('image.jpg', cv2.IMREAD_GRAYSCALE)
+
+# 创建一个布尔掩码，找到所有像素值大于10的点
+mask = image > 10
+
+# 将这些点的像素值设为255
+image[mask] = 255
+
+# 保存修改后的图像
+cv2.imwrite('modified_image.jpg', image)
