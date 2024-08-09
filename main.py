@@ -1,4 +1,8 @@
 try:
+    # 打印当前的工作目录和环境变量
+    print(f"Current working directory: {os.getcwd()}")
+    print(f"Environment variables: {os.environ}")
+
     process = subprocess.Popen(command, shell=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE, text=True)
 
     # 实时显示log
