@@ -1,21 +1,10 @@
-# 定义命令和参数
-command = [
-    'python', 'train.py',
-    '--batch-size', '1',
-    '--param-dir', r'D:\\duan\\BDCN\\trained_model\\1-Aero-engine-defect\\14_2',
-    '--max-itter', '15',
-    '--data_lst', r'D:\\duan\\BDCN\\train_data\\1-Aero-engine-defect\\14_2\\train_pair.lst',
-    '-c', '-g', '0'
-]
+# 假设 command 和 current_dir 是定义好的
+command = ["your_command_here"]  # 根据实际命令调整
+current_dir = "D:\\\\your_path_here"  # 确保路径合法并存在
 
-# 获取当前脚本的目录
-current_dir = os.path.dirname(__file__)
-
+# 运行命令
 try:
-    # 运行命令
     result = subprocess.run(command, cwd=current_dir, check=True, capture_output=True, text=True)
-    # 打印标准输出
     print(result.stdout)
 except subprocess.CalledProcessError as e:
-    # 打印错误信息
-    print(f"Error: {e.stderr}")
+    print(f"Error: {e}")
