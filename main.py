@@ -3,7 +3,7 @@
    b. Learning rate 0.01, 0.001, poor results.
    c. Learning rate 0.01, 0.0001, poor results.
 2. Testing BDCN with 7person from yesterday, then train with 1person.
-   a. Tested 7person, fits well, worry about partial pixel read issue, check today.
+   a. The test for 7-person is done. The fitting contour is okay, but the edges are not continuous. Strangely, there is not much noise. I am afraid it might be the pixel reading issue mentioned before during training. I will check it today.
    b. Training 1person started.
 3. Labelme annotation tool.
    a. Useful, non-closed lines.
