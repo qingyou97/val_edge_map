@@ -10,6 +10,7 @@ for stderr_line in iter(process.stderr.readline, ''):
 
 process.stdout.close()
 process.stderr.close()
+
 return_code = process.wait()
 print(f"Return Code: {return_code}")
 
