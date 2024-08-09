@@ -1,18 +1,20 @@
-import os
+for command in commands:
+    print(f"Running: {command}")
+    process = subprocess.Popen(command, shell=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE, text=True, encoding='utf-8')
+    
+    # 实时输出标准输出
+    for stdout_line in iter(process.stdout.readline, ''):
+        print(stdout_line, end='')
 
-# 指定文件夹的路径
-folder_path = './A'
-
-# 遍历文件夹下的所有文件
-for filename in os.listdir(folder_path):
-    # 检查文件是否是图像文件，你可以根据需要调整文件类型
-    if filename.endswith(('.png', '.jpg', '.jpeg', '.bmp', '.gif')):
-        # 构建新的文件名
-        new_name = "_groove" + filename
-        # 获取完整的文件路径
-        old_file = os.path.join(folder_path, filename)
-        new_file = os.path.join(folder_path, new_name)
-        # 重命名文件
-        os.rename(old_file, new_file)
-
-print("文件重命名完成")
+    # 实时输出标准错误
+    for stderr_line in iter(process.stderr.readline, ''):
+        print(stderr_line, end='')
+        
+    process.stdout.close()
+    process.stderr.close()
+    return_code = process.wait()
+    
+    print(f"Return Code: {return_code}")
+    if return_code != 0:
+        print(f"Command failed: {command}")
+        break
