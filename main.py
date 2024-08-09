@@ -1,20 +1,48 @@
-def update_cfg(filename, new_data_root, new_data_lst):
-    # 读取文件内容
-    with open(filename, 'r', encoding='utf-8') as file:
-        file_content = file.read()
-    
-    # 使用正则表达式替换指定内容
-    file_content = re.sub(
-        r"('data_root':\\s*')[^']*(')",
-        r"\\1" + new_data_root + r"\\2",
-        file_content
-    )
-    file_content = re.sub(
-        r"('data_lst':\\s*')[^']*(')",
-        r"\\1" + new_data_lst + r"\\2",
-        file_content
-    )
-    
-    # 保存回原文件
-    with open(filename, 'w', encoding='utf-8') as file:
-        file.write(file_content)
+import ast
+
+def load_config(path):
+    with open(path, 'r', encoding='utf-8') as file:
+        module = ast.parse(file.read())
+    config_code = next(node for node in module.body if isinstance(node, ast.Assign) and node.targets[0].id == 'config')
+    config_test_code = next(node for node in module.body if isinstance(node, ast.Assign) and node.targets[0].id == 'config_test')
+    config = ast.literal_eval(config_code.value)
+    config_test = ast.literal_eval(config_test_code.value)
+    return config, config_test
+
+def save_config(config, config_test, path):
+    with open(path, 'w', encoding='utf-8') as file:
+        file.write('config = {\
+')
+        for key, value in config.items():
+            file.write(f"    {key!r}: {value!r},\
+")
+        file.write('}\
+\
+')
+
+        file.write('config_test = {\
+')
+        for key, value in config_test.items():
+            file.write(f"    {key!r}: {value!r},\
+")
+        file.write('}\
+\
+')
+
+        file.write("if __name__ == '__main__':\
+")
+        file.write("    print(config.keys())\
+")
+
+def update_bsds500(config, new_data_root, new_data_lst):
+    if 'bsds500' in config:
+        config['bsds500']['data_root'] = new_data_root
+        config['bsds500']['data_lst'] = new_data_lst
+    else:
+        print("bsds500 not found in config")
+
+def update_cfg(cfg_path, new_data_root, new_data_lst):
+    config, config_test = load_config(cfg_path)
+    update_bsds500(config, new_data_root, new_data_lst)
+    save_config(config, config_test, cfg_path)
+    print('Config updated successfully.')
