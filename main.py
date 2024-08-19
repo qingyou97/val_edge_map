@@ -1,34 +1,23 @@
 import os
-import glob
-from PIL import Image
 
-# 获取所有子文件夹的路径
-parent_folder = 'E:\\\\test'
-folders = [f.path for f in os.scandir(parent_folder) if f.is_dir()]
-destination_dir = r'E:\oneimage/'
+# 文件夹路径
+folder_path = 'A文件夹路径'
 
-# 确保读取到的文件夹数量正确
-if len(folders) != 576:
-    print("文件夹数量不足576个，实际数量:", len(folders))
-else:
-    print("读取到文件夹数量:", len(folders))
-    # 循环读取这些文件夹
-    for folder in folders:
-        print(f'正在读取文件夹: {folder}')
-        last_layer = os.path.basename(folder)
-        print(f'文件夹: {last_layer}')
+# 获取所有文件夹名
+folder_names = sorted(os.listdir(folder_path))
 
-        # 获取所有图像文件
-        for filename in os.listdir(folder):
-            if filename.endswith(('.png', '.jpg', '.jpeg', '.bmp', '.gif')):
-                img_path = os.path.join(folder, filename)
-                img = Image.open(img_path)
+# 用于记录配对的字典
+paired_folders = {}
 
-                # 新的文件名
-                new_filename = f'{last_layer}_{filename}'
-                new_img_path = os.path.join(destination_dir, new_filename)
+# 遍历文件夹名并按照配对关系进行匹配
+for name in folder_names:
+    key = name.rsplit('_', 1)[0]
+    if key in paired_folders:
+        paired_folders[key].append(name)
+    else:
+        paired_folders[key] = [name]
 
-                # 保存图像
-                img.save(new_img_path)
-
-        print("所有图像已处理并保存到新文件夹。")
+# 打印配对结果
+for pair in paired_folders.values():
+    if len(pair) == 2:
+        print(pair[0], '和', pair[1], '是一对')
