@@ -1,23 +1,22 @@
 import os
+import shutil
 
-# 文件夹路径
-folder_path = 'A文件夹路径'
+def move_files(src_folder, dst_folder_png, dst_folder_jpg):
+    if not os.path.exists(dst_folder_png):
+        os.makedirs(dst_folder_png)
+    if not os.path.exists(dst_folder_jpg):
+        os.makedirs(dst_folder_jpg)
 
-# 获取所有文件夹名
-folder_names = sorted(os.listdir(folder_path))
+    for file_name in os.listdir(src_folder):
+        src_file = os.path.join(src_folder, file_name)
+        if os.path.isfile(src_file):
+            if file_name.lower().endswith('.png'):
+                shutil.move(src_file, os.path.join(dst_folder_png, file_name))
+            elif file_name.lower().endswith('.jpg'):
+                shutil.move(src_file, os.path.join(dst_folder_jpg, file_name))
 
-# 用于记录配对的字典
-paired_folders = {}
+src_folder = 'A文件夹路径'
+dst_folder_png = 'B文件夹路径'
+dst_folder_jpg = 'C文件夹路径'
 
-# 遍历文件夹名并按照配对关系进行匹配
-for name in folder_names:
-    key = name.rsplit('_', 1)[0]
-    if key in paired_folders:
-        paired_folders[key].append(name)
-    else:
-        paired_folders[key] = [name]
-
-# 打印配对结果
-for pair in paired_folders.values():
-    if len(pair) == 2:
-        print(pair[0], '和', pair[1], '是一对')
+move_files(src_folder, dst_folder_png, dst_folder_jpg)
