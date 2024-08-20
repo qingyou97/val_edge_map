@@ -1,19 +1,21 @@
-import scipy.ndimage
-import imageio
+from PIL import Image
 
-def resize_image_half_nearest_neighbor(input_path, output_path):
-    # 读取图像
-    image = imageio.imread(input_path)
-
-    # 确定缩放比例
-    scale_y, scale_x = 0.5, 0.5
-    zoom_factors = (scale_y, scale_x)
-
-    # 缩放图像
-    zoomed_image = scipy.ndimage.zoom(image, zoom_factors, order=0)
-
-    # 保存图像
-    imageio.imwrite(output_path, zoomed_image)
-
-# 调用函数示例
-resize_image_half_nearest_neighbor('input_image_path.png', 'output_image_path.png')
+def resize_binarized_png(image_path: str, output_path: str, scale: float = 0.5):
+    # 打开图像文件
+    image = Image.open(image_path)
+    
+    # 获取原始图像的尺寸
+    original_width, original_height = image.size
+    
+    # 计算新尺寸
+    new_width = int(original_width * scale)
+    new_height = int(original_height * scale)
+    
+    # 使用最近邻插值法进行缩放
+    resized_image = image.resize((new_width, new_height), Image.NEAREST)
+    
+    # 保存缩放后的图像
+    resized_image.save(output_path)
+    
+# 使用示例
+resize_binarized_png('input_image.png', 'resized_image.png')
