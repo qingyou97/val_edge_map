@@ -1,7 +1,10 @@
-from PIL import Image
+import random
+import string
 
-# 转换pyl浮数组为image对象
-image = Image.fromarray(lb.astype(np.uint8))
+def generate_random_name(length):
+    letters = string.ascii_letters  # 包含所有大小写字母
+    return ''.join(random.choice(letters) for _ in range(length))
 
-# 保存为图像文件
-image.save('output_image.png')
+name_length = 10  # 你可以改变名字的长度
+random_name = generate_random_name(name_length)
+print("生成的随机名字是：", random_name)
