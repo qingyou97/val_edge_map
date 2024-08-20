@@ -1,3 +1,12 @@
-file_name = os.path.basename(file_path)  # 获取最后的文件名，即 "14_2.png"
-prefix = os.path.splitext(file_name)[0]  # 去掉文件扩展名，只留下前缀，即 "14_2"
-保持图像中的细边缘而防止它们消失，你可能更适合使用最近邻插值。虽然它可能会带来某些锯齿效应，但它能够更好地保留细边缘。
+from PIL import Image
+
+# 打开图像文件
+input_path = "path/to/your/image.jpg"  # 替换为你的图像路径
+output_path = "path/to/save/scaled_image.jpg"  # 替换为你想保存图像的路径
+
+# 使用最近邻插值调整图像大小，将图像缩放到512x512
+with Image.open(input_path) as img:
+    img_resized = img.resize((512, 512), Image.NEAREST)
+    img_resized.save(output_path)
+    
+print(f"图像已缩放并保存至: {output_path}")
