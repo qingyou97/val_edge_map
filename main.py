@@ -1,19 +1,23 @@
-import cv2
-import numpy as np
-
-def resize_by_half(image):
-    height, width = image.shape[:2]
-    height //= 2
-    width //= 2
-    resized_image = cv2.resize(image, (width, height), interpolation=cv2.INTER_LINEAR) # 使用双线性插值
-    return resized_image
-
-if __name__ == "__main__":
-    image_path = r"D:\\edge_detection\\code\\datasets\\metal_engine_data\\reorganization\\Metal_Training_original\\1-Aero-engine-defect\\gt_binary/4.png"
-    image = cv2.imread(image_path, 0)  # 0 表示读取为灰度图像
-    resized_image = resize_by_half(image)
-    
-    # 进行二值化处理
-    _, binary_resized_image = cv2.threshold(resized_image, 127, 255, cv2.THRESH_BINARY) 
-
-    cv2.imwrite("resized_image_cv2.jpg", binary_resized_image)
+1-Aero-engine-defect
+大小: (944, 720), 数量: 6
+大小: (3264, 2488), 数量: 10
+大小: (2488, 3264), 数量: 4
+casting
+大小: (512, 512), 数量: 20
+engine_part_cooler_round
+大小: (224, 224), 数量: 20
+engine_part_cooler_square
+大小: (224, 224), 数量: 20
+ball-screw
+大小: (1130, 460), 数量: 20
+valve
+大小: (259, 194), 数量: 1
+Cylinder
+大小: (1600, 1200), 数量: 19
+大小: (1590, 1192), 数量: 1
+Groove
+大小: (1280, 1024), 数量: 20
+Ring
+大小: (1280, 1024), 数量: 20
+bottle
+大小: (900, 900), 数量: 20
