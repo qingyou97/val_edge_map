@@ -1,17 +1,13 @@
-import cv2  # OpenCV库
+import numpy as np
+import scipy.ndimage as ndi
+import matplotlib.pyplot as plt
 
-def resize_by_half(image):
-    height, width = image.shape[:2]
-    while height > 512 or width > 512:
-        height //= 2
-        width //= 2
-        image = cv2.resize(image, (width, height), interpolation=cv2.INTER_NEAREST)
-    # 最终的调整
-    image = cv2.resize(image, (512, 512), interpolation=cv2.INTER_NEAREST)
-    return image
+# 示例二维图像（可以用你自己的图像替换）
+image = np.random.rand(10, 10)
 
-if __name__ == "__main__":
-    image_path = "path/to/your/image.jpg"  # 替换为图像路径
-    image = cv2.imread(image_path)
-    resized_image = resize_by_half(image)
-    cv2.imwrite("resized_image.jpg", resized_image)
+# 缩放到原来的一半
+zoom_factors = (0.5, 0.5)  # 对应行和列方向的缩放因子
+scaled_image = ndi.zoom(image, zoom_factors, order=0)  # order=0 表示最近邻插值
+
+# 保存缩放后的图像到本地
+plt.imsave('scaled_image.png', scaled_image, cmap='gray')
