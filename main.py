@@ -1,23 +1,25 @@
-1-Aero-engine-defect
-大小: (944, 720), 数量: 6
-大小: (3264, 2488), 数量: 10
-大小: (2488, 3264), 数量: 4
-casting
-大小: (512, 512), 数量: 20
-engine_part_cooler_round
-大小: (224, 224), 数量: 20
-engine_part_cooler_square
-大小: (224, 224), 数量: 20
-ball-screw
-大小: (1130, 460), 数量: 20
-valve
-大小: (259, 194), 数量: 1
-Cylinder
-大小: (1600, 1200), 数量: 19
-大小: (1590, 1192), 数量: 1
-Groove
-大小: (1280, 1024), 数量: 20
-Ring
-大小: (1280, 1024), 数量: 20
-bottle
-大小: (900, 900), 数量: 20
+from PIL import Image
+import os
+
+def process_images(input_folder, output_folder):
+    if not os.path.exists(output_folder):
+        os.makedirs(output_folder)
+
+    for filename in os.listdir(input_folder):
+        file_path = os.path.join(input_folder, filename)
+
+        if filename.endswith('.png'):
+            img = Image.open(file_path).convert('L')
+            img_resized = img.resize((512, 512), Image.BICUBIC)
+            img_resized = img_resized.point(lambda p: 255 if p > 0 else 0)
+            img_resized.save(os.path.join(output_folder, filename), 'PNG')
+        
+        elif filename.endswith('.jpg'):
+            img = Image.open(file_path)
+            img_resized = img.resize((512, 512), Image.BICUBIC)
+            img_resized.save(os.path.join(output_folder, filename), 'JPEG')
+
+input_folder = 'path/to/your/input/folder'
+output_folder = 'path/to/your/output/folder'
+
+process_images(input_folder, output_folder)
