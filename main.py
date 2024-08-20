@@ -1,13 +1,17 @@
 import numpy as np
-import scipy.ndimage as ndi
-import matplotlib.pyplot as plt
+import scipy.ndimage
+import imageio
 
-# 示例二维图像（可以用你自己的图像替换）
-image = np.random.rand(10, 10)
+def zoom_image(image_path, zoom_factor=0.5):
+    # 读取图像
+    image = imageio.imread(image_path)
+    
+    # 使用zoom函数进行最近邻插值
+    zoomed_image = scipy.ndimage.zoom(image, zoom=(zoom_factor, zoom_factor, 1), order=0, mode='nearest')
+    
+    return zoomed_image
 
-# 缩放到原来的一半
-zoom_factors = (0.5, 0.5)  # 对应行和列方向的缩放因子
-scaled_image = ndi.zoom(image, zoom_factors, order=0)  # order=0 表示最近邻插值
-
-# 保存缩放后的图像到本地
-plt.imsave('scaled_image.png', scaled_image, cmap='gray')
+# 示例用法：
+resized_image = zoom_image('path_to_image.jpg')
+# 可以根据需要保存或展示resized_image
+imageio.imwrite('resized_image.jpg', resized_image)
