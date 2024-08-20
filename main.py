@@ -1,1 +1,17 @@
-I checked my code and I am using bicubic interpolation. Currently, the interpolated image looks like the first one. After scaling to 512*512, it has values from 0-255. When pidinet reads it, it filters out pixels less than 25.6, and right now there are 643 total pixels. The threshold of 25.6 filters out 226 pixels, which may also cause edge discontinuities. But when I tried using nearest neighbor interpolation, there were still edge break points and aliasing effects. So I will stick with bicubic interpolation but convert the grayscale image to a binary image, ensuring that every pixel with value is set to 255. Then I will retrain all images on other networks. What do you think?
+import cv2  # OpenCV库
+
+def resize_by_half(image):
+    height, width = image.shape[:2]
+    while height > 512 or width > 512:
+        height //= 2
+        width //= 2
+        image = cv2.resize(image, (width, height), interpolation=cv2.INTER_NEAREST)
+    # 最终的调整
+    image = cv2.resize(image, (512, 512), interpolation=cv2.INTER_NEAREST)
+    return image
+
+if __name__ == "__main__":
+    image_path = "path/to/your/image.jpg"  # 替换为图像路径
+    image = cv2.imread(image_path)
+    resized_image = resize_by_half(image)
+    cv2.imwrite("resized_image.jpg", resized_image)
