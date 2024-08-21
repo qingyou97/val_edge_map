@@ -1,11 +1,23 @@
-1. Confirm interpolation method after resizing to see if resizing thickens edge and causes gt edge loss.
-Conclusion: Checked my code, default is bicubic interpolation, which thickens edges. PIDInet code previously set threshold to 0.1, filtering out some values. Lowered PIDInet threshold to prevent this issue. Switched to nearest neighbor interpolation, which keeps edge thickness at 1 but causes discontinuity in edges. Decided to stick with bicubic interpolation (`order=3`), re-binarized greyscale values through post-processing.
-2. Re-trained PIDInet and BDCN with images scaled to 512x512. Trials include training with a single image, and randomly with 2/3/5/7/9/11 images, and all 100 images. PIDInet re-trained on the BIPEDv2 dataset.
-Conclusion: As of this morning, PIDInet has trained extensively on the large BIPED dataset; only two small metal datasets remain. Similarly, BDCN also only has two small metal datasets left.
-3. Finished training scripts for three settings in dexined: training with a single image, 2/3/5/7/9/11 images, and all 100 images to see different effects.
-Conclusion: This morning, checked Wang Chao's machine. Dexined nearly done training the first dataset. Suppose dexined performs inference and auto-saves model in the same path after each model training, slowing things down.
+你可以先克隆空的仓库，再新建并上传分支。步骤如下：
 
-Today's Plan:
-4. Forecast results and metrics for bdcn and pidinet.
-5. TEED inference under three cases: training with 1 image, training with 2/3/5/7/9/11 images, and training all 100 images.
-6. Study how TEED fusion module is improved.
+1. 克隆空的仓库（不下载所有内容）：   
+   ```bash
+   git clone --no-checkout https://gitlab.com/你的仓库名.git
+   cd 你的仓库名
+   ```
+
+2. 创建一个新的分支：
+   ```bash
+   git checkout --orphan 新分支名
+   ```
+
+3. 添加你的文件并提交：
+   ```bash
+   git add .
+   git commit -m "初始化提交"
+   ```
+
+4. 推送新分支到远程仓库：
+   ```bash
+   git push origin 新分支名
+   ```
