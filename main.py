@@ -1,23 +1,8 @@
-你可以先克隆空的仓库，再新建并上传分支。步骤如下：
-
-1. 克隆空的仓库（不下载所有内容）：   
-   ```bash
-   git clone --no-checkout https://gitlab.com/你的仓库名.git
-   cd 你的仓库名
-   ```
-
-2. 创建一个新的分支：
-   ```bash
-   git checkout --orphan 新分支名
-   ```
-
-3. 添加你的文件并提交：
-   ```bash
-   git add .
-   git commit -m "初始化提交"
-   ```
-
-4. 推送新分支到远程仓库：
-   ```bash
-   git push origin 新分支名
-   ```
+Model Design Requirements Definition:
+1. Capable of general edge detection based on a pretrained model.
+2. Edges that cannot be detected in item 1 should be detectable byspecifying support images.
+3. Edges that should be ignored in item 1 should be ignorable by spbecifying support images
+模型设计需求定义：
+1. 基于预训练模型能够进行一般边缘检测。
+2. 在项1中无法检测到的边缘应通过指定支持图像来检测。
+3. 在项1中应忽略的边缘应通过指定支持图像来忽略。
