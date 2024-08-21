@@ -1,8 +1,21 @@
-Model Design Requirements Definition:
-1. Capable of general edge detection based on a pretrained model.
-2. Edges that cannot be detected in item 1 should be detectable byspecifying support images.
-3. Edges that should be ignored in item 1 should be ignorable by spbecifying support images
-模型设计需求定义：
-1. 基于预训练模型能够进行一般边缘检测。
-2. 在项1中无法检测到的边缘应通过指定支持图像来检测。
-3. 在项1中应忽略的边缘应通过指定支持图像来忽略。
+import os.path
+
+import cv2
+import numpy as np
+
+img_path = r'E:\TEED\training_data\1-Aero-engine-defect\gt'
+save_path = r'E:\TEED\training_data\1-Aero-engine-defect\gt_new'
+if not os.path.exists(save_path):
+    os.makedirs(save_path)
+img_list = os.listdir(img_path)
+for img in img_list:
+    img_new_path = os.path.join(img_path,img)
+
+    # 读取图像
+    image = cv2.imread(img_new_path, cv2.IMREAD_GRAYSCALE)
+
+    # 反转图像颜色
+    inverted_image = cv2.bitwise_not(image)
+
+    # 保存反转后的图像
+    cv2.imwrite(os.path.join(save_path,f'{img}'), inverted_image)
