@@ -1,10 +1,9 @@
- image_path = os.path.join(target_folder_path, image_name)
-    img = PilImage.open(image_path)
-    img = img.resize((60, 60))
-    
-    unique_image_path = f'resized_image_{count}.png'
-    img.save(unique_image_path)
-    
-    resized_img = OpenpyxlImage(unique_image_path)
-    resized_img.anchor = f'{col_letter}{row}'
-    sheet.add_image(resized_img)
+import random
+import string
+
+def generate_random_string(length):
+    letters = string.ascii_letters + string.digits  # 包含字母和数字
+    return ''.join(random.choice(letters) for i in range(length))
+
+# 生成一个长度为10的随机字符串
+random_string = generate_random_string(10)
