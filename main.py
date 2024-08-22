@@ -15,9 +15,17 @@ folder_name = sheet['B5'].value   # 示例值：14_2_epoch50
 base_path = 'path/to/A_folder/'   # A文件夹的路径
 target_folder_path = os.path.join(base_path, folder_name)
 
-# 基础列标题
-columns = [chr(i) for i in range(ord('H'), ord('Z') + 1)] + \\
-          [f'A{chr(i)}' for i in range(ord('A'), ord('Z') + 1)]  # 从H开始到Z再到AA, AB, AC...
+# 基础列标题生成函数
+def generate_excel_columns():
+    columns = []
+    for i in range(ord('H'), ord('Z') + 1):
+        columns.append(chr(i))
+    for i in range(ord('A'), ord('Z') + 1):
+        for j in range(ord('A'), ord('Z') + 1):
+            columns.append(chr(i) + chr(j))
+    return columns
+
+columns = generate_excel_columns()
 images = os.listdir(target_folder_path)[:20]  # 获取目标文件夹中前20个文件名
 
 row = 5
