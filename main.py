@@ -1,40 +1,39 @@
 import openpyxl
-from openpyxl.drawing.image import Image
 import os
+from PIL import Image as PilImage
+from openpyxl.drawing.image import Image as OpenpyxlImage
 
-# 打开工作簿和特定sheet页
-workbook_path = 'your_excel_file.xlsx'
-workbook = openpyxl.load_workbook(workbook_path)
-sheet = workbook['1-Aero-engine-defect']
+# 读取Excel文件
+excel_file = 'path/to/excel/file.xlsx'
+wb = openpyxl.load_workbook(excel_file)
+sheet = wb['1-Aero-engine-defect']
 
-# 读取B5单元格的值
-cell_value = sheet['B5'].value
+# 读取B5格中的字符串
+folder_name = sheet['B5'].value   # 示例值：14_2_epoch50
 
-# 设置图像文件夹路径
-image_folder = os.path.join('A', cell_value)
+# 文件夹路径
+base_path = 'path/to/A_folder/'   # A文件夹的路径
+target_folder_path = os.path.join(base_path, folder_name)
 
-# 获取图像文件列表
-image_files = [file for file in os.listdir(image_folder) if file.lower().endswith(('png', 'jpg', 'jpeg', 'bmp'))]
+# 基础列标题
+columns = [chr(i) for i in range(ord('H'), ord('Z') + 1)] + \\
+          [f'A{chr(i)}' for i in range(ord('A'), ord('Z') + 1)]  # 从H开始到Z再到AA, AB, AC...
+images = os.listdir(target_folder_path)[:20]  # 获取目标文件夹中前20个文件名
 
-# 检查图像数量是否达到20
-if len(image_files) < 20:
-    raise Exception(f"{image_folder} 只有 {len(image_files)} 张图像，不足20张。")
+row = 5
 
-# 生成Excel列名
-def get_excel_column_name(n):
-    name = ''
-    while n > 0:
-        n, remainder = divmod(n - 1, 26)
-        name = chr(65 + remainder) + name
-    return name
-
-# 按照顺序将图像插入到H5、I5、J5以此类推
-for index in range(20):
-    image_path = os.path.join(image_folder, image_files[index])
-    img = Image(image_path)
-    col = get_excel_column_name(8 + index)  # 8对应H列
-    img.anchor = f'{col}5'
-    sheet.add_image(img)
-
-# 保存工作簿
-workbook.save(workbook_path)
+for count, image_name in enumerate(images):
+    col_letter = columns[count]
+    
+    # 设置图片名字到表格中
+    cell_name = f'{col_letter}{row-1}'  # 图片名插入该单元格
+    sheet[cell_name] = image_name  # 粘贴图像名字到这个格
+    
+    # 读取并粘贴图像
+    image_path = os.path.join(target_folder_path, image_name)
+    img = OpenpyxlImage(image_path)
+    img.anchor = f'{col_letter}{row}'
+    sheet.add_image(img)  # 粘贴图像到该单元格后面
+    
+# 保存Excel文件
+wb.save('path/to/save/new_excel_file.xlsx')
