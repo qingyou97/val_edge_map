@@ -1,11 +1,3 @@
-import os
-import shutil
-
-# 源文件夹列表
-source_folders = ['A', 'B', 'C', 'D', 'E']
-# 目标文件夹
-target_folder = 'F'
-
 # 确保目标文件夹存在
 os.makedirs(target_folder, exist_ok=True)
 
@@ -22,5 +14,11 @@ for folder in source_folders:
                 # 新文件名
                 new_file_name = f"{folder}_{file_name}"
                 target_file = os.path.join(target_folder, new_file_name)
-                # 复制文件到目标文件夹
-                shutil.copy2(source_file, target_file)
+                try:
+                    # 复制文件到目标文件夹
+                    shutil.copy2(source_file, target_file)
+                    print(f"复制 {source_file} 到 {target_file}")
+                except Exception as e:
+                    print(f"复制 {source_file} 到 {target_file} 失败: {e}")
+    else:
+        print(f"源文件夹 {source_image_folder} 不存在")
