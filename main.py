@@ -1,4 +1,4 @@
-# 确保目标文件夹存在
+# 确保目标文件夹
 os.makedirs(target_folder, exist_ok=True)
 
 # 遍历每个源文件夹
