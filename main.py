@@ -1,17 +1,11 @@
 import os
+import fnmatch
 
-# 文件夹路径
-folder_path = 'A'
+def find_non_jpg_files(directory):
+    for root, _, files in os.walk(directory):
+        for filename in files:
+            if not fnmatch.fnmatch(filename, '*.jpg'):
+                print("Non-JPG file found:", os.path.join(root, filename))
 
-# 遍历文件夹中的所有文件
-for filename in os.listdir(folder_path):
-    # 检查文件后缀是否为.jpeg
-    if filename.endswith(".jpeg"):
-        # 定义旧文件路径
-        old_filepath = os.path.join(folder_path, filename)
-        # 创建新的文件路径并更改后缀名为.jpg
-        new_filepath = os.path.join(folder_path, filename[:-5] + ".jpg")
-        # 重命名文件
-        os.rename(old_filepath, new_filepath)
-        
-print("重命名完成")
+folder_path = 'your_directory_path_here'
+find_non_jpg_files(folder_path)
