@@ -1,24 +1,18 @@
-# 确保目标文件夹
-os.makedirs(target_folder, exist_ok=True)
-
-# 遍历每个源文件夹
-for folder in source_folders:
-    source_image_folder = os.path.join(folder, 'image_512')
-    # 如果源文件夹存在
-    if os.path.exists(source_image_folder):
-        # 遍历每个文件
-        for file_name in os.listdir(source_image_folder):
-            source_file = os.path.join(source_image_folder, file_name)
-            # 如果是文件
-            if os.path.isfile(source_file):
-                # 新文件名
-                new_file_name = f"{folder}_{file_name}"
-                target_file = os.path.join(target_folder, new_file_name)
-                try:
-                    # 复制文件到目标文件夹
-                    shutil.copy2(source_file, target_file)
-                    print(f"复制 {source_file} 到 {target_file}")
-                except Exception as e:
-                    print(f"复制 {source_file} 到 {target_file} 失败: {e}")
-    else:
-        print(f"源文件夹 {source_image_folder} 不存在")
+def generate_excel_columns(start_column):
+    columns = []
+    start_ord = (ord(start_column[0]) - ord('A')) * 26 + ord(start_column[1]) - ord('A') + 26
+    for i in range(start_ord, 16384): # 16384 corresponds to 'XFD' column
+        if i < 26:
+            # Single letter column
+            columns.append(chr(i + ord('A')))
+        elif i < 702: # AA to ZZ (26 + 26^2 - 26) = 702
+            # Double letter column
+            columns.append(chr(i // 26 - 1 + ord('A')) + chr(i % 26 + ord('A')))
+        else:
+            # Three letter column
+            first = chr((i - 702) // 676 + ord('A'))
+            second = chr(((i - 702) % 676) // 26 + ord('A'))
+            third = chr((i - 702) % 26 + ord('A'))
+            columns.append(first + second + third)
+    
+    return columns
