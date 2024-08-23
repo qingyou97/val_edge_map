@@ -1,9 +1,17 @@
-# 假设你的文本文件名为 'data.txt'
-file_path = 'data.txt'
+import os
 
-# 读取文件内容
-with open(file_path, 'r', encoding='utf-8') as file:
-    content = file.read()
+# 文件夹路径
+folder_path = 'A'
 
-# 将读取的字符串内容转换成字典
-dict_data = ast.literal_eval(content)
+# 遍历文件夹中的所有文件
+for filename in os.listdir(folder_path):
+    # 检查文件后缀是否为.jpeg
+    if filename.endswith(".jpeg"):
+        # 定义旧文件路径
+        old_filepath = os.path.join(folder_path, filename)
+        # 创建新的文件路径并更改后缀名为.jpg
+        new_filepath = os.path.join(folder_path, filename[:-5] + ".jpg")
+        # 重命名文件
+        os.rename(old_filepath, new_filepath)
+        
+print("重命名完成")
