@@ -1,1 +1,1 @@
-Overall, pidinet's dataset fitting is not as good as bdcn's. Bdcn performs better because it generalizes well to similar images and can detect the desired ground truths. In contrast, pidinet is more specialized in fitting a single image, resulting in noise in other images.
+Red indicates that the training script has been written and is currently running or has already completed the training.
