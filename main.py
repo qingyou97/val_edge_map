@@ -1,1 +1,1 @@
-Here is my current progress table for the four network experiments. Please review it.
+This is the result of pidinet trained with 100 images. Currently, it is considered not as good as bdcn trained with 100 images. Pidinet fits ball-screw and groove well but has some noise. For the other three types, that is, cylinder, casting, aero-engine, it does not completely fit the ground truth.
