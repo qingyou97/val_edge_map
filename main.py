@@ -1,1 +1,5 @@
-This is the result of pidinet trained with 100 images. Currently, it is considered not as good as bdcn trained with 100 images. Pidinet fits ball-screw and groove well but has some noise. For the other three types, that is, cylinder, casting, aero-engine, it does not completely fit the ground truth.
+Using bdcn results as an example,
+In 5 categories of datasets, for images with small inter-class distance like 4-ball-screw, one image can be well-fitted.
+For images with large inter-class distance, like 1-Aero-engine-defect and 2-casting-product-image, if one image is trained, it detects well for similar images.
+But for other images, detection performance is poor.
+All results of bdcn experiments are recorded in tables.
