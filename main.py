@@ -93,3 +93,12 @@ def train_classifer(model, checkpoints_path):
             loss = F.binary_cross_entropy(
                 map, labels, weight=mask, reduction='sum')
             print(f'loss:{loss}')
+
+
+            # 反向传播并优化
+            loss.backward()
+            batch_loss += loss.item()
+            cur += 1
+
+        optimizer.step()
+        print(f'Epoch [{epoch + 1}/50], Loss: {loss.item():.4f}')
