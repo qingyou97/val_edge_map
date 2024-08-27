@@ -1,29 +1,19 @@
-1. Current training completion status of four algorithms (Table):
+class CustomModel(nn.Module):
+    def __init__(self, bdcn_model):
+        super(CustomModel, self).__init__()
+        self.bdcn_model = bdcn_model
+        # 定义你自己的分类器，这里是一个简单的全连接层示例
+        self.classifier = nn.Sequential(
+            nn.Linear(bdcn_model.output_feature_dim, 256),
+            nn.ReLU(),
+            nn.Linear(256, 10)  # 假设你有10个类别
+        )
 
-| Algorithm | Training Completion Status     |
-| --------- | ------------------------------ |
-| Algorithm A | Completed                     |
-| Algorithm B | Completed                     |
-| Algorithm C | In progress                   |
-| Algorithm D | Not started                   |
-
-2. Visual analysis of pidinet training on 100 images.
-
-Conclusion: Currently, pidinet is not fitting as well as bdcn when training on 100 images. Pidinet fits well on ball-screw and groove images but introduces some noise. For the other three types—cylinder, casting, aero-engine—it does not fully fit the ground truth (gt).
-
-3. TEED training includes testing and adding the image with the lowest F1 score each time.
-Conclusion: Script has been modified. Training is in progress.
-
-4. TEED training results on a single image vs. all images.
-Conclusion: Fitting performance is poor; it does not detect the needed edges in the gt. It detects all edges in the image with a lot of noise. This behavior is the same for all datasets.
-
-5. Tested pidinet trained on biped.
-Conclusion: The training result is below expectations with a lot of noise. Though the number of detected edges is decent, noise is still a problem.
-
-6. Searched for methods to accelerate training, also studied adapter techniques.
-Conclusion: After reviewing adapter tuning, it appears to reduce training time and computational resources because only a specific small set of parameters are trained, without adjusting the whole model. Also, parameter freezing methods: 
-
-1. Freezing early network layers (reused in multiple tasks as they learn general features).
-2. Experiment to identify layers with minimal gradient change for freezing.
-3. Gradient clipping to ensure gradient values remain in range, accelerating convergence (e.g., achieving the same efficacy in 100 epochs vs. 150 epochs without clipping).
-4. Adding a classification layer for finer resolution in classification.
+    def forward(self, x):
+        # pass inputs through the entire bdcn model
+        out = self.bdcn_model(x)
+        # assuming `out[-1]` is the fused output from BDCN's forward method
+        fused_output = out[-1].view(out[-1].size(0), -1)
+        # pass the fused output through the classifier
+        classification = self.classifier(fused_output)
+        return out, classification
