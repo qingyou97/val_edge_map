@@ -1,8 +1,3 @@
-if __name__ == '__main__':
-    # main()
-    model = bdcn.BDCN()
-    checkpoints_path = r'E:\BDCN-master\BDCNmodel\bdcn_pretrained_on_bsds500.pth'
-    train_classifer(model, checkpoints_path)
 def train_classifer(model, checkpoints_path):
     from classifier import FeatureExtractor
 
