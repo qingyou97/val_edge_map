@@ -1,1 +1,1 @@
-Regarding the team management meeting at 5 PM Japan time tomorrow, since I will be off duty, when do you think we should reschedule it? Is it more convenient to move it to today or to combine it with the meeting next Thursday?
+关于明日下午日本时间五点的团队管理会议，因为我明日是休息状态的，你觉得这个会议的时间应该如何安排？是安排到今日方便还是安排到下周四合并到一起方便。
