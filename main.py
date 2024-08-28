@@ -1,16 +1,4 @@
-if __name__ == '__main__':
-    # main()
-    model = bdcn.BDCN()
-    checkpoints_path = r'E:\BDCN-master\BDCNmodel\bdcn_pretrained_on_bsds500.pth'
-    data_root = r'E:\BDCN-master\testdata'  # 存放训练数据的路径
-    data_lst = 'train_pair.lst'  # 训练数据路径下的train_pair.lst文件，里面的内容是相对data_root路径的图像和gt的相对路径
-    save_ck_path = 'checkpoints'
+Summary of the comparison results for the four trained networks.
+Conclusion: Currently, I've added a third point on sheet2 "train one image" page. The third point focuses on testing the model's generalization ability to other images after training on one image. For example, for the aero dataset, I chose an image on which BDCN performed poorly out-of-the-box as a case study. I included its GT (Ground Truth), out-of-box result, BDCN result after training on this one image, and PiDiNet result after training on this one image. Additionally, I selected three other images from these 20 data, using the newly trained models to compare effects. Each comparison includes the original image, GT, out-of-box result, BDCN result after one-image training, and PiDiNet result after one-image training. These three images include both good and bad examples, with the bad ones marked in red.
 
-    yita = 0.4  # 边缘像素阈值
-    num_classes = 3  # 分类总数
-    epoch = 50
-    iter_size = 2
-    batch_size = 1
-
-    train_classifer(model, checkpoints_path, data_root, data_lst, save_ck_path, yita, num_classes, epoch, iter_size,
-                    batch_size)
+So far, the conclusion is that for the aero, casting, and ball-screw datasets, BDCN performs better and shows some generalization after training on one image, while PiDiNet's generalization is lower in this case. However, for the cylinder and groove datasets, PiDiNet performs better than BDCN.
