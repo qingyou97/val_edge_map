@@ -1,3 +1,1 @@
-1. Verify the influence of distance on pidinet, change from l2 distance to cosine distance.
-2. Create a list of experiments.
-3. Reproduce the results of dexined.
+Regarding the team management meeting at 5 PM Japan time tomorrow, since I will be off duty, when do you think we should reschedule it? Is it more convenient to move it to today or to combine it with the meeting next Thursday?
