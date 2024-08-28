@@ -1,4 +1,40 @@
-Summary of the comparison results for the four trained networks.
-Conclusion: Currently, I've added a third point on sheet2 "train one image" page. The third point focuses on testing the model's generalization ability to other images after training on one image. For example, for the aero dataset, I chose an image on which BDCN performed poorly out-of-the-box as a case study. I included its GT (Ground Truth), out-of-box result, BDCN result after training on this one image, and PiDiNet result after training on this one image. Additionally, I selected three other images from these 20 data, using the newly trained models to compare effects. Each comparison includes the original image, GT, out-of-box result, BDCN result after one-image training, and PiDiNet result after one-image training. These three images include both good and bad examples, with the bad ones marked in red.
+import torch
+import torch.nn as nn
+import torch.nn.functional as F
 
-So far, the conclusion is that for the aero, casting, and ball-screw datasets, BDCN performs better and shows some generalization after training on one image, while PiDiNet's generalization is lower in this case. However, for the cylinder and groove datasets, PiDiNet performs better than BDCN.
+class SimpleEdgeClassifier(nn.Module):
+    def __init__(self, num_classes):
+        super(SimpleEdgeClassifier, self).__init__()
+        # 第一层卷积
+        self.conv1 = nn.Conv2d(1, 16, kernel_size=3, stride=1, padding=1)
+        self.batch_norm1 = nn.BatchNorm2d(16)
+        
+        # 第二层卷积
+        self.conv2 = nn.Conv2d(16, 32, kernel_size=3, stride=1, padding=1)
+        self.batch_norm2 = nn.BatchNorm2d(32)
+
+        # 第三层卷积
+        self.conv3 = nn.Conv2d(32, 64, kernel_size=3, stride=1, padding=1)
+        self.batch_norm3 = nn.BatchNorm2d(64)
+        
+        # 平均值池化层
+        self.pool = nn.AdaptiveAvgPool2d((1, 1))
+        
+        # 全连接层
+        self.fc = nn.Linear(64, num_classes)
+
+    def forward(self, x):
+        x = F.relu(self.batch_norm1(self.conv1(x)))
+        x = F.max_pool2d(x, 2)
+        
+        x = F.relu(self.batch_norm2(self.conv2(x)))
+        x = F.max_pool2d(x, 2)
+
+        x = F.relu(self.batch_norm3(self.conv3(x)))
+        x = F.max_pool2d(x, 2)
+
+        # 平均池化，展平，用全连接层输出
+        x = self.pool(x)
+        x = x.view(x.size(0), -1)
+        x = self.fc(x)
+        return x
