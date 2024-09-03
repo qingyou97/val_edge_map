@@ -1,8 +1,14 @@
-Regarding the implementation of the classification layer added after BDCN, the following has been completed and the code uploaded to GitLab:
-
-1. Added a simple classification layer, code in classifier.py.
-2. Solved the gradient back-propagation issue; loss now decreases normally. The cause was modified SGD parameters. Haven't yet investigated why passing weight_decay and momentum led to constant loss.
-3. Moved BDCN fuse process and data loading outside the training loop, time is reduced.
-4. Changed classification to three categories, including background as the third category.
-5. Changed the loss function to CrossEntropyLoss.
-6. Currently, inference code is not complete. Training on 20 casting images is ongoing. On Tuesday, I will write the test code and test the model.
+0903 晨会 10.00-10.39：
+段：
+四个算法的对比表格：针对aero数据集，换几个除了4以外的图像，做下测试；针对ball-screw和casting数据集，多贴几个其他的图像；针对100图像训练出的模型，测一下其他test数据，分析一下。
+继续做泛化性的精度调优，尝试优化器的变更，做一个work试试
+新加入的分类器，尝试优化器的变更
+写一下新加入的分类器的推理代码，测试一下结果
+列一个task list，写一下优先级，碰一下
+韩旭：
+miou不适合做edge评测，换段写的的评测指标
+检查下自己用的什么loss，和段的loss再保持一致
+换backbone，coco训练过的backbone不适合反映edge，换为pidinet的backbone
+每一个图的计算方法是什么，记录下来
+每一个实验的具体计算方法是什么，记录下来
+测一下其他的数据集，最终结果和段一起比较下
