@@ -1,14 +1,16 @@
-0903 晨会 10.00-10.39：
-段：
-四个算法的对比表格：针对aero数据集，换几个除了4以外的图像，做下测试；针对ball-screw和casting数据集，多贴几个其他的图像；针对100图像训练出的模型，测一下其他test数据，分析一下。
-继续做泛化性的精度调优，尝试优化器的变更，做一个work试试
-新加入的分类器，尝试优化器的变更
-写一下新加入的分类器的推理代码，测试一下结果
-列一个task list，写一下优先级，碰一下
-韩旭：
-miou不适合做edge评测，换段写的的评测指标
-检查下自己用的什么loss，和段的loss再保持一致
-换backbone，coco训练过的backbone不适合反映edge，换为pidinet的backbone
-每一个图的计算方法是什么，记录下来
-每一个实验的具体计算方法是什么，记录下来
-测一下其他的数据集，最终结果和段一起比较下
+0903 Morning Meeting 10:00-10:39:
+
+Duan's tasks:
+1. Comparison table for four algorithms: Test with aero dataset using images other than the 4; for ball-screw and casting datasets, add more images; test the models trained with 100 images on other test data and analyze.
+2. Continue tuning accuracy for generalization, try changing the optimizer, and do a work trial.
+3. Try changing the optimizer on the newly added classifier.
+4. Write the inference code for the new classifier and test the results.
+5. List tasks and set priorities; discuss them.
+
+Hanxu's tasks:
+6. miou is not suitable for edge evaluation, use the metric written by Duan.
+7. Check which loss you are using and align it with Duan's loss.
+8. Change backbone as coco-trained backbone is not suitable for edge; use pidinet's backbone instead.
+9. Record the calculation method for each image.
+10. Record the specific calculation method for each experiment.
+11. Test other datasets and compare final results with Duan's.
