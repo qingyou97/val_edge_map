@@ -1,49 +1,102 @@
+      
 import os
-from openpyxl import Workbook
-from openpyxl.drawing.image import Image
-from PIL import Image as PILImage
+import cv2
+import numpy as np
+from PIL import Image
+import scipy.io
+import torch
+from torch.utils import data
+import random
+# from cStringIO import StringIO
+from io import StringIO
+from io import BytesIO
+def load_image_with_cache(path, cache=None, lock=None):
+	if cache is not None:
+		if path not in cache:
+			with open(path, 'rb') as f:
+				cache[path] = f.read()
+		return Image.open(BytesIO(cache[path]))
+	return Image.open(path)
 
-# 创建Excel工作簿和工作表
-wb = Workbook()
-ws = wb.active
 
-# 设置文件夹路径
-folder_path = 'A'
+class Data(data.Dataset):
+	def __init__(self, root, lst, yita=0.5,
+		mean_bgr = np.array([104.00699, 116.66877, 122.67892]),
+		crop_size=None, rgb=True, scale=None):
+		self.mean_bgr = mean_bgr
+		self.root = root
+		self.lst = lst
+		self.yita = yita
+		self.crop_size = crop_size
+		self.rgb = rgb
+		self.scale = scale
+		self.cache = {}
 
-# 设置图像大小
-img_width = 30
-img_height = 30
+		lst_dir = os.path.join(self.root, self.lst)
+		# self.files = np.loadtxt(lst_dir, dtype=str)
+		with open(lst_dir, 'r') as f:
+			self.files = f.readlines()
+			self.files = [line.strip().split(' ') for line in self.files]
 
-# 遍历文件夹
-for row, folder_name in enumerate(os.listdir(folder_path), start=1):
-    folder_path_full = os.path.join(folder_path, folder_name)
-    if os.path.isdir(folder_path_full):
-        # 在指定单元格写上文件夹名
-        ws.cell(row=row, column=1, value=folder_name)
+	def __len__(self):
+		return len(self.files)
 
-        # 获取文件夹中的图像文件
-        img_files = [f for f in os.listdir(folder_path_full) if f.lower().endswith(('.png', '.jpg', '.jpeg', '.gif', '.bmp'))]
-        
-        for col, img_filename in enumerate(img_files, start=2):
-            img_path = os.path.join(folder_path_full, img_filename)
+	def __getitem__(self, index):
+		data_file = self.files[index]
+		# load Image
+		img_file = self.root + data_file[0]
+		# print(img_file)
+		if not os.path.exists(img_file):
+			img_file = img_file.replace('jpg', 'png')
+		# img = Image.open(img_file)
+		img = load_image_with_cache(img_file, self.cache)
+		# load gt image
+		gt_file = self.root + data_file[1]
+		# gt = Image.open(gt_file)
+		gt = load_image_with_cache(gt_file, self.cache)
+		if gt.mode == '1':
+			gt  = gt.convert('L')
+		return self.transform(img, gt)
 
-            # 使用Pillow来改变图像大小
-            img = PILImage.open(img_path)
-            img = img.resize((img_width, img_height), PILImage.LANCZOS)
-            resized_img_path = os.path.join(folder_path_full, f'resized_{img_filename}')
-            img.save(resized_img_path)
+	def transform(self, img, gt):
+		gt = np.array(gt, dtype=np.float32)
+		if len(gt.shape) == 3:
+			gt = gt[:, :, 0]
 
-            # 打开重新调整大小后的图像
-            openpyxl_img = Image(resized_img_path)
-            # 将图像插入到Excel中
-            ws.add_image(openpyxl_img, ws.cell(row=row, column=col).coordinate)
+		# 设置距离阈值
+		pixel = 5
+		d = 2 * pixel + 1
 
-            # 设置列宽为图像宽度
-            col_letter = ws.cell(row=row, column=col).column_letter
-            ws.column_dimensions[col_letter].width = img_width / 7.5  # Excel列宽单位与像素不同，需转换
+		# 创建一个7x7的矩形核
+		kernel = cv2.getStructuringElement(cv2.MORPH_RECT, (d, d))
+		# 使用膨胀操作扩展白色像素
+		gt = cv2.dilate(gt, kernel, iterations=1)
+		# cv2.imwrite('expanded.png', expanded)
 
-        # 设置行高为图像高度
-        ws.row_dimensions[row].height = img_height
+		gt /= 255.
+		gt[gt >= self.yita] = 1
+		gt = torch.from_numpy(np.array([gt])).float()
+		img = np.array(img, dtype=np.float32)
+		if self.rgb:
+			img = img[:, :, ::-1] # RGB->BGR
+		img -= self.mean_bgr
+		data = []
+		if self.scale is not None:
+			for scl in self.scale:
+				img_scale = cv2.resize(img, None, fx=scl, fy=scl, interpolation=cv2.INTER_LINEAR)
+				data.append(torch.from_numpy(img_scale.transpose((2,0,1))).float())
+			return data, gt
+		img = img.transpose((2, 0, 1))
+		img = torch.from_numpy(img.copy()).float()
+		if self.crop_size:
+			_, h, w = gt.size()
+			assert(self.crop_size < h and self.crop_size < w)
+			i = random.randint(0, h - self.crop_size)
+			j = random.randint(0, w - self.crop_size)
+			img = img[:, i:i+self.crop_size, j:j+self.crop_size]
+			gt = gt[:, i:i+self.crop_size, j:j+self.crop_size]
+		return img, gt
 
-# 保存Excel文件
-wb.save('output.xlsx')
+
+
+    
