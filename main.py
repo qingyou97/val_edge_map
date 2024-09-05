@@ -1,3 +1,2 @@
-# 获取并排序文件夹名
-folder_names = os.listdir(folder_path)
-folder_names.sort(key=natural_sort_key)
+def natural_sort_key(s, _nsre=re.compile('([0-9]+)')):
+    return [int(text) if text.isdigit() else text.lower() for text in _nsre.split(s)]
