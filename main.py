@@ -1,2 +1,17 @@
-网络很浅且训练图像只有1张的话，会导致训练结果的随机性很大。这样的条件不足以提供足够的数据来让模型有效学习，因此结果可能会非常不稳定和不准确。
-If the network is very shallow and the training image set contains only one image, it will lead to high randomness in the training results. Such conditions are insufficient to provide enough data for the model to learn effectively, and thus the results may be very unstable and inaccurate.
+# 查看gt
+# new = torch.squeeze(new_label, dim=0)
+# print(f'new shape:{new.shape}')
+# check_label = torch.zeros_like(new)
+# check_label[new == 1] = 1
+# check_label = check_label.numpy()
+# cv2.imwrite('label1.png', 255 * check_label)
+#
+# check_label1 = torch.zeros_like(new)
+# check_label1[new == 0] = 1
+# check_label1 = check_label1.numpy()
+# cv2.imwrite('label0.png', 255 * check_label1)
+#
+# check_label2 = torch.zeros_like(new)
+# check_label2[new == 2] = 1
+# check_label2 = check_label2.numpy()
+# cv2.imwrite('label2.png', 255 * check_label2)
