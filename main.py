@@ -1,102 +1,21 @@
-      
-import os
-import cv2
-import numpy as np
-from PIL import Image
-import scipy.io
-import torch
-from torch.utils import data
-import random
-# from cStringIO import StringIO
-from io import StringIO
-from io import BytesIO
-def load_image_with_cache(path, cache=None, lock=None):
-	if cache is not None:
-		if path not in cache:
-			with open(path, 'rb') as f:
-				cache[path] = f.read()
-		return Image.open(BytesIO(cache[path]))
-	return Image.open(path)
+1. Comparison with out-of-box: whether illumination causes performance degradation
 
+Conclusion:
 
-class Data(data.Dataset):
-	def __init__(self, root, lst, yita=0.5,
-		mean_bgr = np.array([104.00699, 116.66877, 122.67892]),
-		crop_size=None, rgb=True, scale=None):
-		self.mean_bgr = mean_bgr
-		self.root = root
-		self.lst = lst
-		self.yita = yita
-		self.crop_size = crop_size
-		self.rgb = rgb
-		self.scale = scale
-		self.cache = {}
+① Casting dataset: Images labeled with a yellow background have detection performance degraded due to illumination effects. Images with a pinkish background have poor detection due to the object's outer contour being jagged. Images with a green background are extremely affected by alternating light and dark due to illumination.
 
-		lst_dir = os.path.join(self.root, self.lst)
-		# self.files = np.loadtxt(lst_dir, dtype=str)
-		with open(lst_dir, 'r') as f:
-			self.files = f.readlines()
-			self.files = [line.strip().split(' ') for line in self.files]
+② Cylinder dataset: The reflective surface of the object leads to non-continuous edges. This situation is common.
 
-	def __len__(self):
-		return len(self.files)
+③ Groove dataset: The lowest horizontal stripe is highly reflective and very bright, causing the two parallel lines at the bottom to fail detection. Images with a pinkish background indicate low light, causing low contrast at the bottom edge and thus failing detection.
 
-	def __getitem__(self, index):
-		data_file = self.files[index]
-		# load Image
-		img_file = self.root + data_file[0]
-		# print(img_file)
-		if not os.path.exists(img_file):
-			img_file = img_file.replace('jpg', 'png')
-		# img = Image.open(img_file)
-		img = load_image_with_cache(img_file, self.cache)
-		# load gt image
-		gt_file = self.root + data_file[1]
-		# gt = Image.open(gt_file)
-		gt = load_image_with_cache(gt_file, self.cache)
-		if gt.mode == '1':
-			gt  = gt.convert('L')
-		return self.transform(img, gt)
+2. BDCN fine-tuning and generalization improvement
 
-	def transform(self, img, gt):
-		gt = np.array(gt, dtype=np.float32)
-		if len(gt.shape) == 3:
-			gt = gt[:, :, 0]
+Conclusion: The dropout method significantly solves the problem of discontinuous edges and greatly improves generalization.
 
-		# 设置距离阈值
-		pixel = 5
-		d = 2 * pixel + 1
+① Sheet1 includes experiments with distinctive and representative results. For example, when using the SGD optimizer: although unwanted edges were greatly suppressed, the internal contours became extremely discontinuous, suppressing many desired edges.
 
-		# 创建一个7x7的矩形核
-		kernel = cv2.getStructuringElement(cv2.MORPH_RECT, (d, d))
-		# 使用膨胀操作扩展白色像素
-		gt = cv2.dilate(gt, kernel, iterations=1)
-		# cv2.imwrite('expanded.png', expanded)
+② After switching to the Adam optimizer: fitting improved, internal contours remained discontinuous, but the results were much better than those with SGD, even though many desired edges were still suppressed.
 
-		gt /= 255.
-		gt[gt >= self.yita] = 1
-		gt = torch.from_numpy(np.array([gt])).float()
-		img = np.array(img, dtype=np.float32)
-		if self.rgb:
-			img = img[:, :, ::-1] # RGB->BGR
-		img -= self.mean_bgr
-		data = []
-		if self.scale is not None:
-			for scl in self.scale:
-				img_scale = cv2.resize(img, None, fx=scl, fy=scl, interpolation=cv2.INTER_LINEAR)
-				data.append(torch.from_numpy(img_scale.transpose((2,0,1))).float())
-			return data, gt
-		img = img.transpose((2, 0, 1))
-		img = torch.from_numpy(img.copy()).float()
-		if self.crop_size:
-			_, h, w = gt.size()
-			assert(self.crop_size < h and self.crop_size < w)
-			i = random.randint(0, h - self.crop_size)
-			j = random.randint(0, w - self.crop_size)
-			img = img[:, i:i+self.crop_size, j:j+self.crop_size]
-			gt = gt[:, i:i+self.crop_size, j:j+self.crop_size]
-		return img, gt
+③ Increasing the learning rate: resulted in retaining more desired edges but also introduced issues with unwanted edges appearing.
 
-
-
-    
+④ Seeking solutions: The dropout method was found. Adding dropout after each ReLU and setting it to 0.5 and other parameters significantly solved the discontinuity problem of edges, greatly improving generalization. Many shallow edges could now detect both contours, but some unwanted edges still remained.
