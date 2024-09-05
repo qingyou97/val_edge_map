@@ -1,19 +1,16 @@
-class FeatureExtractor(nn.Module):
-    def __init__(self, num_classes):
-        super(FeatureExtractor, self).__init__()
-        self.conv1 = nn.Conv2d(in_channels=1, out_channels=64, kernel_size=3, stride=1, padding=1)
-        self.bn1 = nn.BatchNorm2d(64)
+class SimpleCNN(nn.Module):
+    def __init__(self, in_channels=3, num_classes=3):
+        super(SimpleCNN, self).__init__()
+        self.conv1 = nn.Conv2d(in_channels, 16, kernel_size=3, padding=1)
+        self.conv2 = nn.Conv2d(16, 32, kernel_size=3, padding=1)
+        self.fc1 = nn.Linear(32 * 512 * 512, 128)
+        self.fc2 = nn.Linear(128, num_classes)
         self.relu = nn.ReLU()
-        self.conv2 = nn.Conv2d(in_channels=64, out_channels=128, kernel_size=3, stride=1, padding=1)
-        self.bn2 = nn.BatchNorm2d(128)
-        self.conv3 = nn.Conv2d(in_channels=128, out_channels=num_classes, kernel_size=3, stride=1, padding=1)
-        self.bn3 = nn.BatchNorm2d(num_classes)
-        self.shortcut = nn.Sequential()
-
+        
     def forward(self, x):
-        residual = x
-        out = self.relu(self.bn1(self.conv1(x)))
-        out = self.relu(self.bn2(self.conv2(out)))
-        out = self.bn3(self.conv3(out))
-        out += self.shortcut(residual)
-        return out
+        x = self.relu(self.conv1(x))
+        x = self.relu(self.conv2(x))
+        x = x.view(x.size(0), -1)  # Flatten the tensor
+        x = self.relu(self.fc1(x))
+        x = self.fc2(x)
+        return x
