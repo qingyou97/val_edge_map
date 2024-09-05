@@ -1,2 +1,2 @@
-def natural_sort_key(s, _nsre=re.compile('([0-9]+)')):
-    return [int(text) if text.isdigit() else text.lower() for text in _nsre.split(s)]
+3.Determine the feasibility of fine-tuning the BDCN classifier this week.
+Conclusion: After correcting some errors in the training network, we tried various parameter settings, such as batch size and larger models, but found it easy to encounter overfitting. Later, I carefully adjusted the label weights according to the method of pidinet and set the epoch to 300. We found that near 300 epochs, there is some fitting to the ground truth. However, edges tend to be discontinuous. Currently, the shallow network and having only 1 training image result in significant randomness, making the outcomes very unstable and inaccurate. I provided an example in the table.
