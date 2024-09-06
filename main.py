@@ -1,76 +1,59 @@
- feature_map = feature_extractor(fused_map)
-            feature_map = F.sigmoid(feature_map)
+def test(bdcn_model, class_model, data_root, res_dir):
+    mean_bgr = np.array([104.00699, 116.66877, 122.67892])
 
-            # 制作三分类标签
-            # labels_shape = labels.shape
-            # label = torch.zeros(labels_shape)
-            #
-            # label[(labels == 1)] = 1  # (out >= yita) 和 (out < yita)
-            # label[(out >= yita) & (labels < 1)] = 0
-            # label[(out < yita) & (labels < 1)] = 2
-            #
-            # new_label = label.squeeze(1)
-            # new_label.requires_grad = True
-            # new_label = new_label.long()
+    test_root = data_root
 
-            # 制作二分类标签
-            new_label = labels
+    test_lst = os.listdir(test_root)
 
-            # 查看gt
-            # new = torch.squeeze(new_label, dim=0)
-            # print(f'new shape:{new.shape}')
-            # check_label = torch.zeros_like(new)
-            # check_label[new == 1] = 1
-            # check_label = check_label.numpy()
-            # cv2.imwrite('label1.png', 255 * check_label)
-            #
-            # check_label1 = torch.zeros_like(new)
-            # check_label1[new == 0] = 1
-            # check_label1 = check_label1.numpy()
-            # cv2.imwrite('label0.png', 255 * check_label1)
-            #
-            # check_label2 = torch.zeros_like(new)
-            # check_label2[new == 2] = 1
-            # check_label2 = check_label2.numpy()
-            # cv2.imwrite('label2.png', 255 * check_label2)
+    save_dir = res_dir
+    if not os.path.exists(save_dir):
+        os.mkdir(save_dir)
 
-            # 制作三分类掩码
-            # mask = np.zeros(num_classes)
+    bdcn_model.eval()
+    class_model.eval()
 
-            # num_class0 = torch.sum(new_label == 0).float()
-            # num_class1 = torch.sum(new_label == 1).float()
-            # num_class2 = torch.sum(new_label == 2).float()
-            # print(f'num_class0:{num_class0}')
-            # print(f'num_class1:{num_class1}')
-            # print(f'num_class2:{num_class2}')
+    start_time = time.time()
+    all_t = 0
 
-            # mask[0] = 0.3
-            # mask[1] = 0.3
-            # mask[2] = 0.3
-            # mask[0] = 0.5 * num_class2 / (num_class0 + num_class1 + num_class2)
-            # mask[1] = 0.8 * num_class1 / (num_class0 + num_class1 + num_class2)
-            # mask[2] = 0.5 * num_class0 / (num_class0 + num_class1 + num_class2)
-            #
-            # mask = torch.tensor(mask, dtype=torch.float)
-            # mask = mask.detach()
-            # print(f'mask:{mask}')
+    for nm in test_lst:
+        data = cv2.imread(test_root + '/' + nm)
 
-            # 多分类损失函数
-            # criterion = nn.CrossEntropyLoss(weight=mask)
-            # loss = criterion(feature_map, new_label) + dice_loss(feature_map, new_label)
+        print(f'Processing data: {nm}')
+
+        data = np.array(data, np.float32)
+        data -= mean_bgr
+        data = data.transpose((2, 0, 1))
+        data = torch.from_numpy(data).float().unsqueeze(0)
+
+        data = Variable(data)
+
+        t1 = time.time()
+        out = bdcn_model(data)
+
+        if '/' in nm:
+            nm = nm.split('/')[-1]
+
+        fused_map = out[-1].cpu().data
+
+        out = [F.sigmoid(out[-1]).cpu().data.numpy()]
+        save_out = [out[-1][0, 0, :, :]]
+
+        fused_map = Variable(torch.tensor(fused_map))
+        feature_map = class_model(fused_map)
 
 
-            # 制作二分类掩码
+        class_map = F.sigmoid(feature_map).cpu().data.numpy()[0, 0, :, :]
 
-            num_positive = torch.sum(new_label == 1).float()
-            num_negative = torch.sum(new_label == 0).float()
+        # 保存原模型的fused map
+        if not os.path.exists(os.path.join(save_dir, 'fuse')):
+            os.mkdir(os.path.join(save_dir, 'fuse'))
+        cv2.imwrite(os.path.join(save_dir, 'fuse/%s.png' % nm.split('/')[-1].split('.')[0]), 255 - 255 * save_out[-1])
 
-            mask = new_label.clone()
-            mask[new_label == 1] = 2.0 * num_negative / (num_positive + num_negative)
-            mask[new_label == 0] = 1.1 * num_positive / (num_positive + num_negative)
-            mask = mask.detach()
-            print(f'num_positive:{num_positive}')
-            print(f'num_negative:{num_negative}')
+        # 保存经过分类之后的模型
+        if not os.path.exists(os.path.join(save_dir, 'class_1')):
+            os.mkdir(os.path.join(save_dir, 'class_1'))
 
-            # 二分类损失函数
-            loss = F.binary_cross_entropy(feature_map, new_label, weight=mask, reduction='sum')
+        cv2.imwrite(os.path.join(save_dir, 'class_1/%s.png' % nm.split('/')[-1].split('.')[0]),
+                    255- 255 * class_map)
+
+        all_t += time.time() - t1
