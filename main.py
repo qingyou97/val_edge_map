@@ -1,1 +1,1 @@
-I want to know how to add Han Xu's permissions on Wang Chao's machine. Which software should I use?
+Login is fine now, Han Sang currently has permission to access Wang Chao's machine.
