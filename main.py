@@ -34,25 +34,25 @@ def test(bdcn_model, class_model, data_root, res_dir, thresh = 0.5):
         if '/' in nm:
             nm = nm.split('/')[-1]
 
-        fused_map = out[-1].cpu().data
+        bdcn_map = out[-1].cpu().data
 
-        out = [F.sigmoid(out[-1]).cpu().data.numpy()]
-        save_out = [out[-1][0, 0, :, :]]
+        bdcn_map_sigmid = F.sigmoid(out[-1]).cpu().data.numpy()
+        bdcn_save_out = bdcn_map_sigmid[0, 0, :, :]
 
-        fused_map = Variable(torch.tensor(data))
+        fused_map = Variable(data)
         feature_map = class_model(fused_map)
 
 
         class_map = F.sigmoid(feature_map).cpu().data.numpy()[0, 0, :, :]
 
-        fused_map = fused_map.numpy()[0, 0, :, :]
-        new_map = np.zeros_like(fused_map)
-        new_map[(class_map>=thresh) & (fused_map>=thresh)] = 1
+
+        new_map = np.zeros_like(class_map)
+        new_map[(class_map>=thresh) & (bdcn_save_out>=thresh)] = 1
 
         # 保存原模型的fused map
         if not os.path.exists(os.path.join(save_dir, 'fuse')):
             os.mkdir(os.path.join(save_dir, 'fuse'))
-        cv2.imwrite(os.path.join(save_dir, 'fuse/%s.png' % nm.split('/')[-1].split('.')[0]), 255 - 255 * save_out[-1])
+        cv2.imwrite(os.path.join(save_dir, 'fuse/%s.png' % nm.split('/')[-1].split('.')[0]), 255 - 255 * bdcn_save_out)
 
         # 保存经过分类之后的模型
         if not os.path.exists(os.path.join(save_dir, 'class_1')):
