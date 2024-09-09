@@ -1,12 +1,8 @@
-import torch
-import torch.nn as nn
-import torch.nn.functional as F
-
-class FeatureExtractor(nn.Module):
+class FeatureExtractorWithPosition(nn.Module):
     def __init__(self, num_classes=3):
-        super(FeatureExtractor, self).__init__()
+        super(FeatureExtractorWithPosition, self).__init__()
         self.encoder = nn.Sequential(
-            nn.Conv2d(3, 64, kernel_size=3, padding=1),
+            nn.Conv2d(5, 64, kernel_size=3, padding=1),  # 调整输入通道数量为5：3（颜色通道）+ 2（位置通道）
             nn.ReLU(inplace=True),
             nn.MaxPool2d(kernel_size=2, stride=2),
             nn.Conv2d(64, 128, kernel_size=3, padding=1),
@@ -14,29 +10,21 @@ class FeatureExtractor(nn.Module):
             nn.MaxPool2d(kernel_size=2, stride=2)
         )
 
-        self.position_embed = nn.Conv2d(2, 128, kernel_size=1)  # 用于生成位置编码
-
         self.decoder = nn.Sequential(
-            nn.Conv2d(256, 64, kernel_size=3, padding=1),  # 注意通道数增加
+            nn.Conv2d(128, 64, kernel_size=3, padding=1),
             nn.ReLU(inplace=True),
             nn.Conv2d(64, 1, kernel_size=3, padding=1),
             nn.Upsample(scale_factor=4, mode='bilinear', align_corners=True)
         )
 
-    def generate_position_tensor(self, height, width):
-        y_embed = torch.linspace(0, 1, height).unsqueeze(1).repeat(1, width).unsqueeze(0)
-        x_embed = torch.linspace(0, 1, width).unsqueeze(0).repeat(height, 1).unsqueeze(0)
-        return torch.cat([y_embed, x_embed], dim=0).unsqueeze(0)  # shape [1, 2, height, width]
-
     def forward(self, x):
-        position_tensor = self.generate_position_tensor(x.size(2), x.size(3)).to(x.device)
-        position_embedding = self.position_embed(position_tensor)
-        
+        batch_size, _, h, w = x.shape
+        pos_y, pos_x = torch.meshgrid(torch.linspace(0, 1, h), torch.linspace(0, 1, w), indexing='ij')
+        pos_x = pos_x.unsqueeze(0).unsqueeze(0).expand(batch_size, -1, -1, -1)  # (B, 1, H, W)
+        pos_y = pos_y.unsqueeze(0).unsqueeze(0).expand(batch_size, -1, -1, -1)  # (B, 1, H, W)
+        position_encoding = torch.cat([pos_x, pos_y], dim=1).to(x.device)  # (B, 2, H, W)
+        x = torch.cat([x, position_encoding], dim=1)  # (B, 5, H, W)
+
         x = self.encoder(x)
-        
-        # 确保位置编码的尺寸与特征张量的尺寸一致
-        position_embedding = F.interpolate(position_embedding, size=(x.size(2), x.size(3)), mode='bilinear', align_corners=True)
-        
-        combined_features = torch.cat([x, position_embedding.repeat(x.size(0), 1, 1, 1)], dim=1)
-        x = self.decoder(combined_features)
+        x = self.decoder(x)
         return x
