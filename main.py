@@ -1,44 +1,40 @@
-#!/usr/bin/python3
-# -*- coding: utf-8 -*-
-"""
-@File  : point_predict
-@Author: Wendy
-@Time  : 2024/4/11 10:21
-@Desc  :
-"""
-import cv2
-import numpy as np
-from demo import LightGlueMatch
+from lightglue import LightGlue, SuperPoint, DISK
+from lightglue.utils import load_image, rbd
+from lightglue import viz2d
+from pathlib import Path
+import torch
 
+def LightGlueMatch(last_frame, frame, frame_index,matching_save_path):
 
-def vision_angle_transformer(image1, frame_index, image1_point, image2, matching_save_path):
-    image1 = cv2.imread(image1)
-    image2 = cv2.imread(image2)
-    gray1 = cv2.cvtColor(image1, cv2.COLOR_BGR2GRAY)
-    gray2 = cv2.cvtColor(image2, cv2.COLOR_BGR2GRAY)
+    torch.set_grad_enabled(False)
 
-    frame_com_kpts, frame_kpts = LightGlueMatch(gray1, gray2, frame_index, matching_save_path)
-    if len(frame_com_kpts) >= 10:
-        print('Meet matching points num')
-        # 获得源和目标点的数组
-        srcPts = np.float32(frame_com_kpts).reshape(-1, 1, 2)
-        dstPts = np.float32(frame_kpts).reshape(-1, 1, 2)
-        print(f'上一帧特征点的个数：{srcPts.shape[0]}')
+    # Load extractor and matcher module
+    device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
+    extractor = SuperPoint(max_num_keypoints=2048).eval().to(device)
+    matcher = LightGlue(features='superpoint').eval().to(device)
 
-        # 获得单应性矩阵H
-        H, _ = cv2.findHomography(srcPts, dstPts, 0, 2.0)
-        print("h:", H)
+    image0 = load_image(last_frame)
+    image1 = load_image(frame)
 
-        image2_point = cv2.perspectiveTransform(image1_point, H)
-        image2_point = np.squeeze(image2_point).tolist()
-        print(f'上一帧的坐标:{np.squeeze(image1_point).tolist()}')
-        print(f'单应性矩阵计算后的下一帧坐标:{image2_point}')
+    feats0 = extractor.extract(image0.to(device))
+    feats1 = extractor.extract(image1.to(device))
 
-    return image2_point
+    matches01 = matcher({'image0':feats0,'image1':feats1})
+    feats0, feats1, matches01 = [
+        rbd(x) for x in [feats0, feats1, matches01]
+    ]   # remove batch dimension
 
+    kpts0, kpts1, matches = feats0['keypoints'], feats1['keypoints'], matches01['matches']
+    m_kpts0, m_kpts1 = kpts0[matches[...,0]], kpts1[matches[...,1]] # m_kpts0 type:<class 'torch.Tensor'>, shape:torch.Size([1078, 2])
+    print(f'm_kpts0 nums: {m_kpts0.shape[0]}')
+    print(f'm_kpts1 nums: {m_kpts1.shape[0]}')
 
-if __name__ == '__main__':
-    vision_angle_transformer(image1=r'D:\2. project\RAFT-master\frame_img/0.jpg', frame_index=0,
-                             image1_point=[1611, 859],
-                             image2=r'D:\2. project\RAFT-master\frame_img/1.jpg',
-                             matching_save_path=r'./matching_save')
+    axes = viz2d.plot_images([image0, image1]) # 为了后续操作
+    viz2d.plot_matches(m_kpts0, m_kpts1, matching_save_path,frame_index, color='lime',lw=0.2)
+    viz2d.add_text(0,f'Stop after {matches01["stop"]}layers', fs=20)
+
+    kpc0, kpc1 = viz2d.cm_prune(matches01['prune0']), viz2d.cm_prune(matches01['prune1'])
+    viz2d.plot_images([image0,image1])
+    viz2d.plot_keypoints([kpts0, kpts1], colors=[kpc0,kpc1],ps=10)
+
+    return m_kpts0, m_kpts1
