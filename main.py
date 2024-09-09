@@ -33,6 +33,10 @@ class FeatureExtractor(nn.Module):
         position_embedding = self.position_embed(position_tensor)
         
         x = self.encoder(x)
+        
+        # 确保位置编码的尺寸与特征张量的尺寸一致
+        position_embedding = F.interpolate(position_embedding, size=(x.size(2), x.size(3)), mode='bilinear', align_corners=True)
+        
         combined_features = torch.cat([x, position_embedding.repeat(x.size(0), 1, 1, 1)], dim=1)
         x = self.decoder(combined_features)
         return x
