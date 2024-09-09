@@ -1,10 +1,6 @@
-self.encoder = nn.Sequential(
-       nn.Conv2d(in_channels=5, out_channels=64, kernel_size=3, padding=1),
-       nn.ReLU(inplace=True),
-       nn.Dropout(0.5),  # Dropout layer
-       nn.MaxPool2d(kernel_size=2, stride=2),
-       nn.Conv2d(in_channels=64, out_channels=128, kernel_size=3, padding=1),
-       nn.ReLU(inplace=True),
-       nn.Dropout(0.5),  # Dropout layer
-       nn.MaxPool2d(kernel_size=2, stride=2)
-   )
+ self.data_transforms = transforms.Compose([
+                    transforms.RandomHorizontalFlip(),
+                    transforms.RandomRotation(15),
+                    transforms.RandomResizedCrop((self.crop_size, self.crop_size)) if crop_size else transforms.Resize((224, 224)),
+                    transforms.ColorJitter(brightness=0.1, contrast=0.1, saturation=0.1, hue=0.05)
+                ])
