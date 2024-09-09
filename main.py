@@ -1,69 +1,38 @@
-def test(bdcn_model, class_model, data_root, res_dir, thresh = 0.5):
-    mean_bgr = np.array([104.00699, 116.66877, 122.67892])
+import torch
+import torch.nn as nn
+import torch.nn.functional as F
 
-    test_root = data_root
+class FeatureExtractor(nn.Module):
+    def __init__(self, num_classes=3):
+        super(FeatureExtractor, self).__init__()
+        self.encoder = nn.Sequential(
+            nn.Conv2d(3, 64, kernel_size=3, padding=1),
+            nn.ReLU(inplace=True),
+            nn.MaxPool2d(kernel_size=2, stride=2),
+            nn.Conv2d(64, 128, kernel_size=3, padding=1),
+            nn.ReLU(inplace=True),
+            nn.MaxPool2d(kernel_size=2, stride=2)
+        )
 
-    test_lst = os.listdir(test_root)
+        self.position_embed = nn.Conv2d(2, 128, kernel_size=1)  # 用于生成位置编码
 
-    save_dir = res_dir
-    if not os.path.exists(save_dir):
-        os.mkdir(save_dir)
+        self.decoder = nn.Sequential(
+            nn.Conv2d(256, 64, kernel_size=3, padding=1),  # 注意通道数增加
+            nn.ReLU(inplace=True),
+            nn.Conv2d(64, 1, kernel_size=3, padding=1),
+            nn.Upsample(scale_factor=4, mode='bilinear', align_corners=True)
+        )
 
-    bdcn_model.eval()
-    class_model.eval()
+    def generate_position_tensor(self, height, width):
+        y_embed = torch.linspace(0, 1, height).unsqueeze(1).repeat(1, width).unsqueeze(0)
+        x_embed = torch.linspace(0, 1, width).unsqueeze(0).repeat(height, 1).unsqueeze(0)
+        return torch.cat([y_embed, x_embed], dim=0).unsqueeze(0)  # shape [1, 2, height, width]
 
-    start_time = time.time()
-    all_t = 0
-
-
-    for nm in test_lst:
-        data = cv2.imread(test_root + '/' + nm)
-
-        print(f'Processing data: {nm}')
-
-        data = np.array(data, np.float32)
-        data -= mean_bgr
-        data = data.transpose((2, 0, 1))
-        data = torch.from_numpy(data).float().unsqueeze(0)
-
-        data = Variable(data)
-
-        t1 = time.time()
-        out = bdcn_model(data)
-
-        if '/' in nm:
-            nm = nm.split('/')[-1]
-
-        bdcn_map = out[-1].cpu().data
-
-        bdcn_map_sigmid = F.sigmoid(out[-1]).cpu().data.numpy()
-        bdcn_save_out = bdcn_map_sigmid[0, 0, :, :]
-
-        fused_map = Variable(data)
-        feature_map = class_model(fused_map)
-
-
-        class_map = F.sigmoid(feature_map).cpu().data.numpy()[0, 0, :, :]
-
-
-        new_map = np.zeros_like(class_map)
-        new_map[(class_map>=thresh) & (bdcn_save_out>=thresh)] = 1
-
-        # 保存原模型的fused map
-        if not os.path.exists(os.path.join(save_dir, 'fuse')):
-            os.mkdir(os.path.join(save_dir, 'fuse'))
-        cv2.imwrite(os.path.join(save_dir, 'fuse/%s.png' % nm.split('/')[-1].split('.')[0]), 255 - 255 * bdcn_save_out)
-
-        # 保存经过分类之后的模型
-        if not os.path.exists(os.path.join(save_dir, 'class_1')):
-            os.mkdir(os.path.join(save_dir, 'class_1'))
-
-        cv2.imwrite(os.path.join(save_dir, 'class_1/%s.png' % nm.split('/')[-1].split('.')[0]),
-                    255- 255 * new_map)
-        if not os.path.exists(os.path.join(save_dir, 'image')):
-            os.mkdir(os.path.join(save_dir, 'image'))
-
-        cv2.imwrite(os.path.join(save_dir, 'image/%s.png' % nm.split('/')[-1].split('.')[0]),
-                    255- 255 * class_map)
-
-        all_t += time.time() - t1
+    def forward(self, x):
+        position_tensor = self.generate_position_tensor(x.size(2), x.size(3)).to(x.device)
+        position_embedding = self.position_embed(position_tensor)
+        
+        x = self.encoder(x)
+        combined_features = torch.cat([x, position_embedding.repeat(x.size(0), 1, 1, 1)], dim=1)
+        x = self.decoder(combined_features)
+        return x
