@@ -1,23 +1,9 @@
-self.encoder = nn.Sequential(
-    nn.Conv2d(in_channels=5, out_channels=64, kernel_size=3, padding=1),
-    nn.BatchNorm2d(64),
-    nn.ReLU(inplace=True),
-    nn.Dropout(0.5),
-    nn.MaxPool2d(kernel_size=2, stride=2),
-    nn.Conv2d(in_channels=64, out_channels=128, kernel_size=3, padding=1),
-    nn.BatchNorm2d(128),
-    nn.ReLU(inplace=True),
-    nn.Dropout(0.5),
-    nn.MaxPool2d(kernel_size=2, stride=2)
-)
+# 初始化权重
+        self._initialize_weights()
 
-self.decoder = nn.Sequential(
-    nn.Conv2d(in_channels=128, out_channels=128, kernel_size=3, padding=1),
-    nn.BatchNorm2d(128),
-    nn.ReLU(inplace=True),
-    nn.Conv2d(in_channels=128, out_channels=64, kernel_size=3, padding=1),
-    nn.BatchNorm2d(64),
-    nn.ReLU(inplace=True),
-    nn.Conv2d(in_channels=64, out_channels=1, kernel_size=3, padding=1),
-    nn.Upsample(scale_factor=4, mode='bilinear', align_corners=True)
-)
+    def _initialize_weights(self):
+        for m in self.modules():
+            if isinstance(m, nn.Conv2d):
+                nn.init.kaiming_normal_(m.weight, mode='fan_out', nonlinearity='relu')
+                if m.bias is not None:
+                    nn.init.constant_(m.bias, 0)
