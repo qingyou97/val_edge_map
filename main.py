@@ -1,10 +1,8 @@
-def apply_transforms(self, img, gt):
-                augmented = Image.fromarray(np.concatenate((np.array(img), np.array(gt)[:, :, np.newaxis]), axis=2))
-                if self.data_transforms is not None:
-                        augmented = self.data_transforms(augmented)
-                
-                augmented = np.array(augmented)
-                img = Image.fromarray(augmented[:, :, :3])
-                gt = Image.fromarray(augmented[:, :, 3])
-                
-                return img, gt
+self.decoder = nn.Sequential(
+            nn.Conv2d(in_channels=128, out_channels=128, kernel_size=3, padding=1),
+            nn.ReLU(inplace=True),
+            nn.Conv2d(in_channels=128, out_channels=64, kernel_size=3, padding=1),
+            nn.ReLU(inplace=True),
+            nn.Conv2d(in_channels=64, out_channels=1, kernel_size=3, padding=1),
+            nn.Upsample(scale_factor=4, mode='bilinear', align_corners=True)
+        )
