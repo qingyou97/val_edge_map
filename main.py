@@ -1,30 +1,24 @@
-class FeatureExtractorWithPosition(nn.Module):
-    def __init__(self, num_classes=3):
-        super(FeatureExtractorWithPosition, self).__init__()
-        self.encoder = nn.Sequential(
-            nn.Conv2d(5, 64, kernel_size=3, padding=1),  # 调整输入通道数量为5：3（颜色通道）+ 2（位置通道）
-            nn.ReLU(inplace=True),
-            nn.MaxPool2d(kernel_size=2, stride=2),
-            nn.Conv2d(64, 128, kernel_size=3, padding=1),
-            nn.ReLU(inplace=True),
-            nn.MaxPool2d(kernel_size=2, stride=2)
-        )
+def generate_sinusoidal_position_encoding(batch_size, height, width, num_channels, device):
+    def get_angles(pos, i, d_model):
+        angle_rates = 1 / np.power(10000, (2 * (i // 2)) / np.float32(d_model))
+        return pos * angle_rates
 
-        self.decoder = nn.Sequential(
-            nn.Conv2d(128, 64, kernel_size=3, padding=1),
-            nn.ReLU(inplace=True),
-            nn.Conv2d(64, 1, kernel_size=3, padding=1),
-            nn.Upsample(scale_factor=4, mode='bilinear', align_corners=True)
-        )
+    angle_rads_x = get_angles(np.arange(width)[:, np.newaxis], np.arange(num_channels)[np.newaxis, :], num_channels)
+    angle_rads_y = get_angles(np.arange(height)[:, np.newaxis], np.arange(num_channels)[np.newaxis, :], num_channels)
 
-    def forward(self, x):
-        batch_size, _, h, w = x.shape
-        pos_y, pos_x = torch.meshgrid(torch.linspace(0, 1, h), torch.linspace(0, 1, w), indexing='ij')
-        pos_x = pos_x.unsqueeze(0).unsqueeze(0).expand(batch_size, -1, -1, -1)  # (B, 1, H, W)
-        pos_y = pos_y.unsqueeze(0).unsqueeze(0).expand(batch_size, -1, -1, -1)  # (B, 1, H, W)
-        position_encoding = torch.cat([pos_x, pos_y], dim=1).to(x.device)  # (B, 2, H, W)
-        x = torch.cat([x, position_encoding], dim=1)  # (B, 5, H, W)
+    # apply sin to even indices in the array; 2i
+    angle_rads_x[:, 0::2] = np.sin(angle_rads_x[:, 0::2])
+    angle_rads_y[:, 0::2] = np.sin(angle_rads_y[:, 0::2])
 
-        x = self.encoder(x)
-        x = self.decoder(x)
-        return x
+    # apply cos to odd indices in the array; 2i+1
+    angle_rads_x[:, 1::2] = np.cos(angle_rads_x[:, 1::2])
+    angle_rads_y[:, 1::2] = np.cos(angle_rads_y[:, 1::2])
+
+    pos_encoding_x = torch.tensor(angle_rads_x[np.newaxis, :, :, np.newaxis], dtype=torch.float32).to(device)
+    pos_encoding_y = torch.tensor(angle_rads_y[np.newaxis, :, :, np.newaxis], dtype=torch.float32).to(device)
+
+    pos_encoding_x = pos_encoding_x.expand(batch_size, -1, -1, height)
+    pos_encoding_y = pos_encoding_y.expand(batch_size, -1, -1, width)
+
+    pos_encoding = torch.cat([pos_encoding_x, pos_encoding_y], dim=1)
+    return pos_encoding
