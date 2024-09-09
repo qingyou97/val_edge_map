@@ -1,40 +1,36 @@
-from lightglue import LightGlue, SuperPoint, DISK
-from lightglue.utils import load_image, rbd
-from lightglue import viz2d
-from pathlib import Path
+import matplotlib.pyplot as plt
 import torch
 
-def LightGlueMatch(last_frame, frame, frame_index,matching_save_path):
+# 将图像加载换为CPU且变成numpy数组
+image0_cpu = image0.squeeze().cpu().numpy().transpose(1, 2, 0)
+image1_cpu = image1.squeeze().cpu().numpy().transpose(1, 2, 0)
 
-    torch.set_grad_enabled(False)
+# 画图
+fig, ax = plt.subplots(1, 2, figsize=(15, 10))
 
-    # Load extractor and matcher module
-    device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
-    extractor = SuperPoint(max_num_keypoints=2048).eval().to(device)
-    matcher = LightGlue(features='superpoint').eval().to(device)
+# 绘制图像1的点
+ax[0].imshow(image0_cpu)
+ax[0].scatter(points0[:, 0], points0[:, 1], c='r', marker='o')
+ax[0].title.set_text('Image 0 Keypoints')
 
-    image0 = load_image(last_frame)
-    image1 = load_image(frame)
+# 绘制图像2的点
+ax[1].imshow(image1_cpu)
+ax[1].scatter(points1[:, 0], points1[:, 1], c='r', marker='o')
+ax[1].title.set_text('Image 1 Keypoints')
 
-    feats0 = extractor.extract(image0.to(device))
-    feats1 = extractor.extract(image1.to(device))
+# 在两图之间画连线
+for p0, p1 in zip(points0, points1):
+    fig.lines.append(plt.Line2D(
+        [p0[0], p1[0] + image0_cpu.shape[1]], 
+        [p0[1], p1[1]], 
+        color='yellow'  # 线条颜色可以自己更改
+    ))
 
-    matches01 = matcher({'image0':feats0,'image1':feats1})
-    feats0, feats1, matches01 = [
-        rbd(x) for x in [feats0, feats1, matches01]
-    ]   # remove batch dimension
+# 拼接两幅图像
+combined_image = torch.cat((image0, image1), dim=2).squeeze().cpu().numpy().transpose(1, 2, 0)
+ax_combined = fig.add_subplot(111, frameon=False)
+ax_combined.imshow(combined_image)
+ax_combined.axis('off')
+ax_combined.title.set_text('Correspondences')
 
-    kpts0, kpts1, matches = feats0['keypoints'], feats1['keypoints'], matches01['matches']
-    m_kpts0, m_kpts1 = kpts0[matches[...,0]], kpts1[matches[...,1]] # m_kpts0 type:<class 'torch.Tensor'>, shape:torch.Size([1078, 2])
-    print(f'm_kpts0 nums: {m_kpts0.shape[0]}')
-    print(f'm_kpts1 nums: {m_kpts1.shape[0]}')
-
-    axes = viz2d.plot_images([image0, image1]) # 为了后续操作
-    viz2d.plot_matches(m_kpts0, m_kpts1, matching_save_path,frame_index, color='lime',lw=0.2)
-    viz2d.add_text(0,f'Stop after {matches01["stop"]}layers', fs=20)
-
-    kpc0, kpc1 = viz2d.cm_prune(matches01['prune0']), viz2d.cm_prune(matches01['prune1'])
-    viz2d.plot_images([image0,image1])
-    viz2d.plot_keypoints([kpts0, kpts1], colors=[kpc0,kpc1],ps=10)
-
-    return m_kpts0, m_kpts1
+plt.show()
