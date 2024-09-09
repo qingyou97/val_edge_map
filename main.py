@@ -1,36 +1,9 @@
-import matplotlib.pyplot as plt
-import numpy as np
-
-def plot_matches(image0, image1, points0, points1):
-    # 将图像转换为numpy格式
-    image0_np = image0.cpu().numpy().transpose(1, 2, 0)  # convert (3,H,W) -> (H,W,3)
-    image1_np = image1.cpu().numpy().transpose(1, 2, 0)
-
-    # 创建合并图像，左右并行显示 input images
-    height = max(image0_np.shape[0], image1_np.shape[0])
-    width = image0_np.shape[1] + image1_np.shape[1]
-    composite_image = np.zeros((height, width, 3))
-
-    composite_image[:image0_np.shape[0], :image0_np.shape[1], :] = image0_np
-    composite_image[:image1_np.shape[0], image0_np.shape[1]:, :] = image1_np
-
-    # 调整点坐标, 在框取合成图上，特征点1需偏移以匹配image_1的位置
-    points1_adj = points1.clone().numpy()
-    points1_adj[:, 0] += image0_np.shape[1]
-
-    # 作图
-    fig, ax = plt.subplots(figsize=(18,9))
-    ax.imshow(composite_image)
-
-    # 绘制点及匹配线条
-    for (pt0, pt1) in zip(points0.cpu().numpy(), points1_adj):
-        color = np.random.rand(3)
-        ax.scatter(*pt0, s=10, facecolors=color, edgecolors='k')
-        ax.scatter(*pt1, s=10, facecolors=color, edgecolors='k')
-        ax.plot([pt0[0], pt1[0]], [pt0[1], pt1[1]], color=color, linewidth=1.5)
-
-    ax.axis('off')
-    plt.show()
-
-# 调用到函数的是,例如以下方法
-plot_matches(image0, image1, points0, points1)
+1. Original image and GT classification edge detection network
+Conclusion: No significant results achieved on Monday due to poor generalization. The reasons include the low similarity between the edges in the GT and other images, and the strong influence of lighting.
+   a. Tried adding positional encoding information, specifically XY grid coordinates and sine/cosine positional encoding to capture different frequency information. XY grid coordinates marginally suppressed some edges, while sine/cosine encoding had no noticeable effect.
+   b. Added regularization in Adam and Dropout in the network, which slightly suppressed some edges, but the effect was minimal.
+   c. Also added BN layers, deepened the network, and tried different weight initialization methods (Xavier and Kaiming), but observed no significant improvement.
+2. Retrained the previous three-class results using the original image as input
+Conclusion: At least the 0-2 shapes seemed to be fit, indicating normal network operation. The issue earlier might have been due to the network setup, since using fused grayscale images yielded too little information for stable learning.
+3. New idea: Match the desired location in the original image using point feature matching network, then extract out-of-box points from the corresponding positions.
+Conclusion: Tried LightGlue network but found that it matched very few points on the outer circle of the casting, with more points matched internally. This idea is temporarily shelved.
