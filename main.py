@@ -1,1 +1,8 @@
-scheduler = optim.lr_scheduler.CosineAnnealingLR(optimizer, T_max=50)
+1. Draw a flowchart for each solution so far.
+Conclusion: I have drawn each feature map size and block for bdcn, which makes it easier to write improvement plans. Currently, there are two main types of solutions. The first type directly uses an image for fine-tuning on the overall bdcn model to improve generalization. The second solution does not modify bdcn's model architecture but extracts individual feature maps to input to a newly added classifier, including some tuning schemes and generalization improvements.
+
+2. For the classifier solution, the input to the classifier is not the final single-channel feature but the multi-channel feature from earlier layers without activation; the number of channels and whether passed through the activation function both have certain effects.
+Conclusion: By observing all feature layers of bdcn, the recent choice is each sum layer after sem. The sum layer has 21 channels, while subsequent feature maps are single-channel. The current conclusion is, if we choose only one sum layer or a combination of sum and fuse layers, the result after a classifier convolution is very poor, full of noise, and does not suppress the ground truth. Later, concatenating all five sum layers and the fuse layer together gives at least normal results with less noise. However, internal circles remain unsuppressed, looking like a bolder out-of-box. The edges we desire are more prominent than out-of-box.
+
+3. What tasks can be shared with Han Xu? Meet tomorrow morning to discuss.
+Conclusion: Completed. This week, I can help Han Xu with one of the training and adjustment tasks.
