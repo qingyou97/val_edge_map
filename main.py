@@ -1,1 +1,4 @@
-When adjusting the learning rate on my old classifier network, I found that setting it to 0.001 was still not good. So I wanted to verify whether the issue was with the network or my training method. Without changing the training method, I added two new conv layers and two new bn layers to the network this time. I found that the training results fit the gt well. The images from column L are basically consistent with the gt (with some noise).
+OneNote and GitLab have not been running as expected.
+There's an alignment issue with daily tasks.
+Is there a way to improve Han’s work efficiency?
+Regarding Duan's leave, should we temporarily put this direction on hold and continue tuning after he returns on October 8th, or should I hand it over to Han?
