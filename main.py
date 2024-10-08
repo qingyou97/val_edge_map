@@ -1,23 +1,13 @@
-import os
-from PIL import Image
+cropped_img_300 = img.crop((left, top, right, bottom))
+        result_filename = f"{os.path.splitext(filename)[0]}_result{os.path.splitext(filename)[1]}"
+        cropped_img_300.save(os.path.join(B_folder, result_filename))
 
-def crop_images(input_folder, output_folder, top_left_x, top_left_y, width, height):
-    if not os.path.exists(output_folder):
-        os.makedirs(output_folder)
-    
-    for filename in os.listdir(input_folder):
-        if filename.endswith(".png") or filename.endswith(".jpg") or filename.endswith(".jpeg"):
-            img_path = os.path.join(input_folder, filename)
-            img = Image.open(img_path)
-            cropped_img = img.crop((top_left_x, top_left_y, top_left_x + width, top_left_y + height))
-            cropped_img.save(os.path.join(output_folder, filename))
+        # 保留1200-1500像素
+        left = 1200
+        right = 1500 if width >= 1500 else width
+        if width >= 1200:
+            cropped_img_1200_1500 = img.crop((left, top, right, bottom))
+            original_filename = f"{os.path.splitext(filename)[0]}_original{os.path.splitext(filename)[1]}"
+            cropped_img_1200_1500.save(os.path.join(B_folder, original_filename))
 
-# 通用参数
-input_folder = 'A'  # 源文件夹路径
-output_folder = 'B'  # 目标文件夹路径
-top_left_x = 39  # 裁剪框的左上角横坐标
-top_left_y = 23  # 裁剪框的左上角纵坐标
-width = 250  # 裁剪宽度
-height = 250  # 裁剪高度
-
-crop_images(input_folder, output_folder, top_left_x, top_left_y, width, height)
+print("所有图片已裁剪并保存到B文件夹。")
