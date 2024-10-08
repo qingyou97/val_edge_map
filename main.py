@@ -1,30 +1,23 @@
 import os
 from PIL import Image
 
-# 定义文件夹路径
-A_folder = "A文件夹路径"
-B_folder = "B文件夹路径"
+def crop_images(input_folder, output_folder, top_left_x, top_left_y, width, height):
+    if not os.path.exists(output_folder):
+        os.makedirs(output_folder)
+    
+    for filename in os.listdir(input_folder):
+        if filename.endswith(".png") or filename.endswith(".jpg") or filename.endswith(".jpeg"):
+            img_path = os.path.join(input_folder, filename)
+            img = Image.open(img_path)
+            cropped_img = img.crop((top_left_x, top_left_y, top_left_x + width, top_left_y + height))
+            cropped_img.save(os.path.join(output_folder, filename))
 
-if not os.path.exists(B_folder):
-    os.makedirs(B_folder)
+# 通用参数
+input_folder = 'A'  # 源文件夹路径
+output_folder = 'B'  # 目标文件夹路径
+top_left_x = 39  # 裁剪框的左上角横坐标
+top_left_y = 23  # 裁剪框的左上角纵坐标
+width = 250  # 裁剪宽度
+height = 250  # 裁剪高度
 
-# 处理A文件夹中的所有图像
-for filename in os.listdir(A_folder):
-    if filename.endswith(('.png', '.jpg', '.jpeg', '.bmp', '.gif')):
-        file_path = os.path.join(A_folder, filename)
-        img = Image.open(file_path)
-        
-        # 获取图像尺寸
-        width, height = img.size
-        
-        # 裁剪图像 （横向只保留最后80像素）
-        left = width - 80
-        right = width
-        top = 0
-        bottom = height
-        cropped_img = img.crop((left, top, right, bottom))
-        
-        #保存到B文件夹
-        cropped_img.save(os.path.join(B_folder, filename))
-
-print("所有图片已裁剪并保存到B文件夹。")
+crop_images(input_folder, output_folder, top_left_x, top_left_y, width, height)
