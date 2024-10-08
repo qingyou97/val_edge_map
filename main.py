@@ -1,11 +1,42 @@
-# 转换到 HSV 颜色空间
-hsv = np.zeros((direction.shape[0], direction.shape[1], 3), dtype=np.uint8)
-hsv[..., 0] = (direction - direction.min()) / (direction.max() - direction.min()) * 179  # H (色调)
-hsv[..., 1] = 255  # S (饱和度)
-hsv[..., 2] = 255  # V (数值)
+import cv2
+import numpy as np
 
-# 转换为 BGR 颜色空间，以便保存和显示
-bgr = cv2.cvtColor(hsv, cv2.COLOR_HSV2BGR)
+# 读入图像
+image = cv2.imread('your_image.jpg', 0)
 
-# 保存图像并显示
-cv2.imwrite('edge_direction.png', bgr)
+# 二值化图像
+_, binary = cv2.threshold(image, 127, 255, cv2.THRESH_BINARY)
+
+# 创建形态操作核
+kernel = np.ones((3,3), np.uint8)
+
+# 腐蚀操作，减少边缘厚度
+eroded = cv2.erode(binary, kernel, iterations=1)
+
+# 骨架化操作
+def skeletonize(image):
+    skel = np.zeros(image.shape, np.uint8)
+    temp = np.zeros(image.shape, np.uint8)
+    eroded = np.zeros(image.shape, np.uint8)
+    kernel = cv2.getStructuringElement(cv2.MORPH_CROSS, (3,3))
+
+    while True:
+        eroded = cv2.erode(image, kernel)
+        temp = cv2.dilate(eroded, kernel)
+        temp = cv2.subtract(image, temp)
+        skel = cv2.bitwise_or(skel, temp)
+        image = eroded.copy()
+        if cv2.countNonZero(image) == 0:
+            break
+
+    return skel
+
+# 骨架化处理
+skeleton = skeletonize(eroded)
+
+# 显示结果
+cv2.imshow('Original Image', image)
+cv2.imshow('Eroded Image', eroded)
+cv2.imshow('Skeletonized Image', skeleton)
+cv2.waitKey(0)
+cv2.destroyAllWindows()
