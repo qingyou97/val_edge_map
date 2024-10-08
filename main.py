@@ -1,21 +1,30 @@
 import os
-import shutil
+from PIL import Image
 
-# 源文件夹A的路径
-source_folder = 'A文件夹路径'
-# 目标文件夹B的路径
-dest_folder = 'B文件夹路径'
+# 定义文件夹路径
+A_folder = "A文件夹路径"
+B_folder = "B文件夹路径"
 
-# 确保目标文件夹存在
-os.makedirs(dest_folder, exist_ok=True)
+if not os.path.exists(B_folder):
+    os.makedirs(B_folder)
 
-for root, dirs, files in os.walk(source_folder):
-    for dir_name in dirs:
-        segmentation_images_path = os.path.join(root, dir_name, 'segmentation_images')
-        if os.path.exists(segmentation_images_path):
-            for image_name in os.listdir(segmentation_images_path):
-                image_path = os.path.join(segmentation_images_path, image_name)
-                if os.path.isfile(image_path):  # 确保这是一个文件
-                    new_image_name = f"{os.path.basename(source_folder)}_{dir_name}_{image_name}"
-                    new_image_path = os.path.join(dest_folder, new_image_name)
-                    shutil.copyfile(image_path, new_image_path)
+# 处理A文件夹中的所有图像
+for filename in os.listdir(A_folder):
+    if filename.endswith(('.png', '.jpg', '.jpeg', '.bmp', '.gif')):
+        file_path = os.path.join(A_folder, filename)
+        img = Image.open(file_path)
+        
+        # 获取图像尺寸
+        width, height = img.size
+        
+        # 裁剪图像 （横向只保留最后80像素）
+        left = width - 80
+        right = width
+        top = 0
+        bottom = height
+        cropped_img = img.crop((left, top, right, bottom))
+        
+        #保存到B文件夹
+        cropped_img.save(os.path.join(B_folder, filename))
+
+print("所有图片已裁剪并保存到B文件夹。")
