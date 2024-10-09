@@ -1,62 +1,17 @@
-法1
-1. 高斯模糊 (Gaussian Blur)：
-- 函数: cv2.GaussianBlur(img_gray, ksize=（3，3）, sigmaX)
-- 作用: 平滑图像，减少噪音。
+Based on AI results, I used a rule-based method and compared it with applying rule-based methods directly on the original image and against the ground truth (GT) to determine if it matched the specific GT edge locations. 
 
-2. Otsu阈值分割 (Otsu's Binarization)：
-- 函数: cv2.threshold(img_blur, thresh=0, maxval=255, cv2.THRESH_BINARY + cv2.THRESH_OTSU)
-- 作用: 自动计算最佳阈值以二值化图像。
+Conclusion: Using a custom skeletonization function (repeated dilation and erosion, then image difference to update skeleton), I could extract very thin edges directly from the AI result which matched well with the GT upon comparison. 
 
-3. 形态学操作 (Morphological Operations)：
-  kernel = np.ones(shape:(3,3), np.uint8)
-  - 开运算 (Opening):
-    - 函数: cv2.morphologyEx(img_thresh, cv2.MORPH_OPEN, kernel)
-    - 作用: 去除小的白色噪点。
-  - 闭运算 (Closing):
-    - 函数: cv2.morphologyEx(img_open, cv2.MORPH_CLOSE, kernel)
-    - 作用: 填充小的黑色空洞。
+Previously tried methods at the meeting had poor results:
 
-4. 骨架化（Skeletonization）：
-- 函数: skeletonize(img_close == 0)
-- 使用库: from skimage.morphology import skeletonize
-- 作用: 将图像的主轮廓提取成单像素宽的线条。
+a. Directly applying the rule-based method on AI results (rule-based sheet row 11) and on the original image (rule-based sheet row 7). The result on AI is not single-pixel edges. The gradient found is on the outer contour of the yellow area, so the comparison with GT (rule-based sheet row 13) did not match the GT's thin edge.
 
-法2
+b. To solve non-single-pixel edges from Sobel, I applied NMS (Non-Maximum Suppression). This ensured thin edges (rule-based sheet row 15), but the comparison with GT still didn’t match the GT's thin edge (rule-based sheet row 17).
 
-1. 二值化图像：
-_, binary = cv2.threshold(image, 127, 255, cv2.THRESH_BINARY)
-  使用 cv2.threshold 对图像进行二值化处理，阈值为 127。低于此值的像素设为 0，高于此值的像素设为 255。
+c. In the rule-based approach, finding peak intensity and exploring direction (phase). I applied Sobel on the original image to get intensity (magnitude&phase sheet row 9) and direction (magnitude&phase sheet row 11), and on the AI result (magnitude&phase sheet row 15 and row 17). Used HSV mapping for angle visualization. Did not utilize intensity and direction effectively, so switched to skeletonization.
 
-2. 创建形态学操作核：
-kernel = np.ones((3,3), np.uint8)
-  创建一个 3x3 的全1矩阵（由 uint8 类型的值组成），作为形态学操作中的卷积核。
+Skeletonization methods:
 
-4. 腐蚀操作：
-eroded = cv2.erode(binary, kernel, iterations=1)
-  使用 cv2.erode 减少边缘厚度。腐蚀操作迭代一次。
-  
-5. 骨架化函数：
-def skeletonize(image):
-    skel = np.zeros(image.shape, np.uint8)
-    temp = np.zeros(image.shape, np.uint8)
-    eroded = np.zeros(image.shape, np.uint8)
-    kernel = cv2.getStructuringElement(cv2.MORPH_CROSS, (3,3))
+d. Used an old recommended skimage library method but likely due to improper parameter settings or preprocessing, results did not meet expectations (skeletonize sheet row 9).
 
-    while True:
-        eroded = cv2.erode(image, kernel)
-        temp = cv2.dilate(eroded, kernel)
-        temp = cv2.subtract(image, temp)
-        skel = cv2.bitwise_or(skel, temp)
-        image = eroded.copy()
-        if cv2.countNonZero(image) == 0:
-            break
-
-    return skel
-- kernel: 一个 3x3 的十字型结构核，由 cv2.getStructuringElement 创建。
-- 骨架化具体步骤：
-  1. 腐蚀操作：对图像进行腐蚀。
-  2. 膨胀腐蚀结果：对腐蚀后的图像进行膨胀。
-  3. 图像差：原图 - 膨胀后的图像。
-  4. 更新骨架：将差值结果与当前骨架结果进行位或操作，更新骨架图像。
-  5. 更新图像：图像被 eroded 的结果替换。
-  6. 终止条件：直到没有非零像素为止。
+e. Using the repeated dilation-erision method, directly got very thin edges from the AI result (skeletonize sheet row 11). This matched well with the GT upon comparison (skeletonize sheet row 13).
