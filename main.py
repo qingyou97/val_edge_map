@@ -1,10 +1,11 @@
-def overlay_original_on_ai_result(original_folder, ai_result_folder, output_folder):
+def overlay_significant_pixels(original_folder, ai_result_folder, output_folder, threshold=30):
     """
-    将 original_folder 中的图像中的有值像素叠加到 ai_result_folder 中的图像上，以查看重合度。
+    将 original_folder 中像素值大于阈值的像素叠加到 ai_result_folder 中的图像上。
 
     :param original_folder: 包含原始图像的文件夹路径
     :param ai_result_folder: 包含 AI 结果图像的文件夹路径
     :param output_folder: 输出结果图像的文件夹路径
+    :param threshold: 像素值阈值，默认为 30
     """
     # 确保输出文件夹存在
     os.makedirs(output_folder, exist_ok=True)
@@ -28,16 +29,11 @@ def overlay_original_on_ai_result(original_folder, ai_result_folder, output_fold
         
         for y in range(original_image.height):
             for x in range(original_image.width):
-                if original_pixels[x, y][3] != 0:  # 检查 alpha 通道是否不为 0
+                # 检查像素值是否大于阈值
+                if max(original_pixels[x, y][:3]) > threshold:
                     overlay_pixels[x, y] = original_pixels[x, y]
         
         # 保存结果文件
         overlay_image.save(os.path.join(output_folder, original_file.replace('_original', '_overlay')))
 
     print("操作完成，每对图像已处理并保存。")
-
-# 使用示例
-original_folder = 'A文件夹'
-ai_result_folder = 'B文件夹'
-output_folder = '叠加结果文件夹'
-overlay_original_on_ai_result(original_folder, ai_result_folder, output_folder)
