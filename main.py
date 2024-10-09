@@ -1,16 +1,20 @@
-# 读取灰度图
-img = cv2.imread('your_image_path', cv2.IMREAD_GRAYSCALE)
+def get_non_zero_pixels(image_path):
+    # 读取灰度图像
+    image = cv2.imread(image_path, cv2.IMREAD_GRAYSCALE)
+    
+    # 检查是否成功读取图像
+    if image is None:
+        raise ValueError("不能读取图像，检查路径是否正确")
+    
+    # 查找非零像素点的坐标
+    non_zero_coords = np.argwhere(image > 0)
+    
+    # 将坐标转换为列表形式
+    non_zero_coords_list = [tuple(coord) for coord in non_zero_coords]
+    
+    return non_zero_coords_list
 
-# 创建一个与图像大小相同的全黑图像
-masked_img = np.zeros_like(img)
-
-# 定义点的坐标列表
-points = [(x1, y1), (x2, y2), (x3, y3), ...]
-
-# 保留坐标点的灰度值
-for (x, y) in points:
-    masked_img[y, x] = img[y, x]
-
-# 保存或者展示处理后的图像
-cv2.imwrite('masked_image.png', masked_img)
-# 或者使用 cv2.imshow('Masked Image', masked_img), 然后 cv2.waitKey(0) 显示图像窗口
+# 示例使用
+image_path = 'path/to/your/image.jpg'
+non_zero_pixels = get_non_zero_pixels(image_path)
+print(f"有值的像素点坐标: {non_zero_pixels}")
