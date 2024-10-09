@@ -1,20 +1,30 @@
-def get_non_zero_pixels(image_path):
-    # 读取灰度图像
-    image = cv2.imread(image_path, cv2.IMREAD_GRAYSCALE)
+def find_color_points(image_path, target_color):
+    # 读取图像
+    image = cv2.imread(image_path)
     
-    # 检查是否成功读取图像
+    # 确保图像读取成功
     if image is None:
-        raise ValueError("不能读取图像，检查路径是否正确")
-    
-    # 查找非零像素点的坐标
-    non_zero_coords = np.argwhere(image > 0)
-    
-    # 将坐标转换为列表形式
-    non_zero_coords_list = [tuple(coord) for coord in non_zero_coords]
-    
-    return non_zero_coords_list
+        return []
 
-# 示例使用
+    # 建立一个空的list来存储坐标
+    points = []
+
+    # 获取图像高和宽
+    height, width, _ = image.shape
+
+    # 遍历每一个像素点
+    for y in range(height):
+        for x in range(width):
+            if np.array_equal(image[y, x], target_color):
+                points.append((x, y))
+    
+    return points
+
+# 图像路径
 image_path = 'path/to/your/image.jpg'
-non_zero_pixels = get_non_zero_pixels(image_path)
-print(f"有值的像素点坐标: {non_zero_pixels}")
+# 目标RGB颜色
+target_color = [R, G, B]  # 例如 [255, 0, 0] 表示红色
+
+# 寻找指定颜色的坐标
+coordinates = find_color_points(image_path, target_color)
+print(coordinates)
