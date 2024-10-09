@@ -1,30 +1,50 @@
-def annotate_image_with_red_dots(image_path, coords, output_path):
-    """
-    在图像上标记红色点并保存新图像。
+import cv2
+import numpy as np
+import matplotlib.pyplot as plt
 
-    参数:
-    - image_path: 输入图像的路径
-    - coords: 坐标列表，格式为 [(x1, y1), (x2, y2), ...]
-    - output_path: 输出图像的路径
-    """
-    # 读取黑白图像
-    img_anno = cv2.imread(image_path, cv2.IMREAD_GRAYSCALE)
+def plot_arr(path):
 
-    # 将黑白图像转换为BGR彩色图像
-    img_anno = cv2.cvtColor(img_anno, cv2.COLOR_GRAY2BGR)
+    image = cv2.imread(path, cv2.IMREAD_GRAYSCALE)
+    color_image = cv2.cvtColor(image, cv2.COLOR_GRAY2BGR)
 
-    # 遍历所有坐标并标记红色点
-    for item in coords:
-        x = item[0]
-        y = item[1]
-        print(f'x: {x}, y: {y}')
-        img_anno[y, x] = (0, 0, 255)  # BGR通道，红色
+    # 使用Sobel算子计算梯度
+    grad_x = cv2.Sobel(image, cv2.CV_64F, 1, 0, ksize=3)
+    grad_y = cv2.Sobel(image, cv2.CV_64F, 0, 1, ksize=3)
 
-    # 保存新的图像
-    cv2.imwrite(output_path, img_anno)
+    # 计算梯度强度和方向
+    magnitude = cv2.magnitude(grad_x, grad_y)
+    direction = cv2.phase(grad_x, grad_y, angleInDegrees=True)
 
-# 示例调用
-image_path = './12_filtered.png'
-coords = [(10, 10), (20, 20), (30, 30)]
-output_path = 'annotated_images.png'
-annotate_image_with_red_dots(image_path, coords, output_path)
+
+    step = 15  # 每隔多少像素绘制一个箭头
+
+    # 遍历图像的每个像素点
+    arrowed_image = color_image.copy()
+    for y in range(0, image.shape[0], step):
+        for x in range(0, image.shape[1], step):
+            # 梯度方向
+            length = 10
+            angle = direction[y, x]
+
+            # 箭头的角度和终点
+            dx = int(length * np.cos(np.deg2rad(angle)))
+            dy = int(length * np.sin(np.deg2rad(angle)))
+
+            # 箭头的起点和终点
+            start_point = (x, y)
+            end_point = (x + dx, y + dy)
+
+            # 用红色箭头绘制方向
+            cv2.arrowedLine(arrowed_image, start_point, end_point, (0, 0, 255), 1, 8, 0, 0.3)
+
+    cv2.imwrite('arrowed_image.png', arrowed_image)
+
+    # 显示结果
+    # plt.imshow(cv2.cvtColor(arrowed_image, cv2.COLOR_BGR2RGB))
+    # plt.show()
+
+if __name__ == '__main__':
+    # 读取图像并转换为灰度图
+    path = r'20241008-155135.jpg'
+
+    plot_arr(path)
