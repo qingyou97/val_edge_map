@@ -28,14 +28,28 @@ if original_image.ndim == 2:
     original_image = cv2.cvtColor(original_image, cv2.COLOR_GRAY2BGR)
 
 # 提取合适的轮廓并拟合椭圆
+best_ellipse = None
+best_ratio = float('inf')  # 初始化为无穷大
+
 for contour in contours:
     if len(contour) < 5:  # 拟合椭圆需要的点数最少为 5
         continue
     ellipse = cv2.fitEllipse(contour)
-    color = (np.random.randint(0, 256), np.random.randint(0, 256), np.random.randint(0, 256))
-    cv2.ellipse(original_image, ellipse, color, 2)
+    (center, axes, angle) = ellipse
+    major_axis = max(axes)
+    minor_axis = min(axes)
+    ratio = major_axis / minor_axis
+    
+    if ratio < best_ratio:
+        best_ratio = ratio
+        best_ellipse = ellipse
+
+# 绘制最圆的椭圆
+if best_ellipse is not None:
+    color = (0, 255, 0)  # 绿色
+    cv2.ellipse(original_image, best_ellipse, color, 2)
 
 # 显示结果
-cv2.imshow('Fitted Ellipses', original_image)
+cv2.imshow('Most Circular Ellipse', original_image)
 cv2.waitKey(0)
 cv2.destroyAllWindows()
