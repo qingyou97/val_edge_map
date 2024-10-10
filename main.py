@@ -8,8 +8,8 @@ image = cv2.imread('path_to_image', cv2.IMREAD_GRAYSCALE)
 blurred = cv2.GaussianBlur(image, (9, 9), 2)
 
 # 使用霍夫圆变换检测圆
-circles = cv2.HoughCircles(blurred, cv2.HOUGH_GRADIENT, dp=1.2, minDist=30,
-                           param1=50, param2=30, minRadius=0, maxRadius=0)
+circles = cv2.HoughCircles(blurred, cv2.HOUGH_GRADIENT, dp=1.2, minDist=20,
+                           param1=50, param2=30, minRadius=10, maxRadius=100)
 
 # 确保有检测到的圆
 if circles is not None:
