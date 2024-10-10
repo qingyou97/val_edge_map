@@ -1,24 +1,16 @@
-import sys
+1. Overlay GT and original image to confirm which layer GT is on:
+Conclusion: First, the GT I drew is not precise and overlaps the artifact outlines. Second, dilation causes learning of edges on both layers. (Images in the xxx file’s sheet at row 29). Third, GT adjustments will be completed this morning.
 
-class OutputToFile:
-    def __init__(self, filename):
-        self.terminal = sys.stdout
-        self.file = open(filename, 'w')
+2. Handwritten rule: Keep points closer to the inner diameter.
+Conclusion: Done. Comparatively, it's better than taking the maximum peak point. (Images in the xxx file’s sheet at row 29)
+Circle center rule: Read grayscale image and apply morphological opening and closing operations to denoise. Use thresholding to convert the image to binary and apply Laplace transform for edge detection to find contours. Fit each contour to an ellipse and select the one with the smallest axis ratio as the most circular ellipse.
+Point filtering rule: Take points in both positive and negative gradient directions until five continuous points with an intensity of 0 are found. From these points, find two peak points and select the one closer to the circle center. (Explanation is in the last section of the xxx word file)
+Effect: Better than taking the maximum peak point but retained some outer points. Since some gradients were selected in non-perpendicular directions to the contour, our logic couldn't interfere, causing extra points. (Explanation is in the last section of the xxx word file)
 
-    def write(self, message):
-        self.terminal.write(message)
-        self.file.write(message)
+3. Team management meeting and data organization.
 
-    def flush(self):
-        self.terminal.flush()
+4. Handwritten rule: Retain points from light to dark on the innerside edges; if AI doesn’t work, use rule-based customization to solve edges.
+Conclusion: Not started yet.
 
-# 重定向标准输出到文件
-sys.stdout = OutputToFile('output.txt')
-
-# 现在的print语句会同时输出到控制台和文件中
-print("Hello, world!")
-print("This will be written to both console and the output.txt file.")
-
-# 恢复标准输出
-sys.stdout.file.close()
-sys.stdout = sys.stdout.terminal
+5. Experiment with Han’s Dexined results.
+Conclusion: Not received yet.
