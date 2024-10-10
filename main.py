@@ -2,34 +2,32 @@ import cv2
 import numpy as np
 
 # 读取图像
-img = cv2.imread('image.jpg', cv2.IMREAD_GRAYSCALE)
+image = cv2.imread('path_to_image.jpg', cv2.IMREAD_GRAYSCALE)
 
-# 使用高斯滤波来减少噪声
-blurred = cv2.GaussianBlur(img, (9, 9), 2)
+# 边缘检测 (可调参数)
+edges = cv2.Canny(image, threshold1=50, threshold2=150, apertureSize=3)
 
-# 使用霍夫圆变换来检测圆
-circles = cv2.HoughCircles(blurred, cv2.HOUGH_GRADIENT, 1, minDist=20,
-                            param1=50, param2=30, minRadius=0, maxRadius=0)
+# 霍夫圆变换 (可调参数)
+circles = cv2.HoughCircles(edges, 
+                           cv2.HOUGH_GRADIENT, 
+                           dp=1.2, 
+                           minDist=30, 
+                           param1=50, 
+                           param2=30, 
+                           minRadius=10, 
+                           maxRadius=100)
 
 # 如果检测到圆
 if circles is not None:
     circles = np.uint16(np.around(circles))
-    max_radius = 0
-    max_circle = None
-    # 找到最大的圆
     for circle in circles[0, :]:
-        if circle[2] > max_radius:
-            max_radius = circle[2]
-            max_circle = circle
-    # 重新读取彩色图
-    img_color = cv2.imread('image.jpg', cv2.IMREAD_COLOR)
-    # 绘制最大的圆
-    if max_circle is not None:
-        cv2.circle(img_color, (max_circle[0], max_circle[1]), max_circle[2], (0, 0, 255), 3)
+        # 画出圆
+        center = (circle[0], circle[1])
+        radius = circle[2]
+        cv2.circle(image, center, radius, (0, 0, 0), 2)
+        cv2.circle(image, center, 2, (0, 0, 0), 3)
 
-    # 显示图像
-    cv2.imshow('Detected Circles', img_color)
-    cv2.waitKey(0)
-    cv2.destroyAllWindows()
-else:
-    print("没有检测到圆。")
+# 显示结果
+cv2.imshow("Detected Circles", image)
+cv2.waitKey(0)
+cv2.destroyAllWindows()
