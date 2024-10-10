@@ -1,11 +1,15 @@
-1010 Morning Meeting 10.30-11.08:
-Han:
-1. Define each milestone: what is to be completed at each stage, what's the work involved, how do you plan to do it, and what the expected effect is.
-2. When training DCAMA, use the time to fine-tune PatchCore, and modify milestones accordingly.
-3. Discuss other work details in the afternoon meeting.
+Meeting 1:30-2:30 PM on October 10:
+
+Han Xu:
+1. Summarize patterns.
+2. Oneshot is inconsistent in some parts; out-of-box is continuous, but there’s inconsistency after fusion. How to solve this?
+3. Summarize topics similar to above; finetuning direction needs to follow these topics (main point).
+4. Replicate sigmoid results, and organize.
+5. Edit milestone, then report back; what viewpoints, what effects achieve.
 
 Duan:
-1. Overlay the original image with the peak-removed result.
-2. Select images where RULE performs poorly and AI performs well.
-3. Input Han's best oneshot results to me.
-4. Discuss gradient control and other methods in the afternoon meeting.
+6. Overlay ground truth on original image, confirm where ground truth layer is (maybe dilation is causing both layer edges to be learned).
+7. Handwrite specification: keep bright-to-dark transition, keep the inner edge. If AI doesn't work, use rule-based custom solution for edge.
+8. Use Han’s dexined results for experiment.
+9. Handwrite specification, keep peak closer to inner diameter.
+10. Handwrite rule: keep first peak, discard second peak.
