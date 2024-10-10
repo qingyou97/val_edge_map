@@ -15,12 +15,17 @@ circles = cv2.HoughCircles(blurred, cv2.HOUGH_GRADIENT, dp=1.2, minDist=30,
 if circles is not None:
     circles = np.round(circles[0, :]).astype("int")
 
-    for (x, y, r) in circles:
-        # 在输出图像中画圆和中心点
-        cv2.circle(image, (x, y), r, (0, 255, 0), 4)
-        cv2.rectangle(image, (x - 5, y - 5), (x + 5, y + 5), (0, 128, 255), -1)
+    # 将灰度图像转换为BGR图像，以便可以绘制彩色圆
+    output = cv2.cvtColor(image, cv2.COLOR_GRAY2BGR)
 
-# 显示结果
-cv2.imshow("Output", image)
-cv2.waitKey(0)
-cv2.destroyAllWindows()
+    for (x, y, r) in circles:
+        # 在输出图像中画圆和中心点，使用红色
+        cv2.circle(output, (x, y), r, (0, 0, 255), 4)
+        cv2.rectangle(output, (x - 5, y - 5), (x + 5, y + 5), (0, 0, 255), -1)
+
+    # 显示结果
+    cv2.imshow("Output", output)
+    cv2.waitKey(0)
+    cv2.destroyAllWindows()
+else:
+    print("No circles were found")
