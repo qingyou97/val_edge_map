@@ -1,1 +1,3 @@
-Third, we will complete the fine-tuning of gt this morning. There is a problem. If I label the single-pixel contours on the original 512*512 image, Hanxu will need to resize it to 224*224 later. This causes the same issue with breakpoints. To avoid this, we need to do bicubic interpolation and then convert it to a binary image, but this makes the edges not single-pixel. Can I directly label the single-pixel edges on the 224*224 original image instead, which would be more suitable?
+1. Re-label the casting data.
+2. Currently retain the scheme of keeping the maxima closer to the inner diameter, needs further fine-tuning.
+3. Custom scheme of alternating light and dark zones.
