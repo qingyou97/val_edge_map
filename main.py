@@ -1,7 +1,7 @@
 import cv2
 import numpy as np
 
-def detect_and_draw_arcs(image_path):
+def detect_and_draw_largest_arc(image_path):
     # 读取图像
     image = cv2.imread(image_path)
     if image is None:
@@ -24,16 +24,17 @@ def detect_and_draw_arcs(image_path):
     # 如果检测到圆
     if circles is not None:
         circles = np.uint16(np.around(circles))
-        for i in circles[0, :]:
-            # 绘制圆
-            cv2.circle(image, (i[0], i[1]), i[2], (0, 255, 0), 2)
-            # 绘制圆心
-            cv2.circle(image, (i[0], i[1]), 2, (0, 0, 255), 3)
+        largest_circle = max(circles[0, :], key=lambda c: c[2])  # 选择最大的圆
+
+        # 绘制最大的圆
+        cv2.circle(image, (largest_circle[0], largest_circle[1]), largest_circle[2], (0, 255, 0), 2)
+        # 绘制圆心
+        cv2.circle(image, (largest_circle[0], largest_circle[1]), 2, (0, 0, 255), 3)
 
     # 显示结果
-    cv2.imshow('Detected Arcs', image)
+    cv2.imshow('Largest Arc', image)
     cv2.waitKey(0)
     cv2.destroyAllWindows()
 
 # 使用示例
-detect_and_draw_arcs('path_to_your_image.jpg')
+detect_and_draw_largest_arc('path_to_your_image.jpg')
