@@ -1,8 +1,7 @@
-# Compute angle from A (y, x) to B (y2, x2)
-    delta_y = y2 - y
-    delta_x = x2 - x
-    angle_rad = math.atan2(delta_y, delta_x)
-    angle_deg = np.degrees(angle_rad)
-    
-    # The angle_deg should be in range [0, 180)
-    angle_deg = angle_deg % 180
+# 提取每个子list中的浮点数
+times = [item[1] for item in data]
+
+# 计算平均值
+average_time = sum(times) / len(times)
+
+print("平均计算时间为:", average_time)
