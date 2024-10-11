@@ -1,31 +1,37 @@
 from PIL import Image
+import numpy as np
 
-# 打开图像A和图像B
-imgA = Image.open("A.png").convert("1")  # 转换为黑白图
-imgB = Image.open("B.png").convert("1")  # 转换为黑白图
+# 加载A图、B图和C图
+A_img = Image.open('A.png').convert('L')
+B_img = Image.open('B.png').convert('L')
+C_img = Image.open('C.png').convert('RGB')
 
-# 创建一个新的图像用于结果展示，RGB模式
-result = Image.new("RGB", imgA.size)
+# 将图像转换为numpy数组
+A_array = np.array(A_img)
+B_array = np.array(B_img)
+C_array = np.array(C_img.copy())
 
-# 获取像素数据
-pixelsA = imgA.load()
-pixelsB = imgB.load()
-pixelsResult = result.load()
+# 创建一个新的图像数组
+out_array = np.array(C_img)
 
-for x in range(imgA.width):
-    for y in range(imgA.height):
-        if pixelsA[x, y] == 255:  # 图A上的白色像素
-            if pixelsB[x, y] == 255:  # 在图B上也是白色像素
-                pixelsResult[x, y] = (0, 0, 255)  # 蓝色标记重叠区域
-            else:
-                pixelsResult[x, y] = (255, 255, 255)  # 白色标记图A上的像素
-        elif pixelsB[x, y] == 255:
-            pixelsResult[x, y] = (255, 0, 0)  # 红色标记图B上的像素
-        else:
-            pixelsResult[x, y] = (0, 0, 0)  # 黑色背景
+# 定义颜色
+white = [255, 255, 255]
+red = [255, 0, 0]
+blue = [0, 0, 255]
+
+# 获取非零的（有效的）像素点
+A_mask = A_array > 0
+B_mask = B_array > 0
+overlap_mask = A_mask & B_mask
+
+# 将A和B图像中相应的像素点用指定颜色标记
+out_array[A_mask & ~overlap_mask] = white
+out_array[B_mask & ~overlap_mask] = red
+out_array[overlap_mask] = blue
 
 # 保存结果图像
-result.save("result.png")
+out_img = Image.fromarray(out_array)
+out_img.save('output.png')
 
-# 如果需要显示图像，可以使用以下代码
-result.show()
+# 打开生成的新图像
+out_img.show()
