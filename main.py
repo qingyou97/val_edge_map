@@ -1,20 +1,26 @@
-def extract_points_magnitude_and_angle(magnitude, direction, points, shape):
-    new_magnitude = np.zeros(shape)
-    new_angle = np.zeros(shape)
+import os
 
-    for point in points:
-        new_magnitude[point[1], point[0]] = magnitude[point[1], point[0]]
-        new_angle[point[1], point[0]] = direction[point[1], point[0]]
-    
-    return new_magnitude, new_angle
+# A文件夹的路径
+folder_A = 'path/to/your/A/folder'
 
-# 使用例子
-img_path = 'your_image.jpg'
-points = [(x1, y1), (x2, y2), ..., (xn, yn)]  # 替换为实际坐标点列表
+# 遍历A文件夹中的每个子文件夹
+for sub_folder in os.listdir(folder_A):
+    sub_folder_path = os.path.join(folder_A, sub_folder)
+    if os.path.isdir(sub_folder_path):
+        # 遍历子文件夹中的每个文件
+        for file_name in os.listdir(sub_folder_path):
+            # 取出文件名前两位数字
+            prefix = file_name[:2]
+            try:
+                # 转换为整数方便比较
+                prefix_num = int(prefix)
+                # 判断是否在12到31之间
+                if prefix_num < 12 or prefix_num > 31:
+                    file_path = os.path.join(sub_folder_path, file_name)
+                    os.remove(file_path)  # 删除不符合条件的文件
+                    print(f"Deleted: {file_path}")
+            except ValueError:
+                # 如果无法转换为整数，则跳过
+                continue
 
-magnitude, angle, color_image, image = caculate_magnitude_and_direction(img_path)
-new_magnitude, new_angle = extract_points_magnitude_and_angle(magnitude, angle, points, magnitude.shape)
-
-# 保存结果图像或进行其他处理
-cv2.imwrite('new_magnitude_image.jpg', new_magnitude)
-cv2.imwrite('new_angle_image.jpg', new_angle)
+print("完成!")
