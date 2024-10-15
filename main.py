@@ -1,3 +1,8 @@
+import os
+
+# 主文件夹路径
+main_folder = 'path/to/A'
+
 # 指定的起始和结束数字
 start_num = 12
 end_num = 31
@@ -10,10 +15,9 @@ for folder in subfolders:
     # 遍历子文件夹中的所有文件
     for filename in os.listdir(folder):
         print(f"Checking file: {filename}")
-        # 使用正则表达式匹配文件名开头的数字
-        match = re.match(r'^(\\d+)_.*\\.png$', filename)
-        if match:
-            number = int(match.group(1))
+        # 提取文件名开头的数字部分
+        try:
+            number = int(filename.split('_')[0])
             print(f"Found number: {number}")
             # 删除不在 12 到 31 范围内的文件
             if number < start_num or number > end_num:
@@ -23,5 +27,5 @@ for folder in subfolders:
                     print(f"Deleted {file_path}")
                 except Exception as e:
                     print(f"Error deleting {file_path}: {e}")
-        else:
-            print(f"No match for file: {filename}")
+        except ValueError:
+            print(f"Could not extract number from file: {filename}")
