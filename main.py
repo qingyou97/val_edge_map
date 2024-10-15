@@ -1,40 +1,11 @@
-import cv2
-import numpy as np
+1. Casting dataset - Currently, we keep the local maxima points closer to the inner diameter, and further fine-tuning is needed.
+Conclusion: Changing the gradient towards the center improved the results, filtering out more outer edges.
 
-def detect_and_draw_largest_arc(image_path):
-    # 读取图像
-    image = cv2.imread(image_path)
-    if image is None:
-        print("无法读取图像")
-        return
+2. Casting dataset - Alternating bright and dark algorithm to determine edge retention.
+Conclusion: The first custom version retains only left-bright-right-dark on the left half of the image, and left-dark-right-bright on the right half. Also need logic for up and down. Results are mediocre, with intermittent gaps.
+The second version determines which edge is closer to the center with darker pixels and further with brighter pixels, removing the need for directional logic. Currently testing this.
 
-    # 转换为灰度图像
-    gray = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
-
-    # 高斯模糊
-    blurred = cv2.GaussianBlur(gray, (5, 5), 0)
-
-    # 边缘检测
-    edges = cv2.Canny(blurred, 50, 150, apertureSize=3)
-
-    # 霍夫圆变换
-    circles = cv2.HoughCircles(edges, cv2.HOUGH_GRADIENT, dp=1, minDist=20,
-                               param1=50, param2=30, minRadius=0, maxRadius=0)
-
-    # 如果检测到圆
-    if circles is not None:
-        circles = np.uint16(np.around(circles))
-        largest_circle = max(circles[0, :], key=lambda c: c[2])  # 选择最大的圆
-
-        # 绘制最大的圆
-        cv2.circle(image, (largest_circle[0], largest_circle[1]), largest_circle[2], (0, 255, 0), 2)
-        # 绘制圆心
-        cv2.circle(image, (largest_circle[0], largest_circle[1]), 2, (0, 0, 255), 3)
-
-    # 显示结果
-    cv2.imshow('Largest Arc', image)
-    cv2.waitKey(0)
-    cv2.destroyAllWindows()
-
-# 使用示例
-detect_and_draw_largest_arc('path_to_your_image.jpg')
+3. Try other datasets like groove and cylinder, as the method currently shows good results on casting. Fine-tuning can be done later.
+Conclusion: Using dexined results, tested on groove and cylinder.
+Cylinder: The first version took the highest peak, showing a double edge. The second version detects an ellipse and keeps the edge closer to the center.
+Groove: Currently, it takes the highest peak points.
