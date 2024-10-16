@@ -17,7 +17,7 @@ edges = cv2.Canny(binary_image, 50, 150, apertureSize=3)
 lines = cv2.HoughLinesP(edges, rho=1, theta=np.pi / 180, threshold=50, minLineLength=20, maxLineGap=5)
 
 # 创建一个空白图像用于绘制结果
-result_image = np.zeros_like(image)
+result_image = np.zeros_like(binary_image)
 
 # 筛选线段
 if lines is not None:
@@ -31,7 +31,7 @@ if lines is not None:
         if binary_image[mid_y, mid_x] == 255 and length > 10:  # 你可以调整长度阈值
             cv2.line(result_image, (x1, y1), (x2, y2), 255, 1)
 
-# 反转结果图像颜色
+# 保持背景为黑色，线段为白色
 result_image = cv2.bitwise_not(result_image)
 
 # 显示处理结果
