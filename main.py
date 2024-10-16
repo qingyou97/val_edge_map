@@ -1,58 +1,23 @@
-import cv2
-import numpy as np
+1. Overlay the known result with the original gt image to check if the wanted gt is extracted.
+Conclusion: Some well-performing images show gt and results almost overlapping.
+First, some images like B33 in datav3-cylinder page are affected by light at the bottom edge, causing some vertical fluctuation.
+Second, some images like C33 in datav3-cylinder page show that AI detected other noise, exposing many unwanted edges, and this happens a lot.
+Third, images like D33 in datav3-cylinder page show AI detecting two layers of edges; if the lower peak is larger, an unwanted edge is retained, and this can't be solved by proximity to the center.
+Fourth, in images like E33 in datav3-cylinder page, wanted edges are blocked or obscured by light, leading AI to detect different edges, resulting in poor outcomes.
 
-# 读取图像
-image = cv2.imread('path_to_your_image.png', cv2.IMREAD_GRAYSCALE)
+2. Evaluate the gt annotation and impact of lighting in the cylinder dataset.
+Conclusion: Four layers of edges (from top to bottom as first to fourth). Edges 1, 2, and 4 meet the annotation requirements. The third edge has two layers, similar to casting, so I re-annotated the third edge.
 
-# 二值化图像
-_, binary_image = cv2.threshold(image, 128, 255, cv2.THRESH_BINARY)
+3. Arrange and compare results from Han Xu's new version of dexined from yesterday.
+Conclusion:
+First, for the casting dataset, gt and my peak values are similar, but in some regions (like J15 in datav4-casting page), AI's results deviate from gt, which is more accurate. Solution attempts are in progress.
+Second, the cylinder dataset hasn't improved, still showing excess edges.
+Third, groove dataset shows that detected edges are generally good, but many edges are still missing, and some are fragmented.
 
-# 反转图像颜色（因为白色是目标，黑色是背景）
-binary_image = cv2.bitwise_not(binary_image)
+4. Compare each result for the three datasets.
+Conclusion: For casting, most images have fewer detected edges compared to before. By setting points closer to the inner diameter, detected edges are mostly on the inside now.
+For the cylinder dataset, about half the images show reduced noise at the first and second boundary, though many needed edges are also filtered out.
+Groove images show only a few improvements; most have fewer detected edges compared to before.
 
-# 进行形态学操作（闭操作）
-kernel = np.ones((3, 3), np.uint8)  # 窗口大小为3x3，进行闭运算来填充小孔
-closed_image = cv2.morphologyEx(binary_image, cv2.MORPH_CLOSE, kernel)
-
-# 使用霍夫变换检测线条
-lines = cv2.HoughLinesP(closed_image, rho=1, theta=np.pi / 180, threshold=50, minLineLength=20, maxLineGap=5)
-
-# 创建一个新的黑色图像
-new_image = np.zeros_like(image)
-
-# 角度统计
-angle_count = {}
-
-if lines is not None:
-    for line in lines:
-        x1, y1, x2, y2 = line[0]
-        
-        # 计算线的角度
-        angle = np.degrees(np.arctan2(y2 - y1, x2 - x1))
-        if angle < 0:
-            angle += 360  # 将角度转为正值
-        
-        # 将角度四舍五入为整数
-        angle = round(angle)
-        
-        # 过滤掉角度在311到316度之间的线段
-        if 311 <= angle <= 316:
-            continue
-        
-        # 记录每个角度有几条线
-        if angle in angle_count:
-            angle_count[angle] += 1
-        else:
-            angle_count[angle] = 1
-        
-        # 在新的黑色图像上绘制剩余的线段
-        cv2.line(new_image, (x1, y1), (x2, y2), 255, 1)
-
-# 打印角度统计
-for angle, count in sorted(angle_count.items()):
-    print(f"Angle: {angle} degrees, Count: {count}")
-
-# 显示处理结果
-cv2.imshow('Result', new_image)
-cv2.waitKey(0)
-cv2.destroyAllWindows()
+5. Explore if rule-based methods can solve some noise issues.
+Conclusion: Applied opening operation with dilation and erosion to fill gaps. The preliminary result was ok, but full data operation showed poor outcomes with large white areas in many images.
