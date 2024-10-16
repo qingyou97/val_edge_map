@@ -11,26 +11,40 @@ _, binary_image = cv2.threshold(image, 128, 255, cv2.THRESH_BINARY)
 binary_image = cv2.bitwise_not(binary_image)
 
 # 进行形态学操作（闭操作）
-kernel = np.ones((3, 3), np.uint8)
+kernel = np.ones((3, 3), np.uint8)  # 窗口大小为3x3，进行闭运算来填充小孔
 closed_image = cv2.morphologyEx(binary_image, cv2.MORPH_CLOSE, kernel)
 
 # 使用霍夫变换检测线条
 lines = cv2.HoughLinesP(closed_image, rho=1, theta=np.pi / 180, threshold=50, minLineLength=20, maxLineGap=5)
+result_image = cv2.cvtColor(binary_image, cv2.COLOR_GRAY2BGR)
 
-# 创建一个新的黑色背景的图像
-new_image = np.zeros_like(binary_image)
+# 角度统计
+angle_count = {}
 
 if lines is not None:
     for line in lines:
         x1, y1, x2, y2 = line[0]
-        # 计算线段的角度
-        angle = np.arctan2(y2 - y1, x2 - x1) * 180 / np.pi
-        # 检查是否在水平和竖直范围内
-        if abs(angle) <= 15 or abs(abs(angle) - 180) <= 15 or abs(abs(angle) - 90) <= 15:
-            # 绘制白色线条到新图像上
-            cv2.line(new_image, (x1, y1), (x2, y2), (255), 1)
+        cv2.line(result_image, (x1, y1), (x2, y2), (255, 0, 0), 1)
+        
+        # 计算线的角度
+        angle = np.degrees(np.arctan2(y2 - y1, x2 - x1))
+        if angle < 0:
+            angle += 360  # 将角度转为正值
+        
+        # 将角度四舍五入为整数
+        angle = round(angle)
+        
+        # 记录每个角度有几条线
+        if angle in angle_count:
+            angle_count[angle] += 1
+        else:
+            angle_count[angle] = 1
+
+# 打印角度统计
+for angle, count in sorted(angle_count.items()):
+    print(f"Angle: {angle} degrees, Count: {count}")
 
 # 显示处理结果
-cv2.imshow('Result', new_image) 
+cv2.imshow('Result', result_image)
 cv2.waitKey(0)
 cv2.destroyAllWindows()
