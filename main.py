@@ -19,16 +19,23 @@ lines = cv2.HoughLinesP(edges, rho=1, theta=np.pi / 180, threshold=50, minLineLe
 # 创建一个空白图像用于绘制结果
 result_image = np.zeros_like(binary_image)
 
+# 定义相似度阈值
+similarity_threshold = 0.9
+
 # 筛选线段
 if lines is not None:
     for line in lines:
         x1, y1, x2, y2 = line[0]
-        # 计算线段长度
-        length = np.sqrt((x2 - x1) ** 2 + (y2 - y1) ** 2)
-        # 计算线段中点
-        mid_x, mid_y = (x1 + x2) // 2, (y1 + y2) // 2
-        # 检查线段中点是否在原图的白色区域
-        if binary_image[mid_y, mid_x] == 255 and length > 10:  # 你可以调整长度阈值
+        # 创建一个空白图像用于绘制当前线段
+        line_image = np.zeros_like(binary_image)
+        cv2.line(line_image, (x1, y1), (x2, y2), 255, 1)
+        
+        # 计算当前线段与原图的相似度
+        match_result = cv2.matchTemplate(binary_image, line_image, cv2.TM_CCOEFF_NORMED)
+        _, max_val, _, _ = cv2.minMaxLoc(match_result)
+        
+        # 如果相似度高于阈值，则保留该线段
+        if max_val >= similarity_threshold:
             cv2.line(result_image, (x1, y1), (x2, y2), 255, 1)
 
 # 保持背景为黑色，线段为白色
