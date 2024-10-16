@@ -1,10 +1,4 @@
-10/16 - Morning Meeting 10:00-10:40:
-Duan:
-1. Overlay the known results with the original gt image to see if the desired gt has been extracted.
-2. For the cylinder dataset, check the gt annotations and see if lighting issues affect gt extraction.
-3. Organize yesterday's new Dexined results from Han Xu and make comparisons.
-4. Determine if some noise issues can be solved by a rule-based method.
+I just checked the cylinder dataset. The bottom edge I drew is the inner diameter, and it's correct.
 
-Han Xu:
-5. Test with multiple support, and then provide it to Duan. Duan will do the rule-based part.
-6. Improve the tuning for the merge layer algorithm, e.g., the edges detected by Dexined should not be filtered out during merging.
+Illustration:
+But I noticed that the second and third edges from the top, like the casting, have two layers of edges. I checked the guideline you marked for me previously, which falls in the middle of these layers. Which edge should I use?
