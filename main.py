@@ -16,14 +16,17 @@ closed_image = cv2.morphologyEx(binary_image, cv2.MORPH_CLOSE, kernel)
 
 # 使用霍夫变换检测线条
 lines = cv2.HoughLinesP(closed_image, rho=1, theta=np.pi / 180, threshold=50, minLineLength=20, maxLineGap=5)
-result_image = cv2.cvtColor(binary_image, cv2.COLOR_GRAY2BGR)
+
+# 创建黑色背景的图像
+result_image = np.zeros_like(binary_image)
+result_image = cv2.cvtColor(result_image, cv2.COLOR_GRAY2BGR)
 
 if lines is not None:
     for line in lines:
         x1, y1, x2, y2 = line[0]
         angle = np.arctan2(y2 - y1, x2 - x1) * 180 / np.pi
         if (-15 <= angle <= 15) or (75 <= angle <= 105) or (-105 <= angle <= -75):  # 水平和垂直方向
-            cv2.line(result_image, (x1, y1), (x2, y2), (255, 0, 0), 1)
+            cv2.line(result_image, (x1, y1), (x2, y2), (255, 255, 255), 1)  # 白色线条
 
 # 显示处理结果
 cv2.imshow('Result', result_image)
