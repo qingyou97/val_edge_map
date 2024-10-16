@@ -1,1 +1,1 @@
-Good morning, yesterday morning when I contacted you, I also reached out to Zhengong in the group, and he quickly helped me solve the problem.
+把magnitude做了改进，使用原图做magnitude，再把ai结果中需要的区域的magnitude取出来，其他位置的点置为0
