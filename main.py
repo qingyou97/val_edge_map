@@ -1,6 +1,11 @@
 import cv2
 import numpy as np
 
+def is_horizontal_or_vertical(line, angle_threshold=15):
+    x1, y1, x2, y2 = line[0]
+    angle = np.degrees(np.arctan2(y2 - y1, x2 - x1))
+    return abs(angle) <= angle_threshold or abs(angle) >= (90 - angle_threshold)
+
 # 读取图像
 image = cv2.imread('path_to_your_image.png', cv2.IMREAD_GRAYSCALE)
 
@@ -23,8 +28,9 @@ new_image = cv2.cvtColor(new_image, cv2.COLOR_GRAY2BGR)
 
 if lines is not None:
     for line in lines:
-        x1, y1, x2, y2 = line[0]
-        cv2.line(new_image, (x1, y1), (x2, y2), (255, 255, 255), 1)  # 使用白色绘制线，颜色为 (255, 255, 255)
+        if is_horizontal_or_vertical(line):
+            x1, y1, x2, y2 = line[0]
+            cv2.line(new_image, (x1, y1), (x2, y2), (255, 255, 255), 1)  # 使用白色绘制线，颜色为 (255, 255, 255)
 
 # 显示处理结果
 cv2.imshow('Detected Lines', new_image)
