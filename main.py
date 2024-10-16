@@ -16,14 +16,17 @@ closed_image = cv2.bitwise_not(closed_image)
 
 # 使用霍夫变换检测线条
 lines = cv2.HoughLinesP(closed_image, rho=1, theta=np.pi / 180, threshold=50, minLineLength=20, maxLineGap=5)
-result_image = cv2.cvtColor(closed_image, cv2.COLOR_GRAY2BGR)
+
+# 创建一个新的空白图像，背景为黑色
+new_image = np.zeros_like(closed_image)
+new_image = cv2.cvtColor(new_image, cv2.COLOR_GRAY2BGR)
 
 if lines is not None:
     for line in lines:
         x1, y1, x2, y2 = line[0]
-        cv2.line(result_image, (x1, y1), (x2, y2), (255, 255, 255), 1)  # 使用白色绘制线，颜色为 (255, 255, 255)
+        cv2.line(new_image, (x1, y1), (x2, y2), (255, 255, 255), 1)  # 使用白色绘制线，颜色为 (255, 255, 255)
 
 # 显示处理结果
-cv2.imshow('Result', result_image)
+cv2.imshow('Detected Lines', new_image)
 cv2.waitKey(0)
 cv2.destroyAllWindows()
