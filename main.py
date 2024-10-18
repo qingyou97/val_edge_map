@@ -1,11 +1,19 @@
-10.18 Morning meeting 10:00-10:10：
+I tested and organized all six sets of data from V2 (pidinet), V3 (dexined-1), and V4 (dexined-2).
 
-Duan:
-1. Regarding the issue of casting two-layer edges not being fully resolved, the new solution is to expand according to the polar coordinates of the center of the circle. Flatten the circle into horizontal and vertical coordinates, with the horizontal being each block and the vertical being each extension line and strength value. Each time, we can map the area and take the average value using a sliding window to determine which point to keep. Determine the casting effect.
-2. Organize the best version of datasets into one Excel file, including original images, black and white results, and overlay results.
-3. Test once Han Xu provides oneshot.
+For the bottle:
+- V3 (dexined-1) and V4 (dexined-2) both have five best results, performance is similar.
 
-Han:
-1. Think and test why multi-support has more noise than single support and how to improve.
-2. Improve the merge part to ensure that zeroshot can be detected and ultimately output.
-3. DCAMA results needed by Monday.
+For casting:
+- All results are better with V3 (dexined-1), fewer breakpoints, tidier edges.
+
+For cylinder:
+- V5 has the most detections. Before V5, V4 (dexined-2) has 16 best results, performs best with less noise and more continuous edges. V5 has the most detections.
+
+For groove:
+- V3 (dexined-1) has 11 best results. V4 (dexined-2) has 8. V5 has the most detections but also more noise. Similar performance to V3 (dexined-1), each has drawbacks.
+
+For aero:
+- V3 (dexined-1) has 3 best results. V4 (dexined-2) has 9. V5 has the most detections and more edges detected.
+
+For ball-screw:
+- V2 (pidinet) has 4 best results. V4 (dexined-2) has 14 and performs best with more edges detected. V5 has noticeably more noise.
