@@ -7,37 +7,30 @@ def calculate_angle(cx, cy, x, y):
         angle_degrees += 360
     return angle_degrees
 
-def generate_integer_points_on_line(cx, cy, target_x, target_y, tolerance=0.1):
+def generate_integer_points_on_ray(cx, cy, angle_degrees, num_points=100, tolerance=0.1):
+    angle_radians = math.radians(angle_degrees)
     points = set()
-    dx = target_x - cx
-    dy = target_y - cy
-    gcd = math.gcd(dx, dy)
-    step_x = dx // gcd
-    step_y = dy // gcd
 
-    x, y = cx, cy
-    while (x, y) != (target_x, target_y):
-        points.add((x, y))
-        x += step_x
-        y += step_y
-    points.add((target_x, target_y))
+    for i in range(1, num_points + 1):
+        x = cx + i * math.cos(angle_radians)
+        y = cy + i * math.sin(angle_radians)
+        int_x, int_y = round(x), round(y)
+        
+        # 计算点到直线的距离
+        distance = abs((int_y - cy) * math.cos(angle_radians) - (int_x - cx) * math.sin(angle_radians))
+        
+        if distance <= tolerance:
+            points.add((int_x, int_y))
 
     return list(points)
 
 # 示例用法：
 center = (0, 0)
-target_point = (2, 1)
-angle = calculate_angle(center[0], center[1], target_point[0], target_point[1])
+angle = 26.565  # 例如从(0,0)到(2,1)的角度
 print(f"角度: {angle} 度")
 
-# 生成直线上的整数点
-points_on_line = generate_integer_points_on_line(center[0], center[1], target_point[0], target_point[1])
-print("直线上的整数点:")
-for point in points_on_line:
+# 生成射线上的整数点
+points_on_ray = generate_integer_points_on_ray(center[0], center[1], angle, num_points=100, tolerance=0.1)
+print("射线上的整数点:")
+for point in points_on_ray:
     print(point)
-
-# 检查是否包含目标点
-if target_point in points_on_line:
-    print(f"包含目标点: {target_point}")
-else:
-    print(f"不包含目标点: {target_point}")
