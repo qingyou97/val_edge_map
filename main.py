@@ -1,2 +1,6 @@
-for i in range(1, 361):
-    print(i, (i + 4 - 1) % 360 + 1)
+lst = [1, 5]
+for i in range(1, 6):
+    if i <= len(lst):
+        print(lst[i-1])
+    else:
+        print(i)
