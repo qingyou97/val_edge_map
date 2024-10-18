@@ -1,17 +1,26 @@
 import math
 
-def find_point_on_line(x1, y1, angle_degrees, distance=1):
-    # 将角度转换为弧度
-    angle_radians = math.radians(angle_degrees)
-    
-    # 计算点的坐标
-    x = x1 + distance * math.cos(angle_radians)
-    y = y1 - distance * math.sin(angle_radians)  # 注意这里是减去，因为y轴向下为正方向
-    
-    return x, y
+def calculate_angle(cx, cy, x, y):
+    angle_radians = math.atan2(y - cy, x - cx)
+    angle_degrees = math.degrees(angle_radians)
+    # Ensure the angle is in the range [0, 360)
+    if angle_degrees < 0:
+        angle_degrees += 360
+    return angle_degrees
 
-# 示例
-x1, y1 = 0, 0
-angle_degrees = 26.56505
-point_x, point_y = find_point_on_line(x1, y1, angle_degrees)
-print(f"经过圆心 ({x1}, {y1}) 并且与水平向右方向成 {angle_degrees} 度的线经过的点是: ({point_x}, {point_y})")
+def coordinate_from_angle(cx, cy, angle_degrees, radius):
+    angle_radians = math.radians(angle_degrees)
+    x = cx + radius * math.cos(angle_radians)
+    y = cy + radius * math.sin(angle_radians)
+    return (x, y)
+
+# 示例用法：
+center = (0, 0)
+point = (2, 1)
+angle = calculate_angle(center[0], center[1], point[0], point[1])
+print(f"角度: {angle} 度")
+
+# 验证我们能否从该角度获取到原点，这里设置半径为点(2, 1)离圆心的距离
+radius = math.hypot(point[0] - center[0], point[1] - center[1])
+calculated_point = coordinate_from_angle(center[0], center[1], angle, radius)
+print(f"坐标: {calculated_point}")
