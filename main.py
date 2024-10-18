@@ -1,26 +1,21 @@
 import math
 
-def calculate_angle(cx, cy, x, y):
-    angle_radians = math.atan2(y - cy, x - cx)
-    angle_degrees = math.degrees(angle_radians)
-    # Ensure the angle is in the range [0, 360)
-    if angle_degrees < 0:
-        angle_degrees += 360
-    return angle_degrees
-
-def coordinate_from_angle(cx, cy, angle_degrees, radius):
+def generate_points_on_ray(cx, cy, angle_degrees, num_points=10, step_size=1):
     angle_radians = math.radians(angle_degrees)
-    x = cx + radius * math.cos(angle_radians)
-    y = cy + radius * math.sin(angle_radians)
-    return (x, y)
+    points = []
+    for i in range(1, num_points + 1):
+        x = cx + i * step_size * math.cos(angle_radians)
+        y = cy + i * step_size * math.sin(angle_radians)
+        points.append((x, y))
+    return points
 
 # 示例用法：
 center = (0, 0)
-point = (2, 1)
-angle = calculate_angle(center[0], center[1], point[0], point[1])
+angle = calculate_angle(center[0], center[1], 2, 1)
 print(f"角度: {angle} 度")
 
-# 验证我们能否从该角度获取到原点，这里设置半径为点(2, 1)离圆心的距离
-radius = math.hypot(point[0] - center[0], point[1] - center[1])
-calculated_point = coordinate_from_angle(center[0], center[1], angle, radius)
-print(f"坐标: {calculated_point}")
+# 生成射线上的点
+points_on_ray = generate_points_on_ray(center[0], center[1], angle, num_points=10, step_size=0.5)
+print("射线上的点:")
+for point in points_on_ray:
+    print(point)
