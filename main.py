@@ -55,12 +55,16 @@ if len(ellipses) >= 4:
     ellipses[3] = adjust_inner_circle(ellipses[2], make_circle(ellipses[3]))
     
     # 绘制第一个圆环到第一个图像
-    cv2.ellipse(output_image1, ellipses[0], 255, 2)  # 用白色绘制外轮廓
-    cv2.ellipse(output_image1, ellipses[1], 255, 2)  # 用白色绘制内轮廓
+    cv2.ellipse(output_image1, ellipses[0], 255, -1)  # 用白色填充外轮廓
+    cv2.ellipse(output_image1, ellipses[1], 0, -1)   # 用黑色填充内轮廓
     
     # 绘制第二个圆环到第二个图像
-    cv2.ellipse(output_image2, ellipses[2], 255, 2)  # 用白色绘制外轮廓
-    cv2.ellipse(output_image2, ellipses[3], 255, 2)  # 用白色绘制内轮廓
+    cv2.ellipse(output_image2, ellipses[2], 255, -1)  # 用白色填充外轮廓
+    cv2.ellipse(output_image2, ellipses[3], 0, -1)   # 用黑色填充内轮廓
+
+# 保存图像
+cv2.imwrite('Outer Circle.png', output_image1)
+cv2.imwrite('Inner Circle.png', output_image2)
 
 # 显示图像
 cv2.imshow('Outer Circle', output_image1)
