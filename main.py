@@ -9,14 +9,14 @@ def get_surrounding_points(x, y):
     else:
         y_floor, y_ceil = y, y
 
-    surrounding_points = [
+    surrounding_points = {
         (x_floor, y_floor),
         (x_floor, y_ceil),
         (x_ceil, y_floor),
         (x_ceil, y_ceil)
-    ]
+    }
 
-    return surrounding_points
+    return list(surrounding_points)
 
 # 示例
 x = 3.6
