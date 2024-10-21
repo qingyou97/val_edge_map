@@ -1,22 +1,31 @@
-def cal_magnitude(point):
-    # 这是一个示例函数，需要你自己定义
-    # 根据 (x, y) 点返回一个值
-    x, y = point
-    return x * y  # 举例：返回 x*y, 你可以换成实际的计算方式
-
-def calculate_average(points):
-    if not points:
-        return 0  # 如果列表为空，返回0
+def find_y_with_max_value(coords_and_intensities):
+    # 用一个字典来存储每个 y 的强度值总和
+    y_intensity_dict = {}
     
-    total_magnitude = 0
-    for point in points:
-        magnitude = cal_magnitude(point)
-        total_magnitude += magnitude
+    # 遍历整个列表
+    for item in coords_and_intensities:
+        coord, intensity = item
+        x, y = coord
+        
+        if y not in y_intensity_dict:
+            y_intensity_dict[y] = 0
+        
+        y_intensity_dict[y] += intensity
     
-    average_magnitude = total_magnitude / len(points)
-    return average_magnitude
+    # 找到五分之一强度值之和最大的 y
+    max_value = 0
+    max_y = None
+    
+    for y, total_intensity in y_intensity_dict.items():
+        average_intensity = total_intensity / 5
+        if average_intensity > max_value:
+            max_value = average_intensity
+            max_y = y
+    
+    return max_y
 
-# 示例用法：
-points_list = [(3, 2), (3, 3), (4, 2), (4, 3)]
-average = calculate_average(points_list)
-print(average)
+# 示例列表
+coords_and_intensities = [[(1, 1), 3], [(1, 2), 3], [(2, 2), 3]]
+
+# 调用函数并打印结果
+print(find_y_with_max_value(coords_and_intensities))
