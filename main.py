@@ -1,41 +1,28 @@
-import matplotlib.pyplot as plt
-import numpy as np
+from PIL import Image, ImageDraw
 
-# 图像尺寸
-img_size = 224
+# 定义图像尺寸
+width, height = 224, 224
 
-# 创建一个新的图形
-fig, ax = plt.subplots(figsize=(8, 8))
+# 创建一个新图像
+image = Image.new('RGB', (width, height), 'white')
+draw = ImageDraw.Draw(image)
 
-# 定义每个区域的角度（弧度）
-angles = np.linspace(0, 2 * np.pi, 9)
+# 定义中心点
+cx, cy = width // 2, height // 2
 
-# 颜色数组
-colors = ['red', 'green', 'blue', 'orange', 'purple', 'cyan', 'magenta', 'yellow']
+# 定义区域颜色
+colors = ['red', 'green', 'blue', 'yellow', 'orange', 'purple', 'pink', 'cyan']
 
-# 中心点
-center = (img_size / 2, img_size / 2)
+# 画出八个区域
+draw.polygon([(0, 0), (cx, 0), (cx, cy), (0, cy)], fill=colors[0])  # 左上
+draw.polygon([(cx, 0), (width, 0), (width, cy), (cx, cy)], fill=colors[1])  # 右上
+draw.polygon([(width, cy), (cx, cy), (cx, height), (width, height)], fill=colors[2])  # 右下
+draw.polygon([(0, cy), (cx, cy), (cx, height), (0, height)], fill=colors[3])  # 左下
+draw.polygon([(0, 0), (cx, 0), (cx//2, cy//2)], fill=colors[4])  # 左上小区块
+draw.polygon([(cx, 0), (width, 0), (cx + cx//2, cy //2)], fill=colors[5])  # 右上小区块
+draw.polygon([(0, height), (cx, height), (cx - cx//2, height - cy //2)], fill=colors[6]) # 左下小区块
+draw.polygon([(cx, height), (width, height), (cx + cx//2, height - cy //2)], fill=colors[7])  # 右下小区块
 
-# 绘制每一个区域
-for i in range(8):
-    theta1, theta2 = angles[i], angles[i + 1]
-    x1, y1 = center[0] + (img_size / 2) * np.cos(theta1), center[1] + (img_size / 2) * np.sin(theta1)
-    x2, y2 = center[0] + (img_size / 2) * np.cos(theta2), center[1] + (img_size / 2) * np.sin(theta2)
-    wedge = plt.Polygon([center, (x1, y1), (x2, y2), center], color=colors[i])
-    ax.add_patch(wedge)
-
-# 设置坐标轴样式
-ax.set_xlim(0, img_size)
-ax.set_ylim(0, img_size)
-ax.set_aspect('equal')
-
-# 隐藏轴的标签
-ax.xaxis.set_visible(False)
-ax.yaxis.set_visible(False)
-
-# 网格隐藏
-ax.grid(False)
-ax.axis('off')
-
-# 显示图形
-plt.show()
+# 保存或显示图像
+image.show()
+# image.save('output.png')
