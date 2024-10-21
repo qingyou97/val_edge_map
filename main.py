@@ -24,15 +24,17 @@ for contour in contours:
         ellipses.append(ellipse)
 
 # 确保我们找到了两个圆环
-if len(ellipses) >= 2:
-    # 按面积排序，确保第一个是外侧圆环，第二个是内侧圆环
+if len(ellipses) >= 4:
+    # 按面积排序，确保第一个和第二个是一个圆环的内外轮廓，第三个和第四个是另一个圆环的内外轮廓
     ellipses = sorted(ellipses, key=lambda e: e[1][0] * e[1][1], reverse=True)
     
-    # 绘制外侧圆环到第一个图像
-    cv2.ellipse(output_image1, ellipses[0], 255, 2)  # 用白色绘制
+    # 绘制第一个圆环到第一个图像
+    cv2.ellipse(output_image1, ellipses[0], 255, 2)  # 用白色绘制外轮廓
+    cv2.ellipse(output_image1, ellipses[1], 255, 2)  # 用白色绘制内轮廓
     
-    # 绘制内侧圆环到第二个图像
-    cv2.ellipse(output_image2, ellipses[1], 255, 2)  # 用白色绘制
+    # 绘制第二个圆环到第二个图像
+    cv2.ellipse(output_image2, ellipses[2], 255, 2)  # 用白色绘制外轮廓
+    cv2.ellipse(output_image2, ellipses[3], 255, 2)  # 用白色绘制内轮廓
 
 # 显示图像
 cv2.imshow('Outer Circle', output_image1)
