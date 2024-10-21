@@ -1,33 +1,11 @@
-from PIL import Image
+1. There was an issue with the casting code, reran it.
+Conclusion: Used the same version result, modified the code slightly. The effect on the casting dataset improved greatly, the offset issue was solved. Previously, many points were taken outside, this time most points are on the inner side, perfectly capturing the inner edge. File link:
 
-def find_non_matching_color_coordinates(image_path, target_color):
-    # 打开图像
-    img = Image.open(image_path)
-    
-    # 确保这是一个RGBA图像
-    img = img.convert("RGBA")
-    
-    # 获取图像的宽高
-    width, height = img.size
-    
-    # 获取图像的数据
-    pixels = img.load()
-    
-    # 存储不匹配目标颜色的像素的坐标
-    non_matching_coords = set()
-    
-    # 遍历每个像素，检查是否与目标颜色不同
-    for y in range(height):
-        for x in range(width):
-            if pixels[x, y] != target_color:
-                non_matching_coords.add((x, y))
-    
-    return non_matching_coords
+2. Regarding the unsolved issue of the double edges on casting, the new plan is to expand the circle using polar coordinates around the center. Convert the circle to Cartesian coordinates, with horizontal axis representing blocks and vertical axis representing each extended line and intensity value. Map and average in regions, use sliding window to judge which point to keep. Test casting effect.
+Conclusion: Many breakpoints, needs improvement. Current plan is to take a line every degree, average every five degrees to get the top two points. Poor effect. File link:
 
-# 示例使用
-image_path = os.path.join(ai_result_folder, filename.replace('original', 'ai_result'))
-target_color = (253, 231, 36, 255)
-non_matching_coordinates = find_non_matching_color_coordinates(image_path, target_color)
+3. Organize the best version results of all datasets into an Excel. Include original image, black-and-white result, overlay result.
+Conclusion: Done, file link:
 
-for coord in non_matching_coordinates:
-    print(coord)
+4. Test Han Xu’s one-shot after receiving it.
+Conclusion: For the current one-shot result, I took all the AI regions and applied a rule-based method. Result has many noisy points in AI output, so current rule-based result is poor. Today, I will set a threshold on AI results to filter out some noise and reevaluate the results. File link:
