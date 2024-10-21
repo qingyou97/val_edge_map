@@ -33,11 +33,26 @@ if len(ellipses) >= 4:
         max_radius = max(axes)
         return (center, (max_radius, max_radius), angle)
     
+    def adjust_inner_circle(outer, inner):
+        outer_center, outer_axes, outer_angle = outer
+        inner_center, inner_axes, inner_angle = inner
+        
+        # 调整内圆心到外圆心
+        inner_center = outer_center
+        
+        # 如果内圆需要调整
+        if inner_axes[0] > outer_axes[0]:
+            inner_axes = (outer_axes[0] - 10, outer_axes[0] - 10)  # 这里减去10是为了确保内圆小于外圆
+        elif inner_axes[0] < outer_axes[0]:
+            inner_axes = (outer_axes[0] - 10, outer_axes[0] - 10)  # 这里减去10是为了确保内圆小于外圆
+        
+        return (inner_center, inner_axes, inner_angle)
+    
     # 调整为正圆
     ellipses[0] = make_circle(ellipses[0])
-    ellipses[1] = make_circle(ellipses[1])
+    ellipses[1] = adjust_inner_circle(ellipses[0], make_circle(ellipses[1]))
     ellipses[2] = make_circle(ellipses[2])
-    ellipses[3] = make_circle(ellipses[3])
+    ellipses[3] = adjust_inner_circle(ellipses[2], make_circle(ellipses[3]))
     
     # 绘制第一个圆环到第一个图像
     cv2.ellipse(output_image1, ellipses[0], 255, 2)  # 用白色绘制外轮廓
