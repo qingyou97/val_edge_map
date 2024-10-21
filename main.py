@@ -1,5 +1,11 @@
 import numpy as np
 import matplotlib.pyplot as plt
+from matplotlib.font_manager import FontProperties
+
+# 设置中文字体
+font_path = "C:/Windows/Fonts/simsun.ttc"  # 你可以根据实际情况修改路径
+font_prop = FontProperties(fname=font_path)
+
 inner_radius = 2  # 内半径
 outer_radius = 5  # 外半径
 theta = np.linspace(0, 2 * np.pi, 1000)  # 角度分段
@@ -31,8 +37,8 @@ for i in range(len(left_side_y)):
 # 设置矩形的显示
 ax.set_xlim(0, rect_width)
 ax.set_ylim(inner_radius, outer_radius)
-ax.set_xlabel('展开后的圆环外周长')
-ax.set_ylabel('半径差值')
-ax.set_title('圆环展开后的矩形表示及配对关系')
+ax.set_xlabel('展开后的圆环外周长', fontproperties=font_prop)
+ax.set_ylabel('半径差值', fontproperties=font_prop)
+ax.set_title('圆环展开后的矩形表示及配对关系', fontproperties=font_prop)
 
 plt.show()
