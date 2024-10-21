@@ -72,3 +72,22 @@ ax2.set_title('圆环展开后的矩形表示及配对关系', fontproperties=fo
 
 plt.tight_layout()
 plt.show()
+
+# 定义函数来找到对应的左侧点
+def find_corresponding_left_point(right_x, right_y):
+    if right_x != rect_width:
+        raise ValueError("输入的x坐标不是右侧边界的坐标")
+    if right_y < inner_radius or right_y > outer_radius:
+        raise ValueError("输入的y坐标超出范围")
+    
+    # 对应的左侧点的y坐标与右侧点相同
+    left_y = right_y
+    left_x = 0  # 左侧边界的x坐标为0
+    
+    return left_x, left_y
+
+# 示例：输入右侧的一个坐标点
+right_x_input = rect_width
+right_y_input = 3.5
+left_x_output, left_y_output = find_corresponding_left_point(right_x_input, right_y_input)
+print(f"右侧点 ({right_x_input}, {right_y_input}) 对应的左侧点是 ({left_x_output}, {left_y_output})")
