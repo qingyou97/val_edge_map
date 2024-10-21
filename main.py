@@ -26,6 +26,17 @@ fig, (ax1, ax2) = plt.subplots(1, 2, figsize=(12, 6))
 # 绘制圆环
 ax1.plot(inner_circle_x, inner_circle_y, label='内圆')
 ax1.plot(outer_circle_x, outer_circle_y, label='外圆')
+
+# 在圆环上绘制径向线条
+num_lines = 20
+angles = np.linspace(0, 2 * np.pi, num_lines, endpoint=False)
+for angle in angles:
+    x_inner = inner_radius * np.cos(angle)
+    y_inner = inner_radius * np.sin(angle)
+    x_outer = outer_radius * np.cos(angle)
+    y_outer = outer_radius * np.sin(angle)
+    ax1.plot([x_inner, x_outer], [y_inner, y_outer], color='gray', linestyle='--', linewidth=0.5)
+
 ax1.set_aspect('equal', 'box')
 ax1.set_title('圆环', fontproperties=font_prop)
 ax1.legend()
@@ -46,6 +57,11 @@ colors = cmap(np.linspace(0, 1, len(left_side_y)))
 for i in range(len(left_side_y)):
     ax2.plot([left_side[i], right_side[i]], [left_side_y[i], right_side_y[i]],
              color=colors[i], linestyle='-', linewidth=0.5)
+
+# 在展开的矩形中绘制对应的径向线条
+for angle in angles:
+    x_rect = angle * outer_radius
+    ax2.plot([x_rect, x_rect], [inner_radius, outer_radius], color='gray', linestyle='--', linewidth=0.5)
 
 # 设置矩形的显示
 ax2.set_xlim(0, rect_width)
