@@ -1,28 +1,38 @@
-from PIL import Image, ImageDraw
+import numpy as np
+import matplotlib.pyplot as plt
+inner_radius = 2  # 内半径
+outer_radius = 5  # 外半径
+theta = np.linspace(0, 2 * np.pi, 1000)  # 角度分段
 
-# 定义图像尺寸
-width, height = 224, 224
+# 创建矩形边界
+rect_height = outer_radius - inner_radius
+rect_width = 2 * np.pi * outer_radius
 
-# 创建一个新图像
-image = Image.new('RGB', (width, height), 'white')
-draw = ImageDraw.Draw(image)
+# 展开圆环，并显示对应点
+fig, ax = plt.subplots()
 
-# 定义中心点
-cx, cy = width // 2, height // 2
+# 在矩形的左侧边界上画出原圆环左侧
+left_side_y = np.linspace(inner_radius, outer_radius, 1000)
+left_side = np.zeros_like(left_side_y)
 
-# 定义区域颜色
-colors = ['red', 'green', 'blue', 'yellow', 'orange', 'purple', 'pink', 'cyan']
+# 在矩形的右侧边界上画出原圆环右侧
+right_side_y = np.linspace(inner_radius, outer_radius, 1000)
+right_side = np.ones_like(right_side_y) * rect_width
 
-# 画出八个区域
-draw.polygon([(0, 0), (cx, cy), (0, cy)], fill=colors[0])  # 左上
-draw.polygon([(0, 0), (cx, cy), (cx, 0)], fill=colors[1])  # 上中
-draw.polygon([(cx, 0), (cx, cy), (width, 0)], fill=colors[2])  # 右上
-draw.polygon([(width, 0), (cx, cy), (width, cy)], fill=colors[3])  # 右中
-draw.polygon([(width, cy), (cx, cy), (width, height)], fill=colors[4])  # 右下
-draw.polygon([(cx, height), (cx, cy), (width, height)], fill=colors[5])  # 下中
-draw.polygon([(0, height), (cx, cy), (cx, height)], fill=colors[6])  # 左下
-draw.polygon([(0, cy), (cx, cy), (0, height)], fill=colors[7])  # 左中
+# 给左右的每个点添加颜色来表示一一对应关系（使用渐变色）
+cmap = plt.get_cmap('viridis')
+colors = cmap(np.linspace(0, 1, len(left_side_y)))
 
-# 保存或显示图像
-image.show()
-# image.save('output.png')
+# 绘制两侧点以及它们的一一对应的连接线
+for i in range(len(left_side_y)):
+    ax.plot([left_side[i], right_side[i]], [left_side_y[i], right_side_y[i]],
+             color=colors[i], linestyle='-', linewidth=0.5)
+
+# 设置矩形的显示
+ax.set_xlim(0, rect_width)
+ax.set_ylim(inner_radius, outer_radius)
+ax.set_xlabel('展开后的圆环外周长')
+ax.set_ylabel('半径差值')
+ax.set_title('圆环展开后的矩形表示及配对关系')
+
+plt.show()
