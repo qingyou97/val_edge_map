@@ -1,6 +1,6 @@
-# 输出圆环的内外直径和圆心点坐标
-    for i, ellipse in enumerate(ellipses[:4]):
-        center, axes, _ = ellipse
-        diameter = int(max(axes) * 2)
-        center_x, center_y = int(center[0]), int(center[1])
-        print(f"圆环 {i//2 + 1} 的 {'外' if i % 2 == 0 else '内'}直径: {diameter}, 圆心点坐标: ({center_x}, {center_y})")
+rect_width = 10  # 这里设定你的最大值
+length = 5  # 要取出的序列长度
+
+for i in range(rect_width + 1):
+    sequence = [(j + i) % (rect_width + 1) for j in range(length)]
+    print(sequence)
