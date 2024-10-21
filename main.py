@@ -2,39 +2,41 @@ import cv2
 import numpy as np
 
 # 读取图像
-image = cv2.imread('your_image_path.jpg', cv2.IMREAD_GRAYSCALE)
-image = cv2.resize(image, (224, 224))
+image = cv2.imread('input_image.png', cv2.IMREAD_GRAYSCALE)
 
-# 二值化
+# 二值化图像（假设圆环是纯白色，即像素值为255）
 _, binary_image = cv2.threshold(image, 127, 255, cv2.THRESH_BINARY)
 
-# 查找轮廓
+# 找出轮廓
 contours, _ = cv2.findContours(binary_image, cv2.RETR_TREE, cv2.CHAIN_APPROX_SIMPLE)
 
-# 创建一个彩色图像来绘制红色轮廓
-output_image = cv2.cvtColor(image, cv2.COLOR_GRAY2BGR)
+# 创建彩色图像用于绘制
+color_image = cv2.cvtColor(image, cv2.COLOR_GRAY2BGR)
 
-# 找到并绘制圆环
-circles_found = 0
+# 筛选出两个圆环的四条轮廓
+circle_contours = []
+
 for contour in contours:
-    # 拟合椭圆轮廓，确保轮廓具有足够的点
-    if len(contour) >= 5:
-        ellipse = cv2.fitEllipse(contour)
-        # 检查轮廓周长与圆拟合周长的近似程度
-        perimeter = cv2.arcLength(contour, True)
-        hull_perimeter = cv2.arcLength(cv2.convexHull(contour), True)
-        perimeter_ratio = perimeter / hull_perimeter
-        
-        # 过滤出类圆周长轮廓的形式
-        if 0.8 < perimeter_ratio < 1.2:
-            cv2.ellipse(output_image, ellipse, (0, 0, 255), 2)  # 用红色绘制
-            circles_found += 1
-            
-    # 结束循环，如已找到两个圆环
-    if circles_found >= 2:
-        break
+    # 计算轮廓面积以及最小外接圆
+    area = cv2.contourArea(contour)
+    (x, y), radius = cv2.minEnclosingCircle(contour)
+    
+    # 定义一个面积合理范围以识别圆环
+    if area > 500 and area < 5000:
+        circle_contours.append(contour)
 
-# 显示图像
-cv2.imshow('Detected Ellipses', output_image)
+# 确保找到两个圆环，每个圆环有内外轮廓
+assert len(circle_contours) == 4, "未找到两个圆环的完整轮廓"
+
+# 按面积极简排序后绘制轮廓，这里假设：较大的两个为外轮廓，较小的两个为内轮廓
+circle_contours = sorted(circle_contours, key=cv2.contourArea, reverse=True)
+for i, contour in enumerate(circle_contours):
+    cv2.drawContours(color_image, [contour], -1, (0, 0, 255), 2)  # 使用红色绘制
+
+# 保存结果
+cv2.imwrite('output_image.png', color_image)
+
+# 显示结果
+cv2.imshow('Detected Circles', color_image)
 cv2.waitKey(0)
 cv2.destroyAllWindows()
