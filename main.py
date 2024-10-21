@@ -1,11 +1,14 @@
 import cv2
 import os
-from matplotlib import pyplot as plt
 
 def binary_threshold(input_dir, threshold_value):
     # 检查阈值在合理范围内
     if threshold_value < 0 or threshold_value > 255:
         raise ValueError("阈值应在0到255范围内。")
+    
+    # 创建保存目录
+    output_dir = f"{input_dir}_threshold_{threshold_value}"
+    os.makedirs(output_dir, exist_ok=True)
     
     # 获取目录中的所有图像文件
     for filename in os.listdir(input_dir):
@@ -23,8 +26,7 @@ def binary_threshold(input_dir, threshold_value):
             ret, binary_img = cv2.threshold(img, threshold_value, 255, cv2.THRESH_BINARY)
             
             # 构建保存路径
-            base, ext = os.path.splitext(filename)
-            save_path = os.path.join(input_dir, f"{base}_threshold_{threshold_value}{ext}")
+            save_path = os.path.join(output_dir, filename)
             
             # 保存二值化图像
             cv2.imwrite(save_path, binary_img)
