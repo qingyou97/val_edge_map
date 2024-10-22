@@ -1,31 +1,8 @@
-def find_y_with_max_value(coords_and_intensities):
-    # 用一个字典来存储每个 y 的强度值总和
-    y_intensity_dict = {}
-    
-    # 遍历整个列表
-    for item in coords_and_intensities:
-        coord, intensity = item
-        x, y = coord
-        
-        if y not in y_intensity_dict:
-            y_intensity_dict[y] = 0
-        
-        y_intensity_dict[y] += intensity
-    
-    # 找到五分之一强度值之和最大的 y
-    max_value = 0
-    max_y = None
-    
-    for y, total_intensity in y_intensity_dict.items():
-        average_intensity = total_intensity / 5
-        if average_intensity > max_value:
-            max_value = average_intensity
-            max_y = y
-    
-    return max_y
-
-# 示例列表
-coords_and_intensities = [[(1, 1), 3], [(1, 2), 3], [(2, 2), 3]]
-
-# 调用函数并打印结果
-print(find_y_with_max_value(coords_and_intensities))
+1. Confirm the issues with casting and some breakpoints to determine if they are caused by AI or rule-based systems.
+Conclusion: Two reasons. First, AI results are redundant, leading to many points being considered during the extension line calculation, including strong AI-passed areas closer to the center, which are retained. Second, rule-based detection picks the top two edge intensity points on the extension line as outside edges, while the inner edge is ranked third, thus picking the outer edge. File link:
+2. Tried setting peak points to the top three for issue 1.
+Conclusion: Improved individual images like 15 and 17, where previously the top 2 did not include the inner edge, causing edge deviation. Now selecting the nearest top 3 to the center improves such images. But AI result redundancy causing edge noise remains unsolved.
+3. Polar coordinate algorithm has issues. Should use interpolation to expand the half-sector into a rectangle, enveloping the edge area. Missed points in the half-sector should be interpolated for results. Then average and select the maximum as the edge.
+Conclusion: Testing in progress; found and fixing bugs.
+4. v6 data: Apply a threshold on oneshot AI results to filter some noise and analyze results.
+Conclusion: Chose a threshold of 75 to keep fewer disconnects while maintaining thicker edges. The current result is not better than the previous best 4 support merge version but is better than other versions, though noisier compared to the optimal 4 support merge.
