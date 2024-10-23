@@ -1,5 +1,12 @@
-1. Testing and organizing results of the polar coordinate algorithm
-Conclusion: The results for a single image processed on my computer are done (processing for other images continues on someone else's machine). The effect is not better than the previous version based on finding peak points via the circle center. However, it clearly avoids a specific scenario, "if many consecutive pixels are good, but only one or two pixels are offset," this situation can be avoided. But when a large area of the region has larger peak points on the outer edge, it completely biases towards the outer contour. File link:
+10/23 Morning Meeting 10:00-10:40:
 
-2. List the follow-up experimental plans for rule-based, and send the organized files to Mr. Zhao
-Conclusion: Yesterday, I thought about and did some small experiments, resulting in three subsequent schemes. They are organized in this file. File link:
+Duan:
+1. When selecting peaks, set a threshold and pick the first peak that exceeds this threshold.
+2. The length of the sliding window should be adjustable and the effects of each change need to be recorded.
+3. In the previous Gaussian denoising step, parameter tuning can improve Sobel results.
+
+Han:
+1. Summarize deliverables based on viewpoints.
+2. Organize before-and-after comparison charts.
+3. Summarize examples of both significant improvements and weakened results; choose two charts showing significant improvement and two showing significant weakening.
+4. Focus on improvements in loss and kernel size; organize comparisons of these two aspects before and after.
