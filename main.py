@@ -1,28 +1,40 @@
-def find_min_intensity(data):
-    """
-    从包含坐标和强度值的列表中找到强度值的最小值及其对应的坐标。
-    
-    :param data: list of lists, 形如 [[(x, y), intensity], ...]
-    :return: (tuple, float), 最小强度值和对应的坐标
-    """
-    if not data:
-        return None, None
+import matplotlib.pyplot as plt
 
-    min_intensity = float('inf')
-    min_coordinate = None
+# 假设这个是你的list数据
+data = [
+    [(220, 116), 284.0633732109791],
+    # 其他数据点
+]
 
-    for item in data:
-        coordinate, intensity = item
-        if intensity < min_intensity:
-            min_intensity = intensity
-            min_coordinate = coordinate
+# 提取数据
+coordinates = []
+intensities = []
 
-    return min_coordinate, min_intensity
+for item in data:
+    coordinates.append(item[0])
+    intensities.append(item[1])
 
-# 示例用法
-data = [[(220, 116), 284.0633732109791], 
-        [(215, 122), 180.0567890], 
-        [(210, 118), 300.56473820]]
+# 分离坐标x和y
+x, y = zip(*coordinates)
 
-coordinate, min_intensity = find_min_intensity(data)
-print(f"最小强度值为: {min_intensity}, 对应的坐标为: {coordinate}")
+# 创建绘图
+fig, ax = plt.subplots()
+
+# 散点图
+scatter = ax.scatter(x, y, c=intensities, cmap='viridis')
+
+# 添加色条
+cbar = plt.colorbar(scatter, ax=ax, label='Intensity')
+
+# 设置标签和标题
+ax.set_xlabel('X Coordinate')
+ax.set_ylabel('Y Coordinate')
+plt.title('Intensity Map')
+
+# 设置坐标轴范围
+ax.set_xlim(0, 223)
+ax.set_ylim(0, 223)
+
+# 显示图像
+plt.savefig("output.png")  # 输出到文件
+plt.show()  # 显示图像
