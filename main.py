@@ -1,20 +1,26 @@
-def find_min_five_intensities(data):
+def count_intensity_intervals(data, interval=50):
     """
-    从包含坐标和强度值的列表中找到强度值最小的五个及其对应的坐标。
+    计算并统计每个强度值区间内的点数。
     
     :param data: list of lists, 形如 [[(x, y), intensity], ...]
-    :return: list of tuples, 每个元素为 (coordinate, intensity)
+    :param interval: int, 区间大小，默认为50
+    :return: dict, 形如 {区间: 点数}
     """
     if not data:
-        return []
+        return {}
 
-    # 按强度值排序
-    sorted_data = sorted(data, key=lambda x: x[1])
+    # 初始化区间统计字典
+    interval_counts = {}
 
-    # 取前五个
-    min_five = sorted_data[:5]
+    for item in data:
+        _, intensity = item
+        # 计算强度值所在的区间
+        interval_key = (int(intensity) // interval) * interval
+        if interval_key not in interval_counts:
+            interval_counts[interval_key] = 0
+        interval_counts[interval_key] += 1
 
-    return min_five
+    return interval_counts
 
 # 示例用法
 data = [[(220, 116), 284.0633732109791], 
@@ -25,6 +31,6 @@ data = [[(220, 116), 284.0633732109791],
         [(235, 130), 100.4567890],
         [(240, 135), 250.1234567]]
 
-min_five = find_min_five_intensities(data)
-for coordinate, intensity in min_five:
-    print(f"强度值: {intensity}, 坐标: {coordinate}")
+interval_counts = count_intensity_intervals(data)
+for interval, count in sorted(interval_counts.items()):
+    print(f"区间 {interval}-{interval + 49}: {count} 个点")
