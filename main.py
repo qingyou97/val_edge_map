@@ -1,40 +1,30 @@
-import matplotlib.pyplot as plt
+def find_min_five_intensities(data):
+    """
+    从包含坐标和强度值的列表中找到强度值最小的五个及其对应的坐标。
+    
+    :param data: list of lists, 形如 [[(x, y), intensity], ...]
+    :return: list of tuples, 每个元素为 (coordinate, intensity)
+    """
+    if not data:
+        return []
 
-# 假设这个是你的list数据
-data = [
-    [(220, 116), 284.0633732109791],
-    # 其他数据点
-]
+    # 按强度值排序
+    sorted_data = sorted(data, key=lambda x: x[1])
 
-# 提取数据
-coordinates = []
-intensities = []
+    # 取前五个
+    min_five = sorted_data[:5]
 
-for item in data:
-    coordinates.append(item[0])
-    intensities.append(item[1])
+    return min_five
 
-# 分离坐标x和y
-x, y = zip(*coordinates)
+# 示例用法
+data = [[(220, 116), 284.0633732109791], 
+        [(215, 122), 180.0567890], 
+        [(210, 118), 300.56473820],
+        [(225, 120), 150.1234567],
+        [(230, 125), 200.9876543],
+        [(235, 130), 100.4567890],
+        [(240, 135), 250.1234567]]
 
-# 创建绘图
-fig, ax = plt.subplots()
-
-# 散点图
-scatter = ax.scatter(x, y, c=intensities, cmap='viridis')
-
-# 添加色条
-cbar = plt.colorbar(scatter, ax=ax, label='Intensity')
-
-# 设置标签和标题
-ax.set_xlabel('X Coordinate')
-ax.set_ylabel('Y Coordinate')
-plt.title('Intensity Map')
-
-# 设置坐标轴范围
-ax.set_xlim(0, 223)
-ax.set_ylim(0, 223)
-
-# 显示图像
-plt.savefig("output.png")  # 输出到文件
-plt.show()  # 显示图像
+min_five = find_min_five_intensities(data)
+for coordinate, intensity in min_five:
+    print(f"强度值: {intensity}, 坐标: {coordinate}")
