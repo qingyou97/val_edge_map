@@ -1,7 +1,3 @@
-import cv2
-import numpy as np
-import math
-
 def distance_point_to_circle(px, py, cx, cy, r):
     # 计算点 (px, py) 到圆心 (cx, cy) 的欧氏距离
     center_distance = math.sqrt((px - cx) ** 2 + (py - cy) ** 2)
@@ -49,6 +45,16 @@ def plot_circles_and_point(px, py, circles, nearest_circle_idx, filename='output
     
 def main(px, py, circles):
     nearest_circle_idx, min_distance = find_nearest_circle(px, py, circles)
-    print(f"点到最近圆的垂直距离为 {min_distance:.2f}")
+    print(f"点到最近圆的垂直距离为 {min_distance:.2f} 像素")
     print(f"最近的圆是: 圆心 ({circles[nearest_circle_idx][0]}, {circles[nearest_circle_idx][1]}), 半径 {circles[nearest_circle_idx][2]}")
     plot_circles_and_point(px, py, circles, nearest_circle_idx)
+    return min_distance
+
+# 输入给定的点和四个圆的数据
+px = 100  # 给出的点的x坐标
+py = 150  # 给出的点的y坐标
+circles = [(50, 50, 20), (160, 160, 30), (80, 180, 25), (200, 200, 15)]
+
+# 调用主函数并获取距离
+distance = main(px, py, circles)
+print(f"返回的距离: {distance:.2f} 像素")
