@@ -1,3 +1,24 @@
+import cv2
+import numpy as np
+import math
+
+def distance_point_to_circle(px, py, cx, cy, r):
+    # 计算点 (px, py) 到圆心 (cx, cy) 的欧氏距离
+    center_distance = math.sqrt((px - cx) ** 2 + (py - cy) ** 2)
+    # 垂直距离是欧氏距离减去圆的半径
+    return abs(center_distance - r)
+
+def find_nearest_circle(px, py, circles):
+    # 储存最小距离和最近圆的索引
+    min_distance = float('inf')
+    nearest_circle_idx = -1
+    for idx, (cx, cy, r) in enumerate(circles):
+        dist = distance_point_to_circle(px, py, cx, cy, r)
+        if dist < min_distance:
+            min_distance = dist
+            nearest_circle_idx = idx
+    return nearest_circle_idx, min_distance
+
 def plot_circles_and_point(px, py, circles, nearest_circle_idx, filename='output.png'):
     # 创建一个224x224的白色图像
     img = np.ones((224, 224, 3), dtype=np.uint8) * 255
@@ -25,3 +46,9 @@ def plot_circles_and_point(px, py, circles, nearest_circle_idx, filename='output
     cv2.imshow('Circles and Point', img)
     cv2.waitKey(0)
     cv2.destroyAllWindows()
+    
+def main(px, py, circles):
+    nearest_circle_idx, min_distance = find_nearest_circle(px, py, circles)
+    print(f"点到最近圆的垂直距离为 {min_distance:.2f}")
+    print(f"最近的圆是: 圆心 ({circles[nearest_circle_idx][0]}, {circles[nearest_circle_idx][1]}), 半径 {circles[nearest_circle_idx][2]}")
+    plot_circles_and_point(px, py, circles, nearest_circle_idx)
