@@ -1,10 +1,25 @@
-1024 Morning Meeting 10.30-11.00:
-Duan:
-1. Threshold modification: for example, if it exceeds 100, take the first one. If not, take the nearest lower, for example, above 75 as the final point.
-2. Or modify the final point to take the first local maximum point.
-3. After the sector result comes out, it should be cross-verified with the AI result, not solely depend on the sector result.
-4. Test the groove dataset as well. Think about the logic for selecting ROI, such as the minimum bounding rectangle, etc.
-Han:
-1. Organize the before-and-after comparison charts.
-2. Summarize representative examples of improvement and weakening—these two are significantly improved, these two are significantly weakened.
-3. Deliverable should be organized according to viewpoints.
+import cv2
+import numpy as np
+
+# 读取A图和B图
+A_img = cv2.imread('A.png', cv2.IMREAD_GRAYSCALE)
+B_img = cv2.imread('B.png')
+
+# 确保B图为彩色图
+if len(B_img.shape) == 2 or B_img.shape[2] == 1:
+    B_img = cv2.cvtColor(B_img, cv2.COLOR_GRAY2BGR)
+
+# 找到A图中白色点的坐标
+white_points = np.argwhere(A_img == 255)  # 255表示白色点
+
+# 在B图上画出红点
+for point in white_points:
+    cv2.circle(B_img, (point[1], point[0]), radius=1, color=(0, 0, 255), thickness=-1)
+
+# 保存或显示B图
+cv2.imwrite('B_with_red_dots.png', B_img)
+
+# 如果要显示图像
+cv2.imshow('B_with_red_dots', B_img)
+cv2.waitKey(0)
+cv2.destroyAllWindows()
