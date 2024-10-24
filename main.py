@@ -1,8 +1,23 @@
-1. When selecting peak values, a threshold should be set. Once this threshold is exceeded, select the first peak.
-Conclusion: Completed. The minimum threshold was set to 100. I calculated that in the first original image, among the edges we need, there are 6 points with intensity 0-49, 81 points with intensity 50-99, and 1205 points with intensity above 100 (details in xx file). So I chose a threshold of 100 and conducted a test. In the visualization results, there are large missing areas, and many edges are not in the desired positions. This problem existed even without setting a threshold. I believe the breakage issue is due to setting the threshold too low. The edges found are not the desired ones, possibly because the rings in the AI results are not accurately located. Or because many images contain ellipses instead of perfect circles, which causes some misalignment when using the original AI results (details in xx file lines 18-21).
+from PIL import Image
 
-2. The length of the sliding window should be set as an adjustable parameter and its effect should be recorded each time this parameter is changed.
-Conclusion: The sliding window length has been set as a parameter. Adjustments haven't started yet because I want to first control variables and see the trend of adjusting the intensity threshold.
+def process_image(input_path, output_path):
+    image = Image.open(input_path).convert("RGBA")
+    data = image.getdata()
 
-3. Fill the inside of the ring with AI results and adjust based on the distance from the center.
-Conclusion: The current effect is poor. The reason is that in many images, the algorithm cannot accurately locate the four contours of the two rings. This algorithm needs further improvement. If this improves, the polar coordinate transformation method will also improve slightly. File link:
+    new_data = []
+    for item in data:
+        # 检查白色点 (255, 255, 255, 255)
+        if item[:3] == (255, 255, 255):
+            # 变为 (253, 231, 36, 255)
+            new_data.append((253, 231, 36, 255))
+        else:
+            # 其余点变为 (68, 1, 84, 255)
+            new_data.append((68, 1, 84, 255))
+
+    image.putdata(new_data)
+    image.save(output_path)
+
+# 调用示例
+input_path = 'input_image.png'  # 输入图像路径
+output_path = 'output_image.png'  # 输出图像路径
+process_image(input_path, output_path)
