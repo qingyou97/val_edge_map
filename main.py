@@ -1,23 +1,37 @@
-from PIL import Image
+import cv2
+import numpy as np
 
-def process_image(input_path, output_path):
-    image = Image.open(input_path).convert("RGBA")
-    data = image.getdata()
+def mark_points_with_color(image_a_path, image_b_path, target_rgba, output_path, mark_color=[255, 0, 0, 255]):
+    """
+    在B图上用指定颜色标注A图中指定RGBA值的点。
 
-    new_data = []
-    for item in data:
-        # 检查白色点 (255, 255, 255, 255)
-        if item[:3] == (255, 255, 255):
-            # 变为 (253, 231, 36, 255)
-            new_data.append((253, 231, 36, 255))
-        else:
-            # 其余点变为 (68, 1, 84, 255)
-            new_data.append((68, 1, 84, 255))
+    :param image_a_path: A图的路径
+    :param image_b_path: B图的路径
+    :param target_rgba: 需要查找的RGBA值，例如[253, 231, 36, 255]
+    :param output_path: 标注后的B图保存路径
+    :param mark_color: 标注颜色，默认为红色[255, 0, 0, 255]
+    """
+    # 读取A图和B图
+    image_a = cv2.imread(image_a_path, cv2.IMREAD_UNCHANGED)
+    image_b = cv2.imread(image_b_path, cv2.IMREAD_UNCHANGED)
 
-    image.putdata(new_data)
-    image.save(output_path)
+    if image_a is None or image_b is None:
+        raise FileNotFoundError("无法读取图像文件，请检查路径是否正确。")
 
-# 调用示例
-input_path = 'input_image.png'  # 输入图像路径
-output_path = 'output_image.png'  # 输出图像路径
-process_image(input_path, output_path)
+    if image_a.shape != image_b.shape:
+        raise ValueError("A图和B图的大小不一致。")
+
+    # 找到A图中target_rgba点的位置
+    mask = np.all(image_a == target_rgba, axis=-1)
+    indices = np.where(mask)
+
+    # 在B图上用指定颜色标注这些点
+    for y, x in zip(*indices):
+        image_b[y, x] = mark_color
+
+    # 保存标注后的B图
+    cv2.imwrite(output_path, image_b)
+    print(f"标注完成并保存为'{output_path}'")
+
+# 示例调用
+mark_points_with_color('A.png', 'B.png', [253, 231, 36, 255], 'B_annotated.png')
