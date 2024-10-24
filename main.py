@@ -1,4 +1,4 @@
-def process_points(points, circles):
+def process_points(points, circles): 
     def cal_neareest_circle_idx(px, py, circles):
         # This is a placeholder. 
         # Replace it with the actual function implementation.
