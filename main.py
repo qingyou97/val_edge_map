@@ -1,4 +1,5 @@
 import matplotlib.pyplot as plt
+from scipy.signal import find_peaks
 
 data = {
     54: 449.3646893061633, 55: 1297.34465165651155, 56: 1805.3129851341728, 57: 1154.4329935468359,
@@ -12,8 +13,19 @@ data = {
 x = list(data.keys())
 y = list(data.values())
 
+# 设置一个阈值来筛选显著的峰值
+threshold = 1000
+
+# 使用find_peaks找到峰值，并设置高度阈值
+peaks, properties = find_peaks(y, height=threshold)
+
 plt.figure(figsize=(10, 6))
 plt.plot(x, y, marker='o')
+plt.plot([x[p] for p in peaks], [y[p] for p in peaks], "x")  # 标记峰值点
+
+# 标注峰值点
+for p in peaks:
+    plt.text(x[p], y[p], f'({x[p]}, {y[p]:.2f})', fontsize=9, ha='right')
 
 # 设置图表标题和坐标轴标签
 plt.title('Peaks Plot')
@@ -23,5 +35,9 @@ plt.ylabel('Intensity')
 # 显示网格
 plt.grid(True)
 
-# 冷胶图分Tri数. 环亚显示
+# 显示图表
 plt.show()
+
+# 打印峰值点
+print("Peaks at x-values:", [x[p] for p in peaks])
+print("Peak intensities:", [y[p] for p in peaks])
