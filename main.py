@@ -1,32 +1,8 @@
-from PIL import Image
+1. When selecting peak values, a threshold should be set. Once this threshold is exceeded, select the first peak.
+Conclusion: Completed. The minimum threshold was set to 100. I calculated that in the first original image, among the edges we need, there are 6 points with intensity 0-49, 81 points with intensity 50-99, and 1205 points with intensity above 100 (details in xx file). So I chose a threshold of 100 and conducted a test. In the visualization results, there are large missing areas, and many edges are not in the desired positions. This problem existed even without setting a threshold. I believe the breakage issue is due to setting the threshold too low. The edges found are not the desired ones, possibly because the rings in the AI results are not accurately located. Or because many images contain ellipses instead of perfect circles, which causes some misalignment when using the original AI results (details in xx file lines 18-21).
 
-def convert_bw_image(input_path, output_path):
-    # 打开黑白图像
-    img = Image.open(input_path).convert('RGBA')
+2. The length of the sliding window should be set as an adjustable parameter and its effect should be recorded each time this parameter is changed.
+Conclusion: The sliding window length has been set as a parameter. Adjustments haven't started yet because I want to first control variables and see the trend of adjusting the intensity threshold.
 
-    # 定义颜色替换规则
-    color_mapping = {
-        (255, 255, 255, 255): (253, 231, 36, 255),
-        (0, 0, 0, 255): (68, 1, 84, 255)
-    }
-
-    # 获取图像数据
-    data = img.getdata()
-
-    # 创建一个新的图像数据列表
-    new_data = []
-    for item in data:
-        if item in color_mapping:
-            new_data.append(color_mapping[item])
-        else:
-            new_data.append(item)
-
-    # 创建新的图像对象并赋予新的数据
-    new_img = Image.new("RGBA", img.size)
-    new_img.putdata(new_data)
-
-    # 保存为新的PNG图像
-    new_img.save(output_path)
-
-# 示例调用
-convert_bw_image('A图.png', 'A图_new.png')
+3. Fill the inside of the ring with AI results and adjust based on the distance from the center.
+Conclusion: The current effect is poor. The reason is that in many images, the algorithm cannot accurately locate the four contours of the two rings. This algorithm needs further improvement. If this improves, the polar coordinate transformation method will also improve slightly. File link:
