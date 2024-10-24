@@ -62,16 +62,18 @@ def main(px, py, circles):
     print(f"点到最近圆的垂直距离为 {min_distance:.2f} 像素")
     print(f"最近的圆是: 圆心 ({cx}, {cy}), 半径 {r}")
     print(f"点在最近的圆的{position}")
+    print(f"最近的圆是列表中的第 {nearest_circle_idx + 1} 个圆")
     
     plot_circles_and_point(px, py, circles, nearest_circle_idx)
-    return min_distance, position
+    return min_distance, position, nearest_circle_idx
 
-# 输入给定的点和四个圆的数据
+# 输入给定的点和五个圆的数据
 px = 100  # 给出的点的x坐标
 py = 150  # 给出的点的y坐标
 circles = [(50, 50, 20), (160, 160, 30), (80, 180, 25), (200, 200, 15), (111, 110, 98)]
 
-# 调用主函数并获取距离和位置
-distance, position = main(px, py, circles)
+# 调用主函数并获取距离、位置和最近圆的索引
+distance, position, nearest_circle_idx = main(px, py, circles)
 print(f"返回的距离: {distance:.2f} 像素")
 print(f"点在最近的圆的{position}")
+print(f"最近的圆是列表中的第 {nearest_circle_idx + 1} 个圆")
