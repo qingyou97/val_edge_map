@@ -1,75 +1,10 @@
-import matplotlib.pyplot as plt
-from scipy.signal import find_peaks
+1. Optimized the algorithm for finding circular contours. Locating inner and outer contours of two rings based on AI results. Occasionally, some AI results aren't fully contained. Now, checking points not within the rings and expanding rings based on point position and distance until all AI regions are covered. Time optimization also achieved, previously each calculation recomputed sector and rectangular mapping and saved images, causing delay. Now achieving under 1-second per image.
 
-def find_first_peak(data, threshold):
-    """
-    找到数据中第一个显著的峰值点，并返回其横坐标。
+2. Changed threshold filtering method to two types. First method uses high-to-low thresholds, filtering first point above 300; if not within AI region, filtering first point above 200, and so on.
+Conclusion: Some images show AI regions with extra steep gradients and points close to the circle center. This leads to retention of the first threshold point over 300. Reference to lines 26-29 in the xx file.
 
-    参数:
-    data (dict): 包含横坐标和对应强度值的字典。
-    threshold (float): 峰值强度的最小阈值。
+3. Changed to another threshold filtering method. Set thresholds at 1000, 800, 600, and so on. Filter peak points based on these thresholds. Select the first peak point within the AI region as the result.
+Conclusion: Good effect, suppresses some convex parts of AI regions. However, the edge results of other images are not as smooth as the previous version. Both versions have issues; if the ring services are not well detected, three out of twenty images are affected. Reference to lines 22-25 in the xx file.
 
-    返回:
-    int: 第一个显著峰值点的横坐标。
-    """
-    # 提取横坐标和纵坐标
-    x = list(data.keys())
-    y = list(data.values())
-
-    # 使用find_peaks找到峰值，并设置高度阈值
-    peaks, properties = find_peaks(y, height=threshold)
-
-    # 如果找到峰值，返回第一个峰值点的横坐标
-    if peaks.size > 0:
-        return x[peaks[0]]
-    else:
-        return None
-
-def plot_data_with_peaks(data, threshold):
-    """
-    绘制数据并标记显著的峰值点。
-
-    参数:
-    data (dict): 包含横坐标和对应强度值的字典。
-    threshold (float): 峰值强度的最小阈值。
-    """
-    # 提取横坐标和纵坐标
-    x = list(data.keys())
-    y = list(data.values())
-
-    # 使用find_peaks找到峰值，并设置高度阈值
-    peaks, properties = find_peaks(y, height=threshold)
-
-    plt.figure(figsize=(10, 6))
-    plt.plot(x, y, marker='o')
-    plt.plot([x[p] for p in peaks], [y[p] for p in peaks], "x")  # 标记峰值点
-
-    # 设置图表标题和坐标轴标签
-    plt.title('Peaks Plot')
-    plt.xlabel('X-axis')
-    plt.ylabel('Intensity')
-
-    # 显示网格
-    plt.grid(True)
-
-    # 显示图表
-    plt.show()
-
-# 示例数据
-data = {
-    54: 449.3646893061633, 55: 1297.34465165651155, 56: 1805.3129851341728, 57: 1154.4329935468359,
-    58: 326.8625193847768, 59: 88.410921781012733, 60: 51.08902684585762, 61: 624.0675913836851,
-    62: 1831.2469056712966, 63: 1961.3456440528098, 64: 817.7538061704564, 65: 213.56610930077673,
-    66: 582.4233078671347, 67: 942.5185305268745, 68: 1038.215331300595, 69: 1127.5610874995525,
-    70: 801.99001550009673, 71: 261.0890344860568, 72: 101.20416736553082
-}
-
-# 设置阈值
-threshold = 1000
-
-# 找到第一个显著的峰值点
-first_peak_x = find_first_peak(data, threshold)
-print("The first significant peak is at x-value:", first_peak_x)
-
-# 绘制数据并标记显著的峰值点
-plot_data_with_peaks(data, threshold)
+4. Also checked the groove dataset.
+Conclusion: Just wrote the image bounding box retrieval. Considered different edge mapping directions for horizontal and vertical. ROI areas found in horizontal and vertical directions. Vertical pixel stacks located using templates that scan the image to find pixels similar to the template, detecting vertical pixel stacks. Contour detection draws bounding rectangles as ROI areas. For horizontal pixel stacks, subtract the vertical stacks from the image, then locate the largest horizontal bounding rectangles as ROI areas.
