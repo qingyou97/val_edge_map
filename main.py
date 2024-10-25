@@ -1,9 +1,13 @@
-# 定义扩散范围
-range_size = 4
-
-# 提高所有坐标点及其周围像素的对比度
-for (x, y) in coordinates:
-    for i in range(-range_size, range_size + 1):
-        for j in range(-range_size, range_size + 1):
-            if 0 <= x + i < image.shape[1] and 0 <= y + j < image.shape[0]:
-                image[y + j, x + i] = min(255, image[y + j, x + i] * 2)
+def sum_strengths_by_x(coordinates_dict):
+    sum_by_x = {}
+    
+    # 遍历字典中的每个元素
+    for (x, y), strength in coordinates_dict.items():
+        # 如果 x 没有在结果字典中，初始化为0
+        if x not in sum_by_x:
+            sum_by_x[x] = 0.0
+        
+        # 将当前强度值加到对应 x 的总和中
+        sum_by_x[x] += strength
+    
+    return sum_by_x
