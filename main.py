@@ -1,21 +1,31 @@
-def find_two_peak_y_values(sum_by_y):
-    # 将字典按值排序，得到一个列表，元素为 (y, strength) 元组
-    sorted_items = sorted(sum_by_y.items(), key=lambda item: item[1], reverse=True)
-    
-    # 取出前两个极大值点的 y 值
-    peak_y_values = [sorted_items[0][0], sorted_items[1][0]]
-    
-    return peak_y_values
+import cv2
+import numpy as np
 
-# 示例数据字典
-coords_dict = {(20, 37): 9.055385138137417, (20, 38): 47.01063709417264, 
-               (20, 39): 77.05841939723393, (20, 40): 65.06919393998976, 
-               (21, 26): 0.0}
+# 读取图片A和图片B
+imageA = cv2.imread('imageA.jpg')
+imageB = cv2.imread('imageB.jpg')
 
-# 计算每个 y 的强度总和
-sum_by_y = sum_strengths_by_y(coords_dict)
+# 确保图片大小相同
+if imageA.shape != imageB.shape:
+    exit("图片A和图片B大小不同，无法处理。")
 
-# 找到两个峰值的极大值点
-peak_y_values = find_two_peak_y_values(sum_by_y)
+# 转换图片A成灰度图像
+grayA = cv2.cvtColor(imageA, cv2.COLOR_BGR2GRAY)
 
-print(peak_y_values)
+# 定义白色点的阈值（假设为255）
+threshold = 255
+
+# 找到灰度图像中所有白色点的坐标
+white_points = np.column_stack(np.where(grayA == threshold))
+
+# 在图片B的相应位置涂成绿色
+for point in white_points:
+    imageB[point[0], point[1]] = [0, 255, 0]  # BGR格式的绿色
+
+# 保存结果图片
+cv2.imwrite('result_image.jpg', imageB)
+
+# 显示结果图片
+cv2.imshow('Result', imageB)
+cv2.waitKey(0)
+cv2.destroyAllWindows()
