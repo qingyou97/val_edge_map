@@ -1,13 +1,13 @@
 import matplotlib.pyplot as plt
 from scipy.signal import find_peaks
 
-def plot_peaks_with_specific_value(data, specific_value):
+def plot_peaks_with_specific_value(data, specific_x):
     """
-    绘制数据，并标记所有显著的峰值点，同时标记特定值对应的点。
+    绘制数据，并标记所有显著的峰值点，同时标记特定横坐标对应的点。
 
     参数:
     data (dict): 包含横坐标和对应强度值的字典。
-    specific_value (float): 要标记的特定值。
+    specific_x (int): 要标记的特定横坐标。
     """
 
     # 提取横坐标和纵坐标
@@ -24,10 +24,10 @@ def plot_peaks_with_specific_value(data, specific_value):
     for p in peaks:
         plt.plot(x[p], y[p], "gs", label='Peaks' if p == peaks[0] else "")
 
-    # 标记特定值对应的点
-    if specific_value in y:
-        index = y.index(specific_value)
-        plt.plot(x[index], y[index], "ys", markersize=10, label='Specific Value')
+    # 标记特定横坐标对应的点
+    if specific_x in data:
+        index = x.index(specific_x)
+        plt.plot(x[index], y[index], "ys", markersize=10, label='Specific Value', markerfacecolor='none', markeredgewidth=2)
 
     # 设置图表标题和坐标轴标签
     plt.title('Peaks Plot with Specific Value')
@@ -52,8 +52,8 @@ data = {
     70: 801.99001515015, 71: 261.089817516190, 72: 101.204167635102
 }
 
-# 设置要标记的特定值
-specific_value = 1805.3129851344728
+# 设置要标记的特定横坐标
+specific_x = 56
 
-# 绘制数据并标记显著的峰值点及特定值对应的点
-plot_peaks_with_specific_value(data, specific_value)
+# 绘制数据并标记显著的峰值点及特定横坐标对应的点
+plot_peaks_with_specific_value(data, specific_x)
