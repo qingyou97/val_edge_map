@@ -1,1 +1,1 @@
-The reason for changes in the outcome after adjusting the contrast.
+blurred = cv2.GaussianBlur(equ, (5, 5), 0)
