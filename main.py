@@ -1,36 +1,33 @@
 import matplotlib.pyplot as plt
-from scipy.signal import find_peaks
 
-def plot_peaks_with_specific_value(data, specific_x):
+def plot_peaks_with_specific_values(data, specific_x, value_list):
     """
-    绘制数据，并标记所有显著的峰值点，同时标记特定横坐标对应的点。
+    绘制数据，并根据特定条件标记点。
 
     参数:
     data (dict): 包含横坐标和对应强度值的字典。
-    specific_x (int): 要标记的特定横坐标。
+    specific_x (int): 要用黄色标记的特定横坐标。
+    value_list (list): 要用红色标记的横坐标列表。
     """
 
     # 提取横坐标和纵坐标
     x = list(data.keys())
     y = list(data.values())
 
-    # 找到显著的峰值点
-    peaks, _ = find_peaks(y)
-
     plt.figure(figsize=(10, 6))
     plt.plot(x, y, marker='o', label='Data')
 
-    # 绘制所有的峰值点
-    for p in peaks:
-        plt.plot(x[p], y[p], "gs", label='Peaks' if p == peaks[0] else "")
-
     # 标记特定横坐标对应的点
-    if specific_x in data:
-        index = x.index(specific_x)
-        plt.plot(x[index], y[index], "ys", markersize=10, label='Specific Value', markerfacecolor='none', markeredgewidth=2)
+    for i in range(len(x)):
+        if x[i] == specific_x:
+            plt.plot(x[i], y[i], "ys", markersize=10, label='Specific Value', markerfacecolor='none', markeredgewidth=2)
+        elif x[i] in value_list:
+            plt.plot(x[i], y[i], "rs", markersize=10, label='Value List' if i == 0 else "", markerfacecolor='none', markeredgewidth=2)
+        else:
+            plt.plot(x[i], y[i], "gs", markersize=10, label='Other Values' if i == 0 else "", markerfacecolor='none', markeredgewidth=2)
 
     # 设置图表标题和坐标轴标签
-    plt.title('Peaks Plot with Specific Value')
+    plt.title('Peaks Plot with Specific Values')
     plt.xlabel('X-axis')
     plt.ylabel('Intensity')
 
@@ -55,5 +52,8 @@ data = {
 # 设置要标记的特定横坐标
 specific_x = 56
 
+# 设置要用红色标记的横坐标列表
+value_list = [55, 57, 60]
+
 # 绘制数据并标记显著的峰值点及特定横坐标对应的点
-plot_peaks_with_specific_value(data, specific_x)
+plot_peaks_with_specific_values(data, specific_x, value_list)
