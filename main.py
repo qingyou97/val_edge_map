@@ -20,30 +20,22 @@ def plot_peaks_with_specific_values(data, specific_x, value_list):
     # 标记特定横坐标对应的点
     for i in range(len(x)):
         if x[i] == specific_x:
-            plt.plot(x[i], y[i], "ys", markersize=10, markerfacecolor='none', markeredgewidth=2)
+            plt.plot(x[i], y[i], "ys", markersize=10, markerfacecolor='none', markeredgewidth=2, label='finally selected' if i == 0 else "")
         elif x[i] in value_list:
-            plt.plot(x[i], y[i], "rs", markersize=10, markerfacecolor='none', markeredgewidth=2)
+            plt.plot(x[i], y[i], "rs", markersize=10, markerfacecolor='none', markeredgewidth=2, label='not in ai result' if i == 0 else "")
         else:
-            plt.plot(x[i], y[i], "gs", markersize=10, markerfacecolor='none', markeredgewidth=2)
+            plt.plot(x[i], y[i], "gs", markersize=10, markerfacecolor='none', markeredgewidth=2, label='in ai result' if i == 0 else "")
 
     # 设置图表标题和坐标轴标签
     plt.title('Peaks Plot with Specific Values')
     plt.xlabel('X-axis')
     plt.ylabel('Intensity')
 
-    # 添加右上角的指示区域
-    plt.text(1.05, 0.95, 'finally selected', color='yellow', fontsize=12, transform=plt.gca().transAxes, ha='left', va='top')
-    plt.text(1.05, 0.90, 'not in ai result', color='red', fontsize=12, transform=plt.gca().transAxes, ha='left', va='top')
-    plt.text(1.05, 0.85, 'in ai result', color='green', fontsize=12, transform=plt.gca().transAxes, ha='left', va='top')
-
     # 显示图例
-    plt.legend()
+    plt.legend(loc='upper right')
 
     # 显示网格
     plt.grid(True)
-
-    # 调整图表边距以适应右上角的指示区域
-    plt.subplots_adjust(right=0.75)
 
     # 显示图表
     plt.show()
