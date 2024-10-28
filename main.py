@@ -20,16 +20,14 @@ def plot_peaks_with_specific_value(data, specific_value):
     plt.figure(figsize=(10, 6))
     plt.plot(x, y, marker='o', label='Data')
 
-    # 绘制所有的峰值点并标记它们的名次
+    # 绘制所有的峰值点
     for p in peaks:
         plt.plot(x[p], y[p], "gs", label='Peaks' if p == peaks[0] else "")
-        plt.text(x[p], y[p], f'{p}', color='green', verticalalignment='bottom', horizontalalignment='right', fontsize=8, bbox=dict(facecolor='white', alpha=0.5, edgecolor='green'))
 
     # 标记特定值对应的点
     if specific_value in y:
         index = y.index(specific_value)
-        plt.plot(x[index], y[index], "bs", markersize=10, label='Specific Value')
-        plt.text(x[index], y[index], "specific value", color='blue', verticalalignment='top', horizontalalignment='left', fontsize=10, bbox=dict(facecolor='white', alpha=0.5, edgecolor='blue'))
+        plt.plot(x[index], y[index], "ys", markersize=10, label='Specific Value')
 
     # 设置图表标题和坐标轴标签
     plt.title('Peaks Plot with Specific Value')
