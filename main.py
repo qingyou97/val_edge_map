@@ -2,7 +2,7 @@ import matplotlib.pyplot as plt
 
 def plot_peaks_with_specific_values(data, specific_x, value_list):
     """
-    绘制数据，并根据特定条件标记点。
+    绘制数据，并根据特定条件标记点，并在右上角添加指示。
 
     参数:
     data (dict): 包含横坐标和对应强度值的字典。
@@ -20,11 +20,14 @@ def plot_peaks_with_specific_values(data, specific_x, value_list):
     # 标记特定横坐标对应的点
     for i in range(len(x)):
         if x[i] == specific_x:
-            plt.plot(x[i], y[i], "ys", markersize=10, label='Specific Value', markerfacecolor='none', markeredgewidth=2)
+            plt.plot(x[i], y[i], "ys", markersize=10, markerfacecolor='none', markeredgewidth=2)
+            plt.text(x[i], y[i], 'finally selected', color='yellow', fontsize=9, ha='right', va='bottom')
         elif x[i] in value_list:
-            plt.plot(x[i], y[i], "rs", markersize=10, label='Value List' if i == 0 else "", markerfacecolor='none', markeredgewidth=2)
+            plt.plot(x[i], y[i], "rs", markersize=10, markerfacecolor='none', markeredgewidth=2)
+            plt.text(x[i], y[i], 'not in ai result', color='red', fontsize=9, ha='right', va='bottom')
         else:
-            plt.plot(x[i], y[i], "gs", markersize=10, label='Other Values' if i == 0 else "", markerfacecolor='none', markeredgewidth=2)
+            plt.plot(x[i], y[i], "gs", markersize=10, markerfacecolor='none', markeredgewidth=2)
+            plt.text(x[i], y[i], 'in ai result', color='green', fontsize=9, ha='right', va='bottom')
 
     # 设置图表标题和坐标轴标签
     plt.title('Peaks Plot with Specific Values')
