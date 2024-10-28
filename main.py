@@ -18,13 +18,29 @@ def plot_peaks_with_specific_values(data, specific_x, value_list):
     plt.plot(x, y, marker='o', label='Data')
 
     # 标记特定横坐标对应的点
+    yellow_label_added = False
+    red_label_added = False
+    green_label_added = False
+
     for i in range(len(x)):
         if x[i] == specific_x:
-            plt.plot(x[i], y[i], "ys", markersize=10, markerfacecolor='none', markeredgewidth=2, label='finally selected' if i == 0 else "")
+            if not yellow_label_added:
+                plt.plot(x[i], y[i], "ys", markersize=10, markerfacecolor='none', markeredgewidth=2, label='finally selected')
+                yellow_label_added = True
+            else:
+                plt.plot(x[i], y[i], "ys", markersize=10, markerfacecolor='none', markeredgewidth=2)
         elif x[i] in value_list:
-            plt.plot(x[i], y[i], "rs", markersize=10, markerfacecolor='none', markeredgewidth=2, label='not in ai result' if i == 0 else "")
+            if not red_label_added:
+                plt.plot(x[i], y[i], "rs", markersize=10, markerfacecolor='none', markeredgewidth=2, label='not in ai result')
+                red_label_added = True
+            else:
+                plt.plot(x[i], y[i], "rs", markersize=10, markerfacecolor='none', markeredgewidth=2)
         else:
-            plt.plot(x[i], y[i], "gs", markersize=10, markerfacecolor='none', markeredgewidth=2, label='in ai result' if i == 0 else "")
+            if not green_label_added:
+                plt.plot(x[i], y[i], "gs", markersize=10, markerfacecolor='none', markeredgewidth=2, label='in ai result')
+                green_label_added = True
+            else:
+                plt.plot(x[i], y[i], "gs", markersize=10, markerfacecolor='none', markeredgewidth=2)
 
     # 设置图表标题和坐标轴标签
     plt.title('Peaks Plot with Specific Values')
