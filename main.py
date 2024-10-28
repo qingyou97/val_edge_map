@@ -30,8 +30,8 @@ def plot_ranked_peaks(data, threshold, distance, thresh):
         plt.plot(x_value, intensity, "gs", label='Peaks' if rank == 1 else "")
         plt.text(x_value, intensity, f'{rank}', color='green', verticalalignment='bottom', horizontalalignment='right', fontsize=8, bbox=dict(facecolor='white', alpha=0.5, edgecolor='green'))
         if rank == thresh:
-            plt.plot(x_value, intensity, "ys", markersize=10, label='Selected' if rank == 1 else "")
-            plt.text(x_value, intensity, "最终选取的点", color='yellow', verticalalignment='top', horizontalalignment='left', fontsize=10, bbox=dict(facecolor='white', alpha=0.5, edgecolor='yellow')) 
+            plt.plot(x_value, intensity, "ms", markersize=10, label='Selected' if rank == 1 else "")
+            plt.text(x_value, intensity, "finally selected", color='purple', verticalalignment='top', horizontalalignment='left', fontsize=10, bbox=dict(facecolor='white', alpha=0.5, edgecolor='purple')) 
 
     # 设置图表标题和坐标轴标签
     plt.title('Ranked Peaks Plot')
