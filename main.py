@@ -1,15 +1,13 @@
 import matplotlib.pyplot as plt
 from scipy.signal import find_peaks
 
-def plot_ranked_peaks(data, threshold, distance, thresh):
+def plot_peaks_with_specific_value(data, specific_value):
     """
-    绘制数据，并标记所有显著的峰值点，同时标记指定名次的峰值点为最终选取点。
+    绘制数据，并标记所有显著的峰值点，同时标记特定值对应的点。
 
     参数:
     data (dict): 包含横坐标和对应强度值的字典。
-    threshold (float): 峰值强度的最小阈值。
-    distance (int): 峰值之间的最小距离。
-    thresh (int): 要最终标记哪个名次的峰值点。
+    specific_value (float): 要标记的特定值。
     """
 
     # 提取横坐标和纵坐标
@@ -17,24 +15,24 @@ def plot_ranked_peaks(data, threshold, distance, thresh):
     y = list(data.values())
 
     # 找到显著的峰值点
-    peaks, properties = find_peaks(y, height=threshold, distance=distance)
+    peaks, _ = find_peaks(y)
 
-    # 将峰值点按强度排序
-    ranked_peaks = sorted([(y[p], p, x[p]) for p in peaks], reverse=True)
-    
     plt.figure(figsize=(10, 6))
     plt.plot(x, y, marker='o', label='Data')
 
     # 绘制所有的峰值点并标记它们的名次
-    for rank, (intensity, index, x_value) in enumerate(ranked_peaks, start=1):
-        plt.plot(x_value, intensity, "gs", label='Peaks' if rank == 1 else "")
-        plt.text(x_value, intensity, f'{rank}', color='green', verticalalignment='bottom', horizontalalignment='right', fontsize=8, bbox=dict(facecolor='white', alpha=0.5, edgecolor='green'))
-        if rank == thresh:
-            plt.plot(x_value, intensity, "ms", markersize=10, label='Selected' if rank == 1 else "")
-            plt.text(x_value, intensity, "finally selected", color='purple', verticalalignment='top', horizontalalignment='left', fontsize=10, bbox=dict(facecolor='white', alpha=0.5, edgecolor='purple')) 
+    for p in peaks:
+        plt.plot(x[p], y[p], "gs", label='Peaks' if p == peaks[0] else "")
+        plt.text(x[p], y[p], f'{p}', color='green', verticalalignment='bottom', horizontalalignment='right', fontsize=8, bbox=dict(facecolor='white', alpha=0.5, edgecolor='green'))
+
+    # 标记特定值对应的点
+    if specific_value in y:
+        index = y.index(specific_value)
+        plt.plot(x[index], y[index], "bs", markersize=10, label='Specific Value')
+        plt.text(x[index], y[index], "specific value", color='blue', verticalalignment='top', horizontalalignment='left', fontsize=10, bbox=dict(facecolor='white', alpha=0.5, edgecolor='blue'))
 
     # 设置图表标题和坐标轴标签
-    plt.title('Ranked Peaks Plot')
+    plt.title('Peaks Plot with Specific Value')
     plt.xlabel('X-axis')
     plt.ylabel('Intensity')
 
@@ -56,10 +54,8 @@ data = {
     70: 801.99001515015, 71: 261.089817516190, 72: 101.204167635102
 }
 
-# 设置阈值、最小距离、和要选取的峰值名次
-threshold = 1000
-distance = 2
-thresh = 2
+# 设置要标记的特定值
+specific_value = 1805.3129851344728
 
-# 绘制数据并标记显著的峰值点及最终选取点
-plot_ranked_peaks(data, threshold, distance, thresh)
+# 绘制数据并标记显著的峰值点及特定值对应的点
+plot_peaks_with_specific_value(data, specific_value)
