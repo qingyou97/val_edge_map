@@ -1,1 +1,1 @@
-The ROI is fixed to a rectangular shape.
+Select a peak point within each horizontal ROI.
