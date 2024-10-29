@@ -1,8 +1,11 @@
-1. Local contrast enhancement caused differences in the results. Check if the peak map changes.
-Conclusion: After printing the peak map for each sliding window, I found that after enhancing the contrast, the gradient intensity of all points in the AI region is zero. Therefore, it always takes the minimum y value from bottom to top, which is the first AI region point from the bottom up, making it appear smooth. I found the reason because I directly operated on the original image `image` during contrast enhancement, causing some pixels to be updated multiple times as double their original value. As a result, the pixel and the four surrounding pixels in the AI region became pure white, making the gradient zero. This time, by using a new image copy `new_image` to save the updated values, each pixel is only updated once, avoiding this issue. As Mr. Zhao said, after contrast enhancement, my result did not change.
+10 29 Morning Meeting 10:00-10:20:
 
-2. Optimize the above results.
-Conclusion: After performing histogram equalization and Gaussian denoising, the result improved but was still not ideal. So, I changed the sliding window size. After testing, I found that a horizontal window size of 40 and a vertical window size of 20 improved the results, making them smoother.
+Duan:
+1. For the other four datasets, think about how to use the sliding window method to determine the ROI, and then alter the algorithm. Document and record the results.
+2. Organize and record past results from the other datasets.
+3. Compile the best current results into one sheet, including the reproduction process.
 
-3. Record the code and procedures. If other unsatisfactory versions are gone, then document the best version's code and procedure.
-Conclusion: 10 versions of groove are documented in an excel sheet, including gitlab links, commit logs, code directories, and modified parameters. 11 versions of casting are also documented in an excel sheet, including gitlab links, commit logs, code directories, and modified parameters. The other four datasets have not been organized yet.
+Han Xu:
+4. Compile the best current results into one sheet, including the reproduction process.
+5. Summarize the problems in the table with fundamental causes, like detections missed due to glare.
+6. Test all datasets with the best method and organize the results.
