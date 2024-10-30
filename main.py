@@ -1,6 +1,6 @@
-def extend_line_to_intersect(line_points, square_points):
-    # 创建正方形的左侧边
-    left_side = LineString([square_points[0], square_points[3]])
+def extend_line_and_find_intersection(line_points, square_points):
+    # 创建正方形
+    square = Polygon(square_points)
     
     # 创建线段
     line = LineString(line_points)
@@ -16,11 +16,18 @@ def extend_line_to_intersect(line_points, square_points):
     ])
     
     # 计算交点
-    intersection = extended_line.intersection(left_side)
+    intersections = extended_line.intersection(square)
     
-    if not intersection.is_empty:
-        print(f"交点坐标: {intersection}")
-        return intersection
-    else:
-        print("线段与左侧边没有交点。")
+    if intersections.is_empty:
+        print("线段与正方形没有交点。")
         return None
+    else:
+        # 如果有多个交点，找到 x 坐标更小的点
+        if intersections.geom_type == 'MultiPoint':
+            intersection_points = list(intersections)
+            min_x_point = min(intersection_points, key=lambda point: point.x)
+        else:
+            min_x_point = intersections
+        
+        print(f"交点坐标: {min_x_point}")
+        return min_x_point
