@@ -47,8 +47,17 @@ offset_x = half_edge * np.cos(np.radians(rotation_angle))
 offset_y = half_edge * np.sin(np.radians(rotation_angle))
 rotated_center = initial_point + np.array([offset_x, -offset_y])
 
+# 计算旋转后的正方形中心
+# 旋转后，左侧边中点仍然是 initial_point
+# 计算中心点
+center_offset = np.array([
+    half_edge * np.cos(np.radians(rotation_angle + 90)),
+    half_edge * np.sin(np.radians(rotation_angle + 90))
+])
+rotated_center = initial_point + center_offset
+
 # 画旋转后的正方形
-draw_square(initial_point, square_edge, rotation_angle, 'b--', 'Rotated Square')
+draw_square(rotated_center, square_edge, rotation_angle, 'b--', 'Rotated Square')
 
 # 标记变换前后的中点
 plt.scatter(*initial_point, color='red', zorder=5)
