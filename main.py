@@ -1,30 +1,19 @@
-import matplotlib.pyplot as plt
-from PIL import Image
+1. Other four datasets: Consider using a sliding window method to determine the region of interest (ROI), and then adjust the algorithm. Test on other datasets.
 
-def mark_top_point(image_path, coordinates):
-    # 加载图像
-    image = Image.open(image_path)
-    
-    # 找到最小的y值，也就是最靠上的点
-    top_y = min(coordinates, key=lambda point: (point[1], -point[0]))
-    # 这个点的x坐标
-    top_x = top_y[0]
-    
-    # 标注这个点在图像上的位置
-    plt.imshow(image)
-    plt.scatter(top_x, top_y[1], color='green', marker='o')
-    plt.title(f"Top point at x={top_x}, y={top_y[1]}")
-    
-    # 显示图像
-    plt.show()
-    
-    # 返回x值
-    return top_x
+Conclusion:
+- Bottle: The polar coordinate algorithm makes some edges segmented. It doesn't perform as well as finding points closer to the center.
+- Cylinder: Tried to find the ring but failed, so switched to a sliding window across the image width and identified peaks with a distance greater than 4, ultimately finding four peaks in the AI region.
+- Ball-screw: In a 224x224 AI result image, locate the uppermost point with the largest x-value. Divide at this point and find four extreme points on the left and three on the right.
+- Aero: Use a sliding window of 5 over the entire range to locate peak points.
 
-# 示例图像路径与坐标
-image_path = 'path/to/your/image.png'  # 替换为你的图像路径
-coordinates = [(23, 45), (50, 10), (120, 10), (150, 20)]  # 示例坐标
+2. Consolidate all results and place the best results on a single sheet, including the reproduction process.
 
-# 调用函数并获取x坐标
-x = mark_top_point(image_path, coordinates)
-print("Top point's x coordinate:", x)
+Conclusion:
+- Bottle completed: The best results include 2 versions (one using polar coordinates and one focusing on points closer to the center), with 4 other versions.
+- Casting completed: The best results include 2 versions, with 9 other versions.
+- Groove completed: The best results include 2 versions, with 8 other versions.
+- Cylinder completed: The best results include 2 versions, with 4 other versions.
+- Ball-screw completed: The best results include 2 versions, with 3 other versions.
+- Aero: The best results include 2 versions, with 3 other versions.
+
+The code is updated in GitLab.
