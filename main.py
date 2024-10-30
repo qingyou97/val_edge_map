@@ -1,6 +1,7 @@
 import matplotlib.pyplot as plt
 import matplotlib.patches as patches
 import numpy as np
+from matplotlib.path import Path
 
 # 给定点的坐标
 x, y = 51, 57
@@ -31,6 +32,15 @@ points = [
 # 旋转每个顶点
 rotated_points = [rotate_point(px, py, x, y, angle) for px, py in points]
 
+# 创建旋转后的正方形路径
+polygon_path = Path(rotated_points)
+
+# 给定的坐标列表
+coordinate_list = [(1, 2), (3, 9), (50, 56), (52, 58), (60, 60)]
+
+# 找到在旋转后的正方形内的点
+points_inside = [point for point in coordinate_list if polygon_path.contains_point(point)]
+
 # 创建绘图
 fig, ax = plt.subplots()
 
@@ -42,8 +52,12 @@ ax.add_patch(original_square)
 rotated_square = patches.Polygon(rotated_points, closed=True, edgecolor='blue', facecolor='none')
 ax.add_patch(rotated_square)
 
-# 绘制点
+# 绘制给定点
 plt.plot(x, y, 'ro')  # 'ro' 表示红色的圆点
+
+# 绘制在正方形内的点
+for px, py in points_inside:
+    plt.plot(px, py, 'go')  # 'go' 表示绿色的圆点
 
 # 设置绘图范围
 plt.xlim(x - side_length, x + side_length)
@@ -57,3 +71,6 @@ plt.xlabel("X坐标")
 plt.ylabel("Y坐标")
 plt.title("旋转前后的正方形与给定点")
 plt.show()
+
+# 返回在正方形内的点
+print("在旋转后的正方形内的点:", points_inside)
