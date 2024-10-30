@@ -53,6 +53,16 @@ def plot_square_and_lines(rotated_square, points_inside):
         merged_lines_points.append(list(current_line_points))
         used[i] = True
     
+    # 确保每个点都有一条线经过
+    all_points = set(points_inside)
+    covered_points = set()
+    for line_points in merged_lines_points:
+        covered_points.update(line_points)
+    
+    uncovered_points = all_points - covered_points
+    for point in uncovered_points:
+        merged_lines_points.append([point])
+    
     # 绘制合并后的线
     for line_points in merged_lines_points:
         if len(line_points) > 1:
