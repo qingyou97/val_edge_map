@@ -31,26 +31,28 @@ def draw_square(center, edge_length, angle, style, label):
 plt.figure(figsize=(8, 8))
 
 # 初始正方形的中心和尺寸
-initial_center = initial_point + np.array([0, 0]) 
-square_edge = 102  # 从点位置推算整条边长
+square_edge = 102  # 假设正方形边长
+initial_center = initial_point + np.array([square_edge / 2, 0])
 
-# 旋转后的边缘中点和中心
+# 旋转后的正方形中心
 rotation_angle = 14
-transformed_center = initial_point + np.array([0, square_edge / 2])
+# 计算旋转后的中心位置
+transformed_center = initial_point + np.array([square_edge / 2 * np.cos(np.radians(rotation_angle)), 
+                                               square_edge / 2 * np.sin(np.radians(rotation_angle))])
 
 # 画正方形
 draw_square(initial_center, square_edge, 0, 'r-', 'Initial Square')
 draw_square(transformed_center, square_edge, rotation_angle, 'b--', 'Rotated Square')
 
 # 标记变换前后的中点
-plt.scatter(*initial_point, color='red')
-plt.scatter(*initial_point, color='blue')
+plt.scatter(*initial_point, color='red', zorder=5)
+plt.text(initial_point[0], initial_point[1], 'Initial Point', fontsize=9, verticalalignment='bottom')
 
 # 图形设置
-plt.xlim(10, 160)
-plt.ylim(0, 180)
+plt.xlim(0, 160)
+plt.ylim(0, 160)
 plt.gca().set_aspect('equal', adjustable='box')
 plt.legend()
-plt.title('Rotating a Square')
+plt.title('Rotating a Square with Fixed Left Midpoint')
 plt.grid(True)
 plt.show()
