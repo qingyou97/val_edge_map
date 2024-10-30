@@ -1,39 +1,61 @@
 import matplotlib.pyplot as plt
 import numpy as np
 
-# 初始化正方形边长和点的位置
+# 正方形的边长
 side_length = 100
-original_center = (57, 51)
 
-# 创建一个90 - 76度逆时针旋转矩阵
-angle_rot = np.radians(90 - 76)
-cos_theta, sin_theta = np.cos(angle_rot), np.sin(angle_rot)
-rotation_matrix = np.array([[cos_theta, -sin_theta], [sin_theta, cos_theta]])
+# 初始正方形的左侧边缘中心点
+original_point = (0, side_length / 2)
 
-# 算出旋转后的正方形中心点
-new_center_x = original_center[0] * rotation_matrix[0, 0] + original_center[1] * rotation_matrix[0, 1]
-new_center_y = original_center[0] * rotation_matrix[1, 0] + original_center[1] * rotation_matrix[1, 1]
-new_center = (new_center_x, new_center_y)
+# 旋转角度
+angle = 14  # 90 - 76
+angle_rad = np.radians(angle)
+
+# 旋转矩阵
+rotation_matrix = np.array([
+    [np.cos(angle_rad), -np.sin(angle_rad)],
+    [np.sin(angle_rad), np.cos(angle_rad)]
+])
+
+# 计算旋转后的点
+rotated_point = np.dot(rotation_matrix, original_point)
 
 # 画图函数
-def draw_square_with_point(ax, center, side, label):
+def draw_square(ax, center, side, angle, label):
     half_side = side / 2
-    square = plt.Rectangle((center[0] - half_side, center[1] - half_side), side, side, fill=None, edgecolor='r')
+    # 计算正方形的四个顶点
+    corners = np.array([
+        [-half_side, -half_side],
+        [half_side, -half_side],
+        [half_side, half_side],
+        [-half_side, half_side]
+    ])
+    
+    # 旋转正方形
+    rotated_corners = np.dot(corners, rotation_matrix.T)
+    
+    # 平移到中心
+    rotated_corners += center
+    
+    # 绘制正方形
+    square = plt.Polygon(rotated_corners, fill=None, edgecolor='r')
     ax.add_patch(square)
-    ax.plot(center[0], center[1], 'bo')  # 点的位置
+    
+    # 绘制点
+    ax.plot(center[0], center[1], 'bo')
     ax.text(center[0], center[1], f' {label}', verticalalignment='bottom', horizontalalignment='right')
 
 # 创建图和轴
 fig, ax = plt.subplots()
 
-# 绘制初始和旋转后的正方形及点
-draw_square_with_point(ax, original_center, side_length, 'P1')
-draw_square_with_point(ax, new_center, side_length, 'P2 (rotated)')
+# 绘制初始正方形和旋转后的正方形
+draw_square(ax, original_point, side_length, 0, 'Original')
+draw_square(ax, rotated_point, side_length, angle, 'Rotated')
 
 # 设置图形范围
 buffer = 20
-ax.set_xlim(0 - buffer, side_length + buffer)
-ax.set_ylim(0 - buffer, side_length + buffer)
+ax.set_xlim(-side_length, side_length + buffer)
+ax.set_ylim(-side_length, side_length + buffer)
 
 # 设置轴比例相等
 ax.set_aspect('equal', 'box')
