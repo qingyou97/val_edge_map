@@ -32,6 +32,10 @@ def draw_square(ax, center, side, angle, label):
     ])
     
     # 旋转正方形
+    rotation_matrix = np.array([
+        [np.cos(np.radians(angle)), -np.sin(np.radians(angle))],
+        [np.sin(np.radians(angle)), np.cos(np.radians(angle))]
+    ])
     rotated_corners = np.dot(corners, rotation_matrix.T)
     
     # 平移到中心
