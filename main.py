@@ -12,13 +12,19 @@ def plot_square_and_lines(rotated_square, points_inside):
     # 创建多边形对象
     polygon = Polygon(rotated_square)
     
+    # 计算正方形左边的方向向量
+    left_side_vector = (rotated_square[3][0] - rotated_square[0][0], rotated_square[3][1] - rotated_square[0][1])
+    # 计算垂直于左边的方向向量
+    perpendicular_vector = (-left_side_vector[1], left_side_vector[0])
+    
     # 存储每条线经过的点
     lines_points_dicts = []
     
     # 遍历每个点
     for x, y in points_inside:
-        # 创建一条垂直线
-        line = LineString([(x, polygon.bounds[1] - 10), (x, polygon.bounds[3] + 10)])
+        # 创建一条与正方形左右边垂直的线
+        line = LineString([(x - 1000 * perpendicular_vector[0], y - 1000 * perpendicular_vector[1]),
+                           (x + 1000 * perpendicular_vector[0], y + 1000 * perpendicular_vector[1])])
         
         # 检查线经过的点
         line_points = []
@@ -29,7 +35,7 @@ def plot_square_and_lines(rotated_square, points_inside):
         # 如果这条线没有统计过则绘制
         if line_points and line_points not in lines_points_dicts:
             lines_points_dicts.append(line_points)
-            ax.plot([x, x], [polygon.bounds[1] - 10, polygon.bounds[3] + 10], '--', label=f"Crosses {line_points}")
+            ax.plot([line.coords[0][0], line.coords[1][0]], [line.coords[0][1], line.coords[1][1]], '--', label=f"Crosses {line_points}")
     
     # 绘制点
     x_coords, y_coords = zip(*points_inside)
