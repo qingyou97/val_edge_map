@@ -1,72 +1,56 @@
 import matplotlib.pyplot as plt
 import numpy as np
 
-# 正方形的边长
-side_length = 100
+# 初始点（位于正方形左边缘中间）
+initial_point = np.array([57, 51])
 
-# 初始正方形的左侧边缘中心点
-original_point = (0, side_length / 2)
+def draw_square(center, edge_length, angle, style, label):
+    # 正方形的角点计算
+    half_length = edge_length / 2
+    square = np.array([
+        [-half_length, -half_length],
+        [half_length, -half_length],
+        [half_length, half_length],
+        [-half_length, half_length],
+    ])
 
-# 旋转角度
-angle = 14  # 90 - 76
-angle_rad = np.radians(angle)
-
-# 旋转矩阵
-rotation_matrix = np.array([
-    [np.cos(angle_rad), -np.sin(angle_rad)],
-    [np.sin(angle_rad), np.cos(angle_rad)]
-])
-
-# 计算旋转后的点
-rotated_point = np.dot(rotation_matrix, original_point)
-
-# 画图函数
-def draw_square(ax, center, side, angle, label):
-    half_side = side / 2
-    # 计算正方形的四个顶点
-    corners = np.array([
-        [-half_side, -half_side],
-        [half_side, -half_side],
-        [half_side, half_side],
-        [-half_side, half_side]
+    # 旋转矩阵
+    rad_angle = np.radians(angle)
+    rotation_matrix = np.array([
+        [np.cos(rad_angle), -np.sin(rad_angle)],
+        [np.sin(rad_angle), np.cos(rad_angle)]
     ])
     
     # 旋转正方形
-    rotation_matrix = np.array([
-        [np.cos(np.radians(angle)), -np.sin(np.radians(angle))],
-        [np.sin(np.radians(angle)), np.cos(np.radians(angle))]
-    ])
-    rotated_corners = np.dot(corners, rotation_matrix.T)
+    rotated_square = square.dot(rotation_matrix) + center
     
-    # 平移到中心
-    rotated_corners += center
-    
-    # 绘制正方形
-    square = plt.Polygon(rotated_corners, fill=None, edgecolor='r')
-    ax.add_patch(square)
-    
-    # 绘制点
-    ax.plot(center[0], center[1], 'bo')
-    ax.text(center[0], center[1], f' {label}', verticalalignment='bottom', horizontalalignment='right')
+    # 画旋转后的正方形
+    plt.plot(*zip(*rotated_square, rotated_square[0]), style, label=label)
 
-# 创建图和轴
-fig, ax = plt.subplots()
+# 显示图形
+plt.figure(figsize=(8, 8))
 
-# 绘制初始正方形和旋转后的正方形
-draw_square(ax, original_point, side_length, 0, 'Original')
-draw_square(ax, rotated_point, side_length, angle, 'Rotated')
+# 初始正方形的中心和尺寸
+initial_center = initial_point + np.array([0, 0]) 
+square_edge = 102  # 从点位置推算整条边长
 
-# 设置图形范围
-buffer = 20
-ax.set_xlim(-side_length, side_length + buffer)
-ax.set_ylim(-side_length, side_length + buffer)
+# 旋转后的边缘中点和中心
+rotation_angle = 14
+transformed_center = initial_point + np.array([0, square_edge / 2])
 
-# 设置轴比例相等
-ax.set_aspect('equal', 'box')
+# 画正方形
+draw_square(initial_center, square_edge, 0, 'r-', 'Initial Square')
+draw_square(transformed_center, square_edge, rotation_angle, 'b--', 'Rotated Square')
 
-# 显示结果
+# 标记变换前后的中点
+plt.scatter(*initial_point, color='red')
+plt.scatter(*initial_point, color='blue')
+
+# 图形设置
+plt.xlim(10, 160)
+plt.ylim(0, 180)
+plt.gca().set_aspect('equal', adjustable='box')
+plt.legend()
+plt.title('Rotating a Square')
 plt.grid(True)
-plt.title('Square Rotation Example')
-plt.axhline(0, color='black', lw=1)
-plt.axvline(0, color='black', lw=1)
 plt.show()
