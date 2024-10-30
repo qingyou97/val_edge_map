@@ -34,10 +34,12 @@ rotated_points = [rotate_point(px, py, x, y, angle) for px, py in points]
 # 创建绘图
 fig, ax = plt.subplots()
 
+# 创建未旋转的正方形
+original_square = patches.Polygon(points, closed=True, edgecolor='gray', facecolor='none', linestyle='--')
+ax.add_patch(original_square)
+
 # 创建旋转后的正方形
 rotated_square = patches.Polygon(rotated_points, closed=True, edgecolor='blue', facecolor='none')
-
-# 将正方形添加到绘图中
 ax.add_patch(rotated_square)
 
 # 绘制点
@@ -53,5 +55,5 @@ ax.set_aspect('equal', 'box')
 # 显示绘图
 plt.xlabel("X坐标")
 plt.ylabel("Y坐标")
-plt.title("旋转后的正方形与给定点")
+plt.title("旋转前后的正方形与给定点")
 plt.show()
