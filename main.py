@@ -34,19 +34,25 @@ plt.figure(figsize=(8, 8))
 square_edge = 102  # 假设正方形边长
 initial_center = initial_point + np.array([square_edge / 2, 0])
 
-# 旋转后的正方形中心
-rotation_angle = 25
-# 计算旋转后的中心位置
-transformed_center = initial_point + np.array([square_edge / 2 * np.cos(np.radians(rotation_angle)), 
-                                               square_edge / 2 * np.sin(np.radians(rotation_angle))])
-
-# 画正方形
+# 画初始正方形
 draw_square(initial_center, square_edge, 0, 'r-', 'Initial Square')
+
+# 旋转后的正方形
+rotation_angle = 25
+
+# 计算旋转后的正方形中心
+# 由于旋转后点仍在左侧边中间，我们需要计算新的中心
+half_edge = square_edge / 2
+offset_x = half_edge * np.cos(np.radians(rotation_angle))
+offset_y = half_edge * np.sin(np.radians(rotation_angle))
+rotated_center = initial_point + np.array([offset_x, -offset_y])
+
+# 画旋转后的正方形
 draw_square(initial_point, square_edge, rotation_angle, 'b--', 'Rotated Square')
 
 # 标记变换前后的中点
 plt.scatter(*initial_point, color='red', zorder=5)
-plt.text(initial_point[0], initial_point[1], 'Initial Point', fontsize=9, verticalalignment='bottom')
+plt.text(initial_point[0], initial_point[1], 'Fixed Point', fontsize=9, verticalalignment='bottom')
 
 # 图形设置
 plt.xlim(0, 160)
