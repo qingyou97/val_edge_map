@@ -1,36 +1,33 @@
-def extend_line_and_find_intersection(line_points, square_points):
-    # 创建正方形
-    square = Polygon(square_points)
+def plot_line_and_intersection(line_points, square_points, intersection):
+    fig, ax = plt.subplots()
     
-    # 创建线段
-    line = LineString(line_points)
+    # 绘制正方形
+    square = plt.Polygon(square_points, closed=True, fill=None, edgecolor='blue')
+    ax.add_patch(square)
     
-    # 获取线段的方向向量
-    start, end = line_points
-    direction = (end[0] - start[0], end[1] - start[1])
+    # 绘制线段
+    x, y = zip(*line_points)
+    ax.plot(x, y, 'r--', label='Original Line')
     
-    # 延长线段
-    extended_line = LineString([
-        (start[0] - 1000 * direction[0], start[1] - 1000 * direction[1]),
-        (end[0] + 1000 * direction[0], end[1] + 1000 * direction[1])
-    ])
-    
-    # 计算交点
-    intersections = extended_line.intersection(square)
-    
-    if intersections.is_empty:
-        print("线段与正方形没有交点。")
-        return None
-    else:
-        # 如果有多个交点，找到 x 坐标更小的点
-        if intersections.geom_type == 'MultiPoint':
-            intersection_points = list(intersections)
-            min_x_point = min(intersection_points, key=lambda point: point.x)
-        elif intersections.geom_type == 'Point':
-            min_x_point = intersections
+    # 如果有交点，绘制交点
+    if intersection:
+        if intersection.geom_type == 'LineString':
+            # 提取 LineString 中的点
+            points = list(intersection.coords)
+            # 找到 x 坐标更小的点
+            min_x_point = min(points, key=lambda point: point[0])
+            ax.plot(min_x_point[0], min_x_point[1], 'go', label='Intersection Point')
+            # 绘制延长线
+            extended_x = [line_points[0][0], min_x_point[0]]
+            extended_y = [line_points[0][1], min_x_point[1]]
+            ax.plot(extended_x, extended_y, 'g-', label='Extended Line')
         else:
             print("交点类型不支持。")
-            return None
-        
-        print(f"交点坐标: {min_x_point}")
-        return min_x_point
+    
+    ax.set_xlim(50, 70)
+    ax.set_ylim(40, 60)
+    ax.set_aspect('equal', 'box')
+    plt.legend(loc='upper left')
+    
+    plt.title('Line and Intersection with Square')
+    plt.show()
