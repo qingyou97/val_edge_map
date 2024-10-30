@@ -12,10 +12,10 @@ def plot_square_and_lines(rotated_square, points_inside):
     # 创建多边形对象
     polygon = Polygon(rotated_square)
     
-    # 计算正方形左边的方向向量
-    left_side_vector = (rotated_square[3][0] - rotated_square[0][0], rotated_square[3][1] - rotated_square[0][1])
-    # 计算垂直于左边的方向向量
-    perpendicular_vector = (-left_side_vector[1], left_side_vector[0])
+    # 计算正方形上边的方向向量
+    top_side_vector = (rotated_square[1][0] - rotated_square[0][0], rotated_square[1][1] - rotated_square[0][1])
+    # 计算垂直于上边的方向向量
+    perpendicular_vector = (-top_side_vector[1], top_side_vector[0])
     
     # 存储每条线经过的点
     lines_points_dicts = []
@@ -49,6 +49,10 @@ def plot_square_and_lines(rotated_square, points_inside):
     plt.title('Perpendicular Lines Inside Rotated Square')
     plt.show()
     return lines_points_dicts
+
+# 示例数据
+rotated_square = [(55, 45), (65, 45), (65, 55), (55, 55)]
+points_inside = [(60, 50), (62, 52), (58, 48)]
 
 # 调用函数
 lines_data = plot_square_and_lines(rotated_square, points_inside)
