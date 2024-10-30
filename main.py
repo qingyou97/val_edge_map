@@ -35,14 +35,14 @@ square_edge = 102  # 假设正方形边长
 initial_center = initial_point + np.array([square_edge / 2, 0])
 
 # 旋转后的正方形中心
-rotation_angle = 14
+rotation_angle = 25
 # 计算旋转后的中心位置
 transformed_center = initial_point + np.array([square_edge / 2 * np.cos(np.radians(rotation_angle)), 
                                                square_edge / 2 * np.sin(np.radians(rotation_angle))])
 
 # 画正方形
 draw_square(initial_center, square_edge, 0, 'r-', 'Initial Square')
-draw_square(transformed_center, square_edge, rotation_angle, 'b--', 'Rotated Square')
+draw_square(initial_point, square_edge, rotation_angle, 'b--', 'Rotated Square')
 
 # 标记变换前后的中点
 plt.scatter(*initial_point, color='red', zorder=5)
