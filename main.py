@@ -35,8 +35,8 @@ def plot_square_and_lines(rotated_square, points_inside):
             if distance < min_distance:
                 min_distance = distance
     
-    # 设置合并阈值
-    merge_threshold = min_distance * 1.1
+    # 设置合并阈值，增大一些
+    merge_threshold = min_distance * 2.0  # 增大阈值以合并更多点
     
     # 合并直线
     merged_lines_points = []
@@ -52,16 +52,6 @@ def plot_square_and_lines(rotated_square, points_inside):
                 used[j] = True
         merged_lines_points.append(list(current_line_points))
         used[i] = True
-    
-    # 确保每个点都有一条线经过
-    all_points = set(points_inside)
-    covered_points = set()
-    for line_points in merged_lines_points:
-        covered_points.update(line_points)
-    
-    uncovered_points = all_points - covered_points
-    for point in uncovered_points:
-        merged_lines_points.append([point])
     
     # 绘制合并后的线
     for line_points in merged_lines_points:
