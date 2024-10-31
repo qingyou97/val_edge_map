@@ -1,33 +1,5 @@
-def plot_line_and_intersection(line_points, square_points, intersection):
-    fig, ax = plt.subplots()
-    
-    # 绘制正方形
-    square = plt.Polygon(square_points, closed=True, fill=None, edgecolor='blue')
-    ax.add_patch(square)
-    
-    # 绘制线段
-    x, y = zip(*line_points)
-    ax.plot(x, y, 'r--', label='Original Line')
-    
-    # 如果有交点，绘制交点
-    if intersection:
-        if intersection.geom_type == 'LineString':
-            # 提取 LineString 中的点
-            points = list(intersection.coords)
-            # 找到 x 坐标更小的点
-            min_x_point = min(points, key=lambda point: point[0])
-            ax.plot(min_x_point[0], min_x_point[1], 'go', label='Intersection Point')
-            # 绘制延长线
-            extended_x = [line_points[0][0], min_x_point[0]]
-            extended_y = [line_points[0][1], min_x_point[1]]
-            ax.plot(extended_x, extended_y, 'g-', label='Extended Line')
-        else:
-            print("交点类型不支持。")
-    
-    ax.set_xlim(50, 70)
-    ax.set_ylim(40, 60)
-    ax.set_aspect('equal', 'box')
-    plt.legend(loc='upper left')
-    
-    plt.title('Line and Intersection with Square')
-    plt.show()
+1. The latest generalization algorithm needs to be modified to first perform horizontal sliding windows within the AI region. Next, calculate the average value of all gradient directions within this window, then rotate the window to match this gradient direction. Proceed with mapping and selecting peak values. Based on this generalization approach, write logic and test it on six datasets, recording the results. Conclusions: Currently, using a 10*10 square box and a point within the AI region—specifically in the middle of the square's left side—I can calculate the average direction of all the points within the AI region and rotate the square box according to this direction. Next, I find all the AI points within the rotated rectangular box. Since mapping should be directed towards the left side of the square, but the square is tilted, I first identify lines that pass through each point and are perpendicular to the square's left and right sides. Then, I merge these lines within a range based on distance. This allows each line to cover 2-3 points, facilitating average value computation for mapping. Subsequently, I determine which line has the highest average intensity value of points it passes through. I then extend the line, and the intersection with the square's left side is our final point. Each of these steps can be successfully completed. However, as I formally traverse all AI points, some error handling is not yet addressed, resulting in some broken points, which I'm temporarily skipping. This aims to verify if the solution is correct. The current conclusion is that the solution is correct, successfully extracting single-pixel edges. I'll finish writing the remaining error handling today and test these datasets.
+
+2. Compare and organize the results of this generalization algorithm against previous results with the ROI setup. Conclusion: To be organized.
+
+3. Investigate the cause of breakpoints in the AERO algorithm. Conclusion: Not yet completed.
