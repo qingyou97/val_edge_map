@@ -1,10 +1,9 @@
-October 31 Morning Meeting 1.00-1.17:
+ # 采样并检查所有在正方形内的点
+    all_points_inside = []
+    x_points = np.arange(x_min, x_max, step)
+    y_points = np.arange(y_min, y_max, step)
 
-Duan:
-1. When finding the peak value, it's necessary to use all the points for calculation, then find the points within the AI.
-2. After correcting issue 1 and other tolerances, test and compare the dataset.
-3. The best document should be reviewed tomorrow morning, including the branch, how to execute, how to reproduce, a separate Excel file, and all related work.
-
-Han:
-4. Try reducing the amount of merged input features.
-5. The best document should be reviewed tomorrow morning, including the branch, how to execute, how to reproduce, a separate Excel file, and all related work.
+    for x in x_points:
+        for y in y_points:
+            if polygon_path.contains_point((x, y)):
+                all_points_inside.append((x, y))
