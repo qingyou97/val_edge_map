@@ -1,3 +1,1 @@
-6. The final best
-
-Previously, I compiled the best results for 4 support. This afternoon, I compiled the best results for 8 support.
+I added your account to three machines: mine, Li Zhe's, and Sun Jiawen's. Wang Chao and Han Xu's machines - Han Xu is in the process of adding. Thank you for your guidance recently, thanks!
