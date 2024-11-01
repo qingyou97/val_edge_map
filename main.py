@@ -1,13 +1,17 @@
-Of course, here's a simple translation to English:
+def copy_folders_to_new_directory(source_dirs, destination_dir):
+    # 创建目标文件夹，如果不存在
+    if not os.path.exists(destination_dir):
+        os.makedirs(destination_dir)
+    
+    for folder in source_dirs:
+        # 获取文件夹名称
+        folder_name = os.path.basename(folder)
+        # 目标文件夹路径
+        destination_folder = os.path.join(destination_dir, folder_name)
+        # 复制文件夹
+        shutil.copytree(folder, destination_folder)
 
-Duan:
-1. Organize the deliverables table and check if the links are functional.
-2. Retest the results of all codes for the 8 supports and summarize the outcomes.
-3. Update the setup steps of the environment and upload the `requirements.txt` to GitLab.
-4. Record branches in the documentation.
-5. Translate all materials into English.
+source_dirs = ['/path/to/first/folder', '/path/to/second/folder', '/path/to/third/folder']
+destination_dir = '/path/to/new/directory'
 
-Han:
-6. Update the setup steps of the environment and upload the `requirements.txt` to GitLab.
-7. Organize the deliverables table and check if the links are functional.
-8. Record branches in the documentation.
+copy_folders_to_new_directory(source_dirs, destination_dir)
